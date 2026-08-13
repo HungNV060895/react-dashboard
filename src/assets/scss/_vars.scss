@@ -1,0 +1,555 @@
+//====================================================
+//Font
+//====================================================
+@use 'sass:math';
+@use 'sass:map';
+@use 'sass:string';
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght,XOPQ,XTRA,YOPQ,YTDE,YTFI,YTLC,YTUC@8..144,100..1000,96,468,79,-203,738,514,712&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+$font-jp: "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴPro W3", "Hiragino Kaku Gothic Pro", Osaka, "Meiryo", "メイリオ", "MS Pゴシック", Arial, Helvetica, Verdana, sans-serif;
+$font-en: "Ms Madi", cursive;
+$font-poppins: "Poppins", sans-serif;
+$font-Inter: "Inter", sans-serif;
+$font-roboto: "Roboto", sans-serif;
+
+
+//====================================================
+//Font Size
+//====================================================
+@mixin font-fm($fmValue, $fwValue) {
+	font-family: ($fmValue);
+	font-weight: ($fwValue);
+}
+
+@mixin font-size($sizeValue) {
+	font-size: math.div($sizeValue, 10) + rem;
+}
+
+@mixin font-vw($fontSize, $viewWidth: 834) {
+	font-size: math.div($fontSize, $viewWidth) * 100 + vw;
+}
+
+@function c-max-size($max, $size) {
+	@return unquote('max(' + $max + ', ' + $size + ')');
+}
+
+
+
+@mixin fts($fts, $lin: 24) {
+	$rem: math.div($fts, 10);
+	$linS: math.div($lin, $fts);
+	font-size: #{$fts}px;
+	font-size: #{$rem}rem;
+	line-height: $linS;
+}
+
+
+
+
+
+//====================================================
+//Position & transform
+//====================================================
+@mixin v-align {
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+@mixin h-align {
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+@mixin v-h-align {
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@mixin smooth-transition {
+	transition: all .3s ease;
+}
+
+
+
+//====================================================
+//Media Quary
+//====================================================
+@mixin mq($breakpoint: md) {
+	@media #{map.get($breakpoints, $breakpoint)} {
+		@content;
+	}
+}
+
+$breakpoint-sm: 640px !default;
+$breakpoint-md: 834px !default;
+$breakpoint-tab: 1024px !default;
+
+$breakpoints: (
+	'xs': 'screen and (max-width: 389px)',
+	'sm': 'screen and (max-width: 640px)',
+	'md': 'screen and (max-width: 834px)',
+	'lg': 'screen and (max-width: 990px)',
+	'tb': 'screen and (max-width: 1024px)',
+	'xl': 'screen and (max-width: 1200px)',
+	'xsl': 'screen and (max-width: 1400px)',
+	'xxl': 'screen and (max-width: 1500px)',
+	'lp': 'screen and (max-width: 1680px)',
+	'xs-min': 'screen and (min-width: 390px)',
+	'sm-min': 'screen and (min-width: 641px)',
+	'md-min': 'screen and (min-width: 835px)',
+	'lg-min': 'screen and (min-width: 991px)',
+	'tb-min': 'screen and (min-width: 1025px)',
+	'xl-min': 'screen and (min-width: 1201px)',
+	'xsl-min': 'screen and (min-width: 1401px)',
+	'xxl-min': 'screen and (min-width: 1501px)',
+	'lp-min': 'screen and (min-width: 1681px)',
+	) !default;
+
+
+
+
+
+//====================================================
+////px→vwの計算
+////
+////.foo {
+////  width: vw(40px);
+////}
+////
+////.bar {
+////  width: vw(40px, 768px);
+////}
+////
+////.baz {
+////  width: vw(50%);
+////}
+//====================================================
+@function strip-unit($number) {
+	@if type-of($number)=='number' and not unitless($number) {
+		@return math.div($number, ($number * 0 + 1)
+	);
+}
+
+@return $number;
+}
+
+
+@function vw($px, $base: 834px) {
+	$value: $px;
+
+	// 単位がpx以外の場合は警告を出してそのまま返す
+	@if (unit($px) !='px') {
+		@warn 'vw()の引数にpx以外の値を指定しても計算できません';
+		@return $value;
+	}
+
+	$value: math.div((strip-unit($px), strip-unit($base))) * 100vw;
+
+	@return $value;
+}
+
+
+
+
+
+//====================================================
+// Reset form style
+//====================================================
+@mixin formReset() {
+
+	input,
+	button,
+	textarea,
+	select {
+		margin: 0;
+		padding: 0;
+		background: none;
+		border: none;
+		border-radius: 0;
+		outline: none;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+
+		&:active,
+		&:focus {
+			outline: 0;
+		}
+	}
+
+	button {
+		cursor: pointer;
+	}
+}
+
+
+//====================================================
+// flex setting
+//====================================================
+@mixin flex($justify: 0, $align: 0, $wrap: 0, $wrap_align: 0, $column: 0) {
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+
+	// justify-content水平方向揃え（第一引数）
+	@if $justify ==start {
+		// 左揃え
+		-webkit-justify-content: flex-start;
+		-ms-flex-pack: start;
+		justify-content: flex-start;
+	}
+
+	@else if $justify ==end {
+		// 右揃え
+		-webkit-justify-content: flex-end;
+		-ms-flex-pack: end;
+		justify-content: flex-end;
+	}
+
+	@else if $justify ==center {
+		// 中央揃え
+		-webkit-justify-content: center;
+		-ms-flex-pack: center;
+		justify-content: center;
+	}
+
+	@else if $justify ==between {
+		// 両端配置
+		-webkit-justify-content: space-between;
+		-ms-flex-pack: justify;
+		justify-content: space-between;
+	}
+
+	@else if $justify ==around {
+		// 均等配置
+		-webkit-justify-content: space-around;
+		-ms-flex-pack: distribute;
+		justify-content: space-around;
+	}
+
+	// align-items垂直方向揃え（第二引数）
+	@if $align ==start {
+		// 上揃え
+		-webkit-align-items: flex-start;
+		-ms-flex-align: start;
+		align-items: flex-start;
+	}
+
+	@else if $align ==end {
+		// 下揃え
+		-webkit-align-items: flex-end;
+		-ms-flex-align: end;
+		align-items: flex-end;
+	}
+
+	@else if $align ==center {
+		// 中央揃え
+		-webkit-align-items: center;
+		-ms-flex-align: center;
+		align-items: center;
+	}
+
+	@else if $align ==baseline {
+		// ベースライン
+		-webkit-align-items: baseline;
+		-ms-flex-align: baseline;
+		align-items: baseline;
+	}
+
+	@else if $align ==stretch {
+		// 高さ揃え
+		-webkit-align-items: stretch;
+		-ms-flex-align: stretch;
+		align-items: stretch;
+	}
+
+	// flex-wrap子要素の折り返し設定（第三引数）
+	@if $wrap ==nowrap {
+		// 折り返ししない
+		-webkit-flex-wrap: nowrap;
+		-ms-flex-wrap: nowrap;
+		flex-wrap: nowrap;
+	}
+
+	@else if $wrap ==wrap {
+		// 上から下
+		-webkit-flex-wrap: wrap;
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+	}
+
+	@else if $wrap ==reverse {
+		// 下から上
+		-webkit-flex-wrap: wrap-reverse;
+		-ms-flex-wrap: wrap-reverse;
+		flex-wrap: wrap-reverse;
+	}
+
+	// align-content複数行設定（第四引数）
+	@if $wrap_align ==start {
+		// 上揃え
+		-webkit-align-content: flex-start;
+		-ms-flex-line-pack: start;
+		align-content: flex-start;
+	}
+
+	@else if $wrap_align ==end {
+		// 下揃え
+		-webkit-align-content: flex-end;
+		-ms-flex-line-pack: end;
+		align-content: flex-end;
+	}
+
+	@else if $wrap_align ==center {
+		// 中央揃え
+		-webkit-align-content: center;
+		-ms-flex-line-pack: center;
+		align-content: center;
+	}
+
+	@else if $wrap_align ==between {
+		// 両端配置
+		-webkit-align-content: space-between;
+		-ms-flex-line-pack: justify;
+		align-content: space-between;
+	}
+
+	@else if $wrap_align ==around {
+		// 均等配置
+		-webkit-align-content: space-around;
+		-ms-flex-line-pack: distribute;
+		align-content: space-around;
+	}
+
+	@else if $wrap_align ==stretch {
+		// 高さ揃え
+		-webkit-align-content: stretch;
+		-ms-flex-line-pack: stretch;
+		align-content: stretch;
+	}
+
+	// 縦並び（第五引数）
+	@if $column ==1 {
+		-webkit-flex-direction: column;
+		-ms-flex-direction: column;
+		flex-direction: column;
+	}
+}
+
+
+
+
+
+//====================================================
+// hover
+//====================================================
+@mixin hover {
+	@media (any-hover: hover) {
+		&:hover {
+			@content
+		}
+	}
+}
+
+@mixin object-fit($value: cover, $position: null) {
+	object-fit: $value;
+
+	@if $position {
+		object-position: $position;
+		font-family: 'object-fit: #{$value}; object-position: #{$position}',
+		sans-serif;
+	}
+
+	@else {
+		font-family: 'object-fit: #{$value}',
+		sans-serif;
+	}
+}
+
+
+
+
+
+//====================================================
+//画像などを縦横比を維持したままレスポンシブ対応
+//*画像やGoogle Map、YouTubeの埋め込みなどを縦横比を維持したままレスポンシブ対応
+//.photo {
+//  // 画像を16:9にトリミングして縦横比を常に保つ
+//  @include aspect-ratio(16, 9);
+//
+//  & > .image {
+//    @include object-fit(cover);
+//  }
+//}
+//====================================================
+@mixin aspect-ratio($width, $height) {
+	position: relative;
+	overflow: hidden;
+
+	&:before {
+		display: block;
+		content: '';
+		padding-top: math.div($height, $width) * 100%;
+	}
+
+	&> :first-child,
+	img {
+		position: absolute;
+		@include v-h-align;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+
+//====================================================
+//Margin PC and SP
+//====================================================
+@for $i from 0 through 130 {
+	@include mq(md-min) {
+		.mbpc-#{$i} {
+			margin-bottom: $i + px !important;
+		}
+	}
+
+	@include mq() {
+		.mbsp-#{$i} {
+			margin-bottom: $i + px !important;
+		}
+	}
+}
+
+.mb0 {
+	margin-bottom: 0 !important;
+}
+
+
+
+//====================================================
+//Pseudo-elements setting
+//====================================================
+@mixin p-before($w, $h) {
+	&:before {
+		content: "";
+		display: inline-block;
+		position: absolute;
+		width: $w;
+		height: $h;
+		@content;
+	}
+}
+
+@mixin p-after($w, $h) {
+	&:after {
+		content: "";
+		display: inline-block;
+		position: absolute;
+		width: $w;
+		height: $h;
+		@content;
+	}
+}
+
+
+//====================================================
+//txt-stroke setting
+//====================================================
+@mixin txt-stroke($color, $size) {
+	-webkit-text-fill-color: $color;
+	-webkit-text-stroke-width: $size;
+	-webkit-text-stroke-color: $color;
+}
+
+
+@mixin transition($property: all, $duration: 0.45s, $ease: cubic-bezier(0.65, 0, .076, 1)) {
+	transition: $property $duration $ease;
+}
+
+
+
+//====================================================
+//Font awesome setting
+//====================================================
+@mixin ft-awesome($no) {
+	// content:'f02b';
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+
+	@if $no ==arrow-l {
+		// arrow-left = "←"
+		content: '\f060';
+	}
+
+	@else if $no ==arrow-r {
+		// arrow-right = "→"
+		content: '\f061';
+	}
+
+	@else if $no ==c-up {
+		// chevron-up = "︿"
+		content: '\f077';
+	}
+
+	@else if $no ==c-down {
+		// chevron-down = "﹀"
+		content: '\f078';
+	}
+
+	@else if $no ==c-left {
+		// chevron-left = "＜"
+		content: '\f053';
+	}
+
+	@else if $no ==c-right {
+		// chevron-right = "＞"
+		content: '\f054';
+	}
+
+	@else {
+		content: #{'"' + '\\' + $no + '"'};
+	}
+}
+
+
+
+
+
+//====================================================
+//Text ellipsis
+//====================================================
+@mixin u-ellipsis-s() {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+@mixin u-ellipsis-m($line) {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: $line;
+	overflow: hidden;
+}
+
+
+
+
+//====================================================
+//min(), max(), clamp()  setting
+//====================================================
+@function u-max-sizeCalc($max, $size, $viewWidth: 834) {
+	$division: math.div($size, $viewWidth) * 100;
+	@return string.unquote('max(' + $max + ', ' + #{$division}vw + ')');
+}
+
+@function u-min-sizeCalc($min, $size, $viewWidth: 1200) {
+	$division: math.div($size, $viewWidth) * 100;
+	@return string.unquote('min(' + $min + ', ' + #{$division}vw + ')');
+}
+
+//Calculation for responsive optimized size.
+//Modern fluid typography editor: https://modern-fluid-typography.vercel.app/
+@function c-clamp($minSize, $fluidVw: 2vw, $relativeRem: 1rem, $maxSize) {
+	@return string.unquote('clamp(' + $minSize + ', ' + $fluidVw + $relativeRem', ' + $maxSize + ')');
+}
