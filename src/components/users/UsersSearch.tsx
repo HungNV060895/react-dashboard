@@ -1,6 +1,11 @@
 import { LuCirclePlus, LuSearch } from "react-icons/lu";
 
-const UsersSearch = () => {
+interface UsersSearchProps {
+    search: string;
+    setSearch: (search: string) => void;
+}
+
+const UsersSearch = ({search, setSearch} : UsersSearchProps) => {
     return (
         <>
             <div className="user-control flex justify-between mb-6">
@@ -8,7 +13,7 @@ const UsersSearch = () => {
                     <div className="relative">
                         <input
                             className="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                            placeholder="Search for users..."
+                            placeholder="Search for users..." value={search} onChange={(e) => setSearch(e.target.value)}
                         />
                         <button
                             className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "

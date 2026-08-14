@@ -1,7 +1,10 @@
-import { de } from "zod/locales"
-import { users } from  "@/data/users";
+import type { User } from "@/types/user";
 
-const UserTable = () => {
+type UserTableProps = {
+    data: User[];
+};
+
+const UserTable = ({ data }: UserTableProps) => {
     return (
         <>
             <table className="w-full text-sm text-left rtl:text-right text-body">
@@ -16,27 +19,25 @@ const UserTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {
-                        users.map((user) => (
-                            <tr key={user.id} className="odd:bg-white odd:gray:bg-gray-900 even:bg-gray-50 even:grey:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                                <td className="px-6 py-4">
-                                    <img src={user.avatar} alt={user.name} width={40} />
-                                </td>
-                                <td className="px-6 py-4">{user.name}</td>
-                                <td className="px-6 py-4">{user.email}</td>
-                                <td className="px-6 py-4">{user.role}</td>
-                                <td className="px-6 py-4">{user.status}</td>
-                                <td className="px-6 py-4">
-                                    <button className="mr-2 btn-primary rounded-full bg-green-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-green-700">Edit</button>
-                                    <button className="btn-danger  rounded-full bg-red-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-red-700">Delete</button>
-                                </td>
-                            </tr>
-                        ))
-                    }
+                    {data.map((user) => (
+                        <tr key={user.id} className="odd:bg-white odd:gray:bg-gray-900 even:bg-gray-50 even:grey:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                            <td className="px-6 py-4">
+                                <img src={user.avatar} alt={user.name} width={40} />
+                            </td>
+                            <td className="px-6 py-4">{user.name}</td>
+                            <td className="px-6 py-4">{user.email}</td>
+                            <td className="px-6 py-4">{user.role}</td>
+                            <td className="px-6 py-4">{user.status}</td>
+                            <td className="px-6 py-4">
+                                <button className="mr-2 btn-primary rounded-full bg-green-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-green-700">Edit</button>
+                                <button className="btn-danger rounded-full bg-red-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-red-700">Delete</button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </>
-    )
-}
+    );
+};
 
 export default UserTable;

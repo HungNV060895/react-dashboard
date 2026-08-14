@@ -10,7 +10,7 @@ export const users: User[] = [
         avatar: 'https://i.pravatar.cc/150?img=2'
     },
     {
-        id: 1,
+        id: 2,
         name: 'HunggNV',
         email: 'hung@gmail.com',
         role: 'Admin',
@@ -18,7 +18,7 @@ export const users: User[] = [
         avatar: 'https://i.pravatar.cc/150?img=1'
     },
     {
-        id: 1,
+        id: 3,
         name: 'Hung NV',
         email: 'hung.nv@gmail.com',
         role: 'Admin',
@@ -26,7 +26,7 @@ export const users: User[] = [
         avatar: 'https://i.pravatar.cc/150?img=3',
     },
     {
-        id: 2,
+        id: 4,
         name: 'Nguyen Van A',
         email: 'nguyenvana@gmail.com',
         role: 'User',
@@ -34,7 +34,7 @@ export const users: User[] = [
         avatar: 'https://i.pravatar.cc/150?img=4',
     },
     {
-        id: 3,
+        id: 5,
         name: 'Nguyen Van B',
         email: 'nguyenb@gmail.com',
         role: 'User',
