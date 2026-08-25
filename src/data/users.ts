@@ -41,4 +41,36 @@ export const users: User[] = [
         status: 'Inactive',
         avatar: 'https://i.pravatar.cc/150?img=5',
     },
+    {
+        id: 6,
+        name: 'HunggNV',
+        email: 'hung@gmail.com',
+        role: 'Admin',
+        status: 'Active',
+        avatar: 'https://i.pravatar.cc/150?img=1'
+    },
+    {
+        id: 7,
+        name: 'Hung NV',
+        email: 'hung.nv@gmail.com',
+        role: 'Admin',
+        status: 'Active',
+        avatar: 'https://i.pravatar.cc/150?img=3',
+    },
+    {
+        id: 8,
+        name: 'Nguyen Viet Hung',
+        email: 'nguyenvana@gmail.com',
+        role: 'User',
+        status: 'Active',
+        avatar: 'https://i.pravatar.cc/150?img=4',
+    },
+    {
+        id: 9,
+        name: 'Nguyen Viet An',
+        email: 'nguyenb@gmail.com',
+        role: 'User',
+        status: 'Inactive',
+        avatar: 'https://i.pravatar.cc/150?img=5',
+    },
 ]
