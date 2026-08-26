@@ -5,16 +5,30 @@ import UserTable from "@/components/users/UserTable";
 import { useState,  useEffect } from "react";
 import { users } from  "@/data/users";
 import UserFilter from "@/components/users/UserFilter";
+import UserAdd from "@/components/users/UserAdd";
+import type { Error } from "@/types/user";
+import { email } from "zod";
+
 
 
 const Users = () => {
 	const [search, setSearch] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
-
 	const [role, setRole] = useState('All');
 	const [status, setStatus] = useState('All');
+	const [isOpen, setIsOpen] = useState(false);
+
+	//state add users
+	const [nameField, setNameField] = useState('');
+	const [emailField, setEmailField] = useState('');
+	const [roleField, setRoleField] = useState('Admin');
+	const [statusField, setStatusField] = useState('Active');
+	const [avatarField, setAvatarField] = useState(null);
+	const [error, setError] = useState<Error>({});
 
 	const pageSize = 2;
+
+	
 
 	useEffect(() => {
 		setCurrentPage(1);
@@ -39,7 +53,58 @@ const Users = () => {
 	const currentUsers = filteredUsers.slice(startIndex, endIndex);
 
 
+	//Add User
+	//check validate
+	const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		setNameField(value);
+		if(error.name){
+			setError((prev) => ({...prev, name: ''}));
+		}
+	}
 
+	const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		setEmailField(value);
+		
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		let emailError = '';
+
+		if(!value.trim()){
+			emailError = 'Nhap email';
+		}else if(!emailRegex.test(value)){
+			emailError = 'Nhap email dung dinh dang';
+		}
+
+		setError((prev) => ({...prev, email: emailError}));
+	}
+
+	const handleAddUser = () => {
+		const newError: Error = {};
+
+		if(!nameField.trim()){
+			newError.name = 'Nhap ho va ten';
+		}
+
+
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if(!emailField.trim()){
+			newError.email = 'Nhap email';
+		}else if(!emailRegex.test(emailField)){
+			newError.email = 'Nhap email dung dinh dang';
+		}
+
+		console.log(newError);
+		if(Object.keys(newError).length > 0){
+			setError(newError);
+			return;
+		}
+		
+		console.log(nameField, emailField, roleField, statusField);
+
+	}
+
+	
 	return (
 		<>
 			<section className="sec-user">
@@ -52,7 +117,7 @@ const Users = () => {
 							<UserFilter role={role} setRole={setRole} status={status} setStatus={setStatus} />
 						</div>
 						<div className="user-control__right max-w-[150px] w-full">
-							<button className="user-control__btn p-2 border rounded-3xl w-full bg-slate-700 text-white flex items-center justify-center gap-2 hover:bg-slate-400">
+							<button onClick={() => setIsOpen(true)} className="user-control__btn p-2 border rounded-3xl w-full bg-slate-700 text-white flex items-center justify-center gap-2 hover:bg-slate-400">
 								<LuCirclePlus />
 								Add User
 							</button>
@@ -65,6 +130,22 @@ const Users = () => {
 					<UserPagination startIndex={startIndex} currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
 				</div>
 			</section>
+			<UserAdd 
+				isOpen={isOpen} 
+				setIsOpen={setIsOpen} 
+				handleAddUser={handleAddUser}
+				handleNameChange={handleNameChange}
+				handleEmailChange={handleEmailChange}
+				nameField={nameField}
+				emailField={emailField}
+				roleField={roleField}
+				statusField={statusField}
+				setNameField={setNameField}
+				setEmailField={setEmailField}
+				setRoleField={setRoleField}
+				setStatusField={setStatusField}
+				error={error}
+			/>
 		</>
 	)
 }

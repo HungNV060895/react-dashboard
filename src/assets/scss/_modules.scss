@@ -1,0 +1,23 @@
+@layer components {
+    .input-field{
+        @apply p-2 text-sm outline-none w-full h-8 border border-gray-300 rounded-md focus:border-gray-500
+    }
+    .btn-submit{
+        @apply max-w-44 h-10 w-full text-sm text-white bg-green-600 rounded-md outline-none border;
+        &:hover{
+            @apply border border-green-600 text-green-600 bg-transparent transition-colors transition-all
+        }
+    } 
+    .txt-error{
+        @apply text-xs text-red-600
+    }
+}
+
+
+.userAdd-form{
+    &__item{
+        margin-bottom: 1em;
+    }
+}
+
+

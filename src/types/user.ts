@@ -8,3 +8,9 @@ export interface User {
     avatar: string
 }
 
+export interface Error {
+    name?: string;
+    email?: string;
+    role?: string;
+    status?: string;
+}
