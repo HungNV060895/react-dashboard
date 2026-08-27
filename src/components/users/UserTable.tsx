@@ -2,9 +2,11 @@ import type { User } from "@/types/user";
 
 type UserTableProps = {
     data: User[];
+    handleEditUser: (id: number) => void;
+    editUser: User | null,
 };
 
-const UserTable = ({ data }: UserTableProps) => {
+const UserTable = ({ data, handleEditUser, editUser }: UserTableProps) => {
     return (
         <>
             <table className="w-full text-sm text-left rtl:text-right text-body">
@@ -29,7 +31,7 @@ const UserTable = ({ data }: UserTableProps) => {
                             <td className="px-6 py-4">{user.role}</td>
                             <td className="px-6 py-4">{user.status}</td>
                             <td className="px-6 py-4">
-                                <button className="mr-2 btn-primary rounded-full bg-green-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-green-700">Edit</button>
+                                <button onClick={() => handleEditUser(user.id)} className="mr-2 btn-primary rounded-full bg-green-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-green-700">Edit</button>
                                 <button className="btn-danger rounded-full bg-red-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-red-700">Delete</button>
                             </td>
                         </tr>

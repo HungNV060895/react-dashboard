@@ -8,9 +8,15 @@ export interface User {
     avatar: string
 }
 
-export interface Error {
-    name?: string;
-    email?: string;
-    role?: string;
-    status?: string;
+export type FormError = Partial<Record<keyof FormState, string>>;
+
+export interface FormState {
+    id: number,
+    name: string;
+    email: string;
+    role: 'Admin',
+    status: 'Active',
+    avatar: ''
 }
+
+
