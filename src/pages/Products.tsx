@@ -21,6 +21,10 @@ const Products = () => {
 		category: ""
 	})
 
+	const [sorter, setSorter] = useState<String | null>(null);
+
+
+
 	useEffect(() => {
 		localStorage.setItem('dataProducts', JSON.stringify(listProduct));
 	}, [listProduct])
@@ -82,12 +86,44 @@ const Products = () => {
 		setDataProduct((prev) => ({
 			...prev, [name] : value
 		}));
+
+
+		if(name === 'sortprice'){
+			setSorter(value);
+			handleSortPrice(value);
+			setListProduct(handleSortPrice(value))
+		}
+		if(name === 'sortname'){
+			setSorter(value);
+			handleSortName(value);
+			setListProduct(handleSortName(value))
+		}
 	}
+
+	const handleSortPrice = (orderBy: string) => {
+		return orderBy === 'htol' ?
+			[...listProduct].sort((a : ProductType, b: ProductType) => (Number(b.price) - Number(a.price)))
+			:
+			[...listProduct].sort((a : ProductType, b: ProductType) => (Number(a.price) - Number(b.price)))
+	}
+
+	const handleSortName = (orderBy: string) => {
+		return orderBy === 'atoz' ?
+				[...listProduct].sort((a: ProductType, b: ProductType) => a.name.localeCompare(b.name))
+				:
+				[...listProduct].sort((a: ProductType, b: ProductType) => b.name.localeCompare(a.name))
+	}
+
 	return (
 		<>
 			<h1>Products</h1>
 			<button onClick={() => handleOpenModal()}>Add Product</button>
-			<ProductList items={listProduct} handleEditProduct={handleEditProduct} handleDelete={handleDelete} />
+			<ProductList 
+				handleInputChange={handleInputChange} 
+				items={listProduct} 
+				handleEditProduct={handleEditProduct} 
+				handleDelete={handleDelete }
+			/>
 			<ProductAdd 
 				isOpen={isOpen}
 				setIsOpen={setIsOpen}
