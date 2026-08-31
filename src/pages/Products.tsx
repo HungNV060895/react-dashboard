@@ -2,6 +2,9 @@ import type { ProductType } from "@/types/product";
 import { useEffect, useState } from "react";
 import ProductList from "@/components/products/ProductList";
 import ProductAdd from "@/components/products/ProductAdd";
+import SortProduct from "@/components/products/SortProduct";
+import SearchProduct from "@/components/products/SearchProduct";
+import FilterProduct from "@/components/products/FilterProduct";
 
 const Products = () => {
 	
@@ -21,8 +24,10 @@ const Products = () => {
 		category: ""
 	})
 
-	const [sorter, setSorter] = useState<String | null>(null);
+	const [sorter, setSorter] = useState<string>("");
 
+	const [search, setSearch] = useState<string>("");
+	const [category, setCategory] = useState<string>("");
 
 
 	useEffect(() => {
@@ -98,7 +103,26 @@ const Products = () => {
 			handleSortName(value);
 			setListProduct(handleSortName(value))
 		}
+
+		if(name === 'category'){
+			setCategory(value);
+		}
 	}
+
+	const handleSearch = (keyword: string) => {
+		setSearch(keyword);
+	}
+
+
+
+
+	const listProductSearch = 
+	listProduct.filter((item) => {
+		const matchSearch = item.name.trim().toLowerCase().includes(search.trim().toLowerCase());
+		const matchCategory = category.toLowerCase() === '' || item.category.toLowerCase() === category.toLowerCase();
+		return matchSearch && matchCategory;
+	});
+
 
 	const handleSortPrice = (orderBy: string) => {
 		return orderBy === 'htol' ?
@@ -114,13 +138,17 @@ const Products = () => {
 				[...listProduct].sort((a: ProductType, b: ProductType) => b.name.localeCompare(a.name))
 	}
 
+
 	return (
 		<>
 			<h1>Products</h1>
 			<button onClick={() => handleOpenModal()}>Add Product</button>
+			<SearchProduct search={search} handleSearch={handleSearch}/>
+			<FilterProduct items={listProductSearch} handleInputChange={handleInputChange} />
+			<SortProduct handleInputChange={handleInputChange}/>
 			<ProductList 
 				handleInputChange={handleInputChange} 
-				items={listProduct} 
+				items={listProductSearch} 
 				handleEditProduct={handleEditProduct} 
 				handleDelete={handleDelete }
 			/>
