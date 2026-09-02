@@ -17,6 +17,8 @@ const Products = () => {
 
 	
 	const [isOpen, setIsOpen] = useState(false);
+
+	//Note việc cần làm sau khi xong: Tạo initial state chung cho Product
 	const [dataProduct, setDataProduct] = useState<ProductType>({
 		id: 0,
 		name: "",
@@ -106,13 +108,17 @@ const Products = () => {
 
 		if(name === 'sortprice'){
 			setSorter(value);
-			handleSortPrice(value);
-			setListProduct(handleSortPrice(value))
+			//handleSortPrice(value);
+
+			//console.log(handleSortPrice(value));
+			//setListProduct([...listProductSearch, handleSortPrice(value)])
+			//listProductSearch = handleSortPrice(value);
 		}
 		if(name === 'sortname'){
 			setSorter(value);
-			handleSortName(value);
-			setListProduct(handleSortName(value))
+			//handleSortName(value);
+			//console.log(handleSortName(value));
+			//setListProduct(handleSortName(value))
 		}
 
 		if(name === 'categoryFilter'){
@@ -127,27 +133,20 @@ const Products = () => {
 
 
 
-	const listProductSearch = 
+	let listProductSearch = 
 	listProduct.filter((item) => {
 		const matchSearch = item.name.trim().toLowerCase().includes(search.trim().toLowerCase());
 		const matchCategory = category.toLowerCase() === '' || item.category.toLowerCase() === category.toLowerCase();
 		return matchSearch && matchCategory;
-	});
+	}).sort((a: ProductType, b: ProductType) => {
+		if(sorter  === 'htol') return (Number(b.price) - Number(a.price));
+		if(sorter  === 'ltoh') return (Number(a.price) - Number(b.price));
+		if(sorter  === 'atoz') return a.name.localeCompare(b.name);
+		if(sorter  === 'ztoa') return a.name.localeCompare(a.name);
+		return 0;
+	})
 
-
-	const handleSortPrice = (orderBy: string) => {
-		return orderBy === 'htol' ?
-			[...listProduct].sort((a : ProductType, b: ProductType) => (Number(b.price) - Number(a.price)))
-			:
-			[...listProduct].sort((a : ProductType, b: ProductType) => (Number(a.price) - Number(b.price)))
-	}
-
-	const handleSortName = (orderBy: string) => {
-		return orderBy === 'atoz' ?
-				[...listProduct].sort((a: ProductType, b: ProductType) => a.name.localeCompare(b.name))
-				:
-				[...listProduct].sort((a: ProductType, b: ProductType) => b.name.localeCompare(a.name))
-	}
+	console.log(listProductSearch);
 
 
 	return (
