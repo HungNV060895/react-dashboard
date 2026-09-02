@@ -21,7 +21,7 @@ const Products = () => {
 		id: 0,
 		name: "",
 		price: "",
-		category: ""
+		category: "Máy tính"
 	})
 
 	const [sorter, setSorter] = useState<string>("");
@@ -36,6 +36,13 @@ const Products = () => {
 
 	const handleOpenModal = () => {
 		setIsOpen(true);
+		setEditProduct(null);
+		setDataProduct({
+			id: 0,
+			name: "",
+			price: "",
+			category: "Máy tính"
+		})
 	}
 	const handleProductAdd = () => {
 		//1. Khởi tại product mới = giá trị ở ô input
@@ -52,13 +59,17 @@ const Products = () => {
 	}
 
 	const handleEditProduct = (id: number) => {
-		setIsOpen(true);
 		const editedProduct = listProduct.find((item) => item.id === id);
 		if(editedProduct){
 			setDataProduct(editedProduct);
-			setEditProduct(editedProduct);
-			
+			setEditProduct({
+				id: editedProduct.id,
+				name: editedProduct.name,
+				price: editedProduct.price,
+				category: editedProduct.category as "Máy tính" | "Điện thoại"
+			});
 		}
+		setIsOpen(true);
 	}
 
 	const handleUpdateProduct = (idProduct: number) => {
@@ -74,7 +85,7 @@ const Products = () => {
 			id: 0,
 			name: "",
 			price: "",
-			category: ""
+			category: "Máy tính"
 		})
 	}
 
@@ -104,7 +115,7 @@ const Products = () => {
 			setListProduct(handleSortName(value))
 		}
 
-		if(name === 'category'){
+		if(name === 'categoryFilter'){
 			setCategory(value);
 		}
 	}
@@ -144,7 +155,7 @@ const Products = () => {
 			<h1>Products</h1>
 			<button onClick={() => handleOpenModal()}>Add Product</button>
 			<SearchProduct search={search} handleSearch={handleSearch}/>
-			<FilterProduct items={listProductSearch} handleInputChange={handleInputChange} />
+			<FilterProduct handleInputChange={handleInputChange} />
 			<SortProduct handleInputChange={handleInputChange}/>
 			<ProductList 
 				handleInputChange={handleInputChange} 

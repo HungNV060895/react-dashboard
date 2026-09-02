@@ -44,7 +44,7 @@ const UserAdd = (
 						</button>
 					</div>
 					<form onSubmit={(e) => {
-							e.preventDefault;
+							e.preventDefault();
 							editUser ? handleUpdateUser(formData.id) : handleAddUser();
 						}
 					} className="userAdd-form w-full">

@@ -1,26 +1,18 @@
 import type { ProductType } from "@/types/product";
 
 type ProductListType = {
-    items: ProductType[],
     handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
 }
 
-const FilterProduct = ({items, handleInputChange} : ProductListType) => {
-    const uniqueByCategory = items.filter(
-        (item, index, self) =>
-            index === self.findIndex(p => p.category  === item.category)
-    )
+const FilterProduct = ({handleInputChange} : ProductListType) => {
     return (
         <>
             <div className="box-filter-cate">
                 <p>Fillter Category</p>
-                <select name="category" id="category" onChange={handleInputChange}>
+                <select name="categoryFilter" id="categoryFilter" onChange={handleInputChange}>
                     <option value="">All</option>
-                    {
-                        uniqueByCategory.map((item) => (
-                            <option key={item.id} value={item.category}>{item.category}</option>
-                        ))
-                    }
+                    <option value="Máy tính">Máy Tính</option>
+                    <option value="Điện thoại">Điện thoại</option>
                 </select>
             </div>
         </>
