@@ -5,6 +5,7 @@ import ProductAdd from "@/components/products/ProductAdd";
 import SortProduct from "@/components/products/SortProduct";
 import SearchProduct from "@/components/products/SearchProduct";
 import FilterProduct from "@/components/products/FilterProduct";
+import ProductPagination from "@/components/products/ProductPagination";
 
 const Products = () => {
 	
@@ -12,6 +13,10 @@ const Products = () => {
 		const savedProduct = localStorage.getItem('dataProducts');
 		return savedProduct ? JSON.parse(savedProduct) : [];
 	});
+
+	const [items, setItems] = useState<ProductType[]>([]);
+	const [loading, setLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string | null>(null);
 
 	const [editProduct, setEditProduct] = useState<ProductType | null>(null);
 
@@ -32,9 +37,27 @@ const Products = () => {
 	const [category, setCategory] = useState<string>("");
 
 
+	const [currentPage, setCurrentPage] = useState<number>(1);
+
+	const handleChangePage = (page: number) => {
+		setCurrentPage(page)
+	}
+
+
 	useEffect(() => {
 		localStorage.setItem('dataProducts', JSON.stringify(listProduct));
 	}, [listProduct])
+
+	useEffect(() => {
+		setLoading(true);
+		fetchFakeData().then((data) => {
+			setItems(data)
+		}).catch(() => {
+			setError("Error fetching data");
+		}).finally(() => {
+			setLoading(false)
+		})
+	}, [])
 
 	const handleOpenModal = () => {
 		setIsOpen(true);
@@ -106,19 +129,8 @@ const Products = () => {
 		}));
 
 
-		if(name === 'sortprice'){
+		if(name === 'sortprice' || name === 'sortname'){
 			setSorter(value);
-			//handleSortPrice(value);
-
-			//console.log(handleSortPrice(value));
-			//setListProduct([...listProductSearch, handleSortPrice(value)])
-			//listProductSearch = handleSortPrice(value);
-		}
-		if(name === 'sortname'){
-			setSorter(value);
-			//handleSortName(value);
-			//console.log(handleSortName(value));
-			//setListProduct(handleSortName(value))
 		}
 
 		if(name === 'categoryFilter'){
@@ -131,8 +143,6 @@ const Products = () => {
 	}
 
 
-
-
 	let listProductSearch = 
 	listProduct.filter((item) => {
 		const matchSearch = item.name.trim().toLowerCase().includes(search.trim().toLowerCase());
@@ -142,12 +152,36 @@ const Products = () => {
 		if(sorter  === 'htol') return (Number(b.price) - Number(a.price));
 		if(sorter  === 'ltoh') return (Number(a.price) - Number(b.price));
 		if(sorter  === 'atoz') return a.name.localeCompare(b.name);
-		if(sorter  === 'ztoa') return a.name.localeCompare(a.name);
+		if(sorter  === 'ztoa') return b.name.localeCompare(a.name);
 		return 0;
 	})
 
-	console.log(listProductSearch);
+	const postPerPage = 4;
+	const startIndex = (Number(currentPage) - 1) * postPerPage;
+	const endIndex = startIndex + postPerPage;
+	const currentProduct = listProductSearch.slice(startIndex, endIndex);
+	const totalPages = Math.ceil(listProductSearch.length / postPerPage);
 
+	//console.log(currentProduct, totalPages, listProductSearch.length);
+	const fetchFakeData = (delay = 2000) => {
+		return new Promise<ProductType[]>((resolve) => {
+			setTimeout (() => {
+				resolve(currentProduct);
+			}, delay)
+		})
+	}
+
+	if(loading){
+		return (
+			<p className="text-lg text-blue-800 animate-pulse">Loading...</p>
+		)
+	}
+
+	if(error){
+		return (
+			<p className="text-lg text-white bg-red-500 font-medium">Error: {error}</p>
+		)
+	}
 
 	return (
 		<>
@@ -158,10 +192,11 @@ const Products = () => {
 			<SortProduct handleInputChange={handleInputChange}/>
 			<ProductList 
 				handleInputChange={handleInputChange} 
-				items={listProductSearch} 
+				items={items}
 				handleEditProduct={handleEditProduct} 
 				handleDelete={handleDelete }
 			/>
+			<ProductPagination currentPage={currentPage} dataProduct={listProductSearch} startIndex={startIndex} postPerPage={postPerPage} totalPages={totalPages} handleChangePage={handleChangePage} />
 			<ProductAdd 
 				isOpen={isOpen}
 				setIsOpen={setIsOpen}
