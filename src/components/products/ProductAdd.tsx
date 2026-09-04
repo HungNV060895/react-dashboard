@@ -45,6 +45,8 @@ const ProductAdd = ({isOpen, setIsOpen, handleInputChange, handleProductAdd, han
                                 <select onChange={handleInputChange}  name="category" value={dataProduct.category || "Máy tính"} id="category">
                                     <option value="Máy tính">Máy tính</option>
                                     <option value="Điện thoại">Điện thoại</option>
+                                    <option value="Đồ gia dụng">Đồ gia dụng</option>
+                                    <option value="Thiết bị thông minh">Thiết bị thông minh</option>
                                 </select>
                             </dd>
                         </dl>

@@ -59,6 +59,13 @@ const Products = () => {
 		})
 	}, [])
 
+
+	useEffect(() => {
+		if(currentPage > totalPages && totalPages > 0){
+			setCurrentPage(1)
+		}
+	}, [search, category, sorter])
+
 	const handleOpenModal = () => {
 		setIsOpen(true);
 		setEditProduct(null);
@@ -170,6 +177,7 @@ const Products = () => {
 			}, delay)
 		})
 	}
+	//console.log(currentProduct);
 
 	if(loading){
 		return (
@@ -192,7 +200,7 @@ const Products = () => {
 			<SortProduct handleInputChange={handleInputChange}/>
 			<ProductList 
 				handleInputChange={handleInputChange} 
-				items={items}
+				items={currentProduct}
 				handleEditProduct={handleEditProduct} 
 				handleDelete={handleDelete }
 			/>
