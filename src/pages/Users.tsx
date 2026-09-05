@@ -166,7 +166,7 @@ const Users = () => {
 	
 	return (
 		<>
-			<section className="sec-user">
+			<section className="sec-user dark:text-white">
 				<div className="inner">
 					<h2 className="user-ttl text-4xl font-bold mb-4">User Management</h2>
 					<p className="txt-intro text-md mb-5">Manage all users in one place. Control access, assign roles, and monitor activity across your platform.</p>

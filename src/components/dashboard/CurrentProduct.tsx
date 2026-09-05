@@ -3,8 +3,8 @@ const CurrentProduct = () => {
 	return (
 		<>
 			<div className="overflow-x-auto">
-				<table className="min-w-full border border-gray-300 divide-y divide-gray-200">
-						<thead className="bg-gray-300 font-medium">
+				<table className="min-w-full border border-gray-300 divide-y divide-gray-200 dark:text-white">
+						<thead className="bg-gray-300 font-medium dark:text-black">
 							<tr>
 								<th className="font-medium px-4 py-2 text-left">STT</th>
 								<th className="font-medium px-4 py-2 text-left">Name</th>

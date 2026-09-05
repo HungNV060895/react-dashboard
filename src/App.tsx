@@ -10,7 +10,7 @@ function App() {
 			<Header />
 			<div className='flex'>
 				<Sidebar />
-				<main className='flex-1 p-6 bg-slate-100'>
+				<main className='flex-1 p-6 bg-slate-100 dark:bg-slate-900'>
 					<Outlet />
 				</main>
 			</div>

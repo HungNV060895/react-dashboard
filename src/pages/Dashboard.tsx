@@ -19,7 +19,7 @@ const Dashboard = () => {
 
     return (
         <>
-            <h1 className="text-2xl text-slate-950 mb-5">Welcome back! Here's what's happening with your business.</h1>
+            <h1 className="text-2xl text-slate-950 dark:text-white mb-5">Welcome back! Here's what's happening with your business.</h1>
             <ListCard listProduct={listProduct} listUsers={listUsers} num_categories={num_categories} totalPrice={totalPrice}/>
             <CurrentProduct />
         </>

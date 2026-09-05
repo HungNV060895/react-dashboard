@@ -9,7 +9,7 @@ type UserTableProps = {
 const UserTable = ({ data, handleEditUser, editUser }: UserTableProps) => {
     return (
         <>
-            <table className="w-full text-sm text-left rtl:text-right text-body">
+            <table className="w-full text-sm text-left rtl:text-right text-body dark:color-black">
                 <thead className="bg-neutral-secondary-soft border-b border-default">
                     <tr>
                         <th scope="col" className="px-6 py-3 font-medium">Avatar</th>
@@ -22,7 +22,7 @@ const UserTable = ({ data, handleEditUser, editUser }: UserTableProps) => {
                 </thead>
                 <tbody>
                     {data.map((user) => (
-                        <tr key={user.id} className="odd:bg-white odd:gray:bg-gray-900 even:bg-gray-50 even:grey:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
+                        <tr key={user.id} className="odd:bg-white odd:gray:bg-gray-900 even:bg-gray-50 even:grey:bg-gray-800 border-b dark:border-gray-700 dark:text-slate-950 border-gray-200">
                             <td className="px-6 py-4">
                                 <img src={user.avatar} alt={user.name} width={40} />
                             </td>
