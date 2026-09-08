@@ -47,6 +47,12 @@ const ProductAdd = ({isOpen, setIsOpen, handleInputChange, handleProductAdd, han
                                     <option value="Điện thoại">Điện thoại</option>
                                     <option value="Đồ gia dụng">Đồ gia dụng</option>
                                     <option value="Thiết bị thông minh">Thiết bị thông minh</option>
+                                    <option value="Thời trang nam">Thời trang nam</option>
+                                    <option value="Đồng hồ">Đồng hồ</option>
+                                    <option value="Thời trang nữ">Thời trang nữ</option>
+                                    <option value="Sắc đẹp">Sắc đẹp</option>
+                                    <option value="Giày dép nữ">Giày dép nữ</option>
+                                    <option value="Sách vở">Sách vở</option>
                                 </select>
                             </dd>
                         </dl>

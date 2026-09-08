@@ -21,7 +21,6 @@ const Header = () => {
         }
     }, [mode])
 
-    console.log(mode);
     return (
         <>
             <header className="bg-gray-50 text-slate-950 dark:text-white p-4 dark:bg-gray-800">

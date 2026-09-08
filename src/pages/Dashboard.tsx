@@ -21,16 +21,16 @@ const Dashboard = () => {
 
     const currentProduct = listProduct.slice((listProduct.length - 5), listProduct.length);
 
-    const chartData = Object.entries(grouped).map(([category, total]) => {
+    const chartData = Object.entries(grouped).map(([category, total]) => ({
         category, total
-    })
+    }))
 
     return (
         <>
             <h1 className="text-2xl text-slate-950 dark:text-white mb-5">Welcome back! Here's what's happening with your business.</h1>
             <ListCard listProduct={listProduct} listUsers={listUsers} num_categories={num_categories} totalPrice={totalPrice}/>
+            <ProductChart chartData={chartData}/>
             <CurrentProduct currentProduct={currentProduct} />
-            <ProductChart/>
         </>
     )
 }

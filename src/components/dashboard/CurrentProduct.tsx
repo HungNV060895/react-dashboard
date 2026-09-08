@@ -2,7 +2,6 @@ import { ProductType } from "@/types/product";
 import { LuShoppingCart } from "react-icons/lu";
 
 const CurrentProduct = ({ currentProduct }: { currentProduct: ProductType[] }) => {
-	console.log(currentProduct);
 	return (
 		<>
 			<h2 className="text-2xl text-slate-950 dark:text-white mb-5"><LuShoppingCart className="inline-block relative bottom-1" /> Current Product</h2>
