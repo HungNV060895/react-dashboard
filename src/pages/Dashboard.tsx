@@ -1,4 +1,5 @@
 import CurrentProduct from "@/components/dashboard/CurrentProduct";
+import CurrentUser from "@/components/dashboard/CurrentUser";
 import ListCard from "@/components/dashboard/ListCard";
 import ProductChart from "@/components/dashboard/ProductChart";
 import type {ProductType} from "@/types/product";
@@ -20,6 +21,7 @@ const Dashboard = () => {
 
 
     const currentProduct = listProduct.slice((listProduct.length - 5), listProduct.length);
+    const currentUsers = listUsers.slice((listUsers.length - 5), listUsers.length);
 
     const chartData = Object.entries(grouped).map(([category, total]) => ({
         category, total
@@ -31,6 +33,7 @@ const Dashboard = () => {
             <ListCard listProduct={listProduct} listUsers={listUsers} num_categories={num_categories} totalPrice={totalPrice}/>
             <ProductChart chartData={chartData}/>
             <CurrentProduct currentProduct={currentProduct} />
+            <CurrentUser currentUsers={currentUsers} />
         </>
     )
 }

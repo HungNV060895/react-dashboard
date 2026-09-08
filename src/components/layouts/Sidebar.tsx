@@ -4,7 +4,7 @@ import { sidebarMenus } from "@constants/menu";
 
 const Sidebar = () => {
 	return (
-		<aside className='w-64 p-4 shrink-0 bg-blue-200 h-screen'>
+		<aside className='w-64 p-4 shrink-0 bg-blue-200 sticky'>
 			<div className="p-6 text-xl font-bold">
 				My Dashboard
 			</div>
