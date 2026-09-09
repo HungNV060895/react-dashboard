@@ -8,7 +8,7 @@ function App() {
 	return (
 		<>
 			<Header />
-			<div className='flex'>
+			<div className='flex min-h-screen'>
 				<Sidebar />
 				<main className='flex-1 p-6 bg-slate-100 dark:bg-slate-900'>
 					<Outlet />

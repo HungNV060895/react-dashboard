@@ -4,12 +4,22 @@ type UserTableProps = {
     data: User[];
     handleEditUser: (id: number) => void;
     editUser: User | null,
+    loading: boolean,
+    iserror:  string
 };
 
-const UserTable = ({ data, handleEditUser, editUser }: UserTableProps) => {
+const UserTable = ({ data, handleEditUser, editUser, loading, iserror }: UserTableProps) => {
+    if (iserror) {
+        return <p>Lỗi rồi....</p>;
+    }
+    
+    if (loading) {
+        return <p>Loading....</p>;
+    }
+
     return (
         <>
-            <table className="w-full text-sm text-left rtl:text-right text-body dark:color-black">
+            <table className="w-full border border-default text-sm text-left rtl:text-right text-body dark:color-black">
                 <thead className="bg-neutral-secondary-soft border-b border-default">
                     <tr>
                         <th scope="col" className="px-6 py-3 font-medium">Avatar</th>

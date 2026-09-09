@@ -7,15 +7,22 @@ import UserFilter from "@/components/users/UserFilter";
 import UserAdd from "@/components/users/UserAdd";
 import type { FormError, User, FormState } from "@/types/user";
 import {initialFormData} from "@/constants/user";
-
+import getUsers from "@/services/userApi";
 
 
 const Users = () => {
-	const [usersList, setUsersList] = useState<User[]>(() => {
-		const saved = localStorage.getItem('dataUsers');
-		return saved ? JSON.parse(saved) : []
-	});
 
+	
+
+	// const [usersList, setUsersList] = useState<User[]>(() => {
+	// 	const saved = localStorage.getItem('dataUsers');
+	// 	return saved ? JSON.parse(saved) : []
+	// });
+	
+	const [loading, setLoading] = useState<boolean>(false);
+	const [iserror, setIsError] = useState<string>("");
+	const [usersList, setUsersList] = useState<User[]>([]);
+	//console.log(usersList);
 
 	const [editUser, setEditUser] = useState<User | null>(null);
 
@@ -45,31 +52,50 @@ const Users = () => {
 
 	const pageSize = 2;
 
+
+
+	useEffect(() => {
+		setLoading(true);
+		const fetchAllUsers = async () => {
+			try{
+				const data = await getUsers();
+				setUsersList(data);
+			} catch(error) {
+				setIsError(String(error));
+			}finally{
+				console.log("Request completed");
+				setLoading(false);
+			}
+		}
+		
+		fetchAllUsers();
+	}, [])
+
 	useEffect(() => {
 		setCurrentPage(1);
 	}, [search, role, status]);
 
-	useEffect(() => {
-		localStorage.setItem('dataUsers', JSON.stringify(usersList))
-	}, [usersList]);
+	// useEffect(() => {
+	// 	localStorage.setItem('dataUsers', JSON.stringify(usersList))
+	// }, [usersList]);
 
-	const normalizedSearch = search.trim().toLowerCase();
+	// const normalizedSearch = search.trim().toLowerCase();
 
-	const filteredUsers = usersList.filter((user) =>{
-		const matchSearch = user.name.toLowerCase().includes(normalizedSearch) ||
-							user.email.toLowerCase().includes(normalizedSearch);
-		const matchRole = role === 'All' || user.role === role;
-		const matchStatus = status === 'All' || user.status === status;
-		return matchSearch && matchRole && matchStatus;
-	});
+	// const filteredUsers = usersList.filter((user) =>{
+	// 	const matchSearch = user.name.toLowerCase().includes(normalizedSearch) ||
+	// 						user.email.toLowerCase().includes(normalizedSearch);
+	// 	const matchRole = role === 'All' || user.role === role;
+	// 	const matchStatus = status === 'All' || user.status === status;
+	// 	return matchSearch && matchRole && matchStatus;
+	// });
 
 	
 
 
-	const totalPages = Math.ceil(filteredUsers.length / pageSize);
-	const startIndex = (currentPage - 1) * pageSize;
-	const endIndex = startIndex + pageSize;
-	const currentUsers = filteredUsers.slice(startIndex, endIndex);
+	// const totalPages = Math.ceil(filteredUsers.length / pageSize);
+	// const startIndex = (currentPage - 1) * pageSize;
+	// const endIndex = startIndex + pageSize;
+	// const currentUsers = filteredUsers.slice(startIndex, endIndex);
 
 
 	const hadleOpenModal = () => {
@@ -183,10 +209,16 @@ const Users = () => {
 						</div>
 					</div>
 					
-					<div className="user-table relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base border border-default">
-						<UserTable data={currentUsers} handleEditUser={handleEditUser} editUser={editUser} />
+					<div className="user-table relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base">
+						<UserTable 
+							data={usersList} 
+							handleEditUser={handleEditUser} 
+							editUser={editUser} 
+							loading={loading}
+							iserror={iserror}
+						/>
 					</div>
-					<UserPagination startIndex={startIndex} currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+					{/* <UserPagination startIndex={startIndex} currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} /> */}
 				</div>
 			</section>
 			<UserAdd 
