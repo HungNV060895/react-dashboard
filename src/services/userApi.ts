@@ -15,4 +15,9 @@ const createUsers = async (dataUser: User): Promise<User[]> => {
     return response.data;
 }
 
-export {getUsers, createUsers};
+const updateUser = async(updateUser: User, userID: number): Promise<User> => {
+    const response = await axiosClient.put(`/users/${userID}`, updateUser);
+    return response.data;
+}
+
+export {getUsers, createUsers, updateUser};

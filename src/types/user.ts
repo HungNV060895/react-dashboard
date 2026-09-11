@@ -16,7 +16,7 @@ export interface FormState {
     email: string;
     role: 'Admin',
     status: 'Active',
-    avatar: ''
+    avatar: string
 }
 
 

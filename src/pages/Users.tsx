@@ -7,7 +7,7 @@ import UserFilter from "@/components/users/UserFilter";
 import UserAdd from "@/components/users/UserAdd";
 import type { FormError, User, FormState } from "@/types/user";
 import {initialFormData} from "@/constants/user";
-import {getUsers} from "@/services/userApi";
+import {getUsers, createUsers, updateUser} from "@/services/userApi";
 
 
 const Users = () => {
@@ -144,10 +144,9 @@ const Users = () => {
 			avatar: ''
 		}
 
-		// const updateUsersList = [...usersList, newUser];
-		// setUsersList(updateUsersList);
 		setUsersList((prev) => [...prev, newUser]);
-		// localStorage.setItem('dataUsers', JSON.stringify(updateUsersList));
+		createUsers(newUser).then(data => console.log(data)).catch(dataError => console.log(dataError));
+		
 		setIsOpen(false);
 		setFromData(initialFormData);
 		setError({});
@@ -157,6 +156,7 @@ const Users = () => {
 
 	const handleEditUser = (idUser : number) => {
 		const currentUser = usersList.find((item) => item.id === idUser);
+		console.log("User trước khi update:", currentUser);
 		if(currentUser){
 			setEditUser(currentUser);
 			setFromData({
@@ -165,13 +165,13 @@ const Users = () => {
 				email: currentUser.email,
 				role: currentUser.role as FormState["role"],
 				status: currentUser.status as FormState['status'],
-				avatar: ''
+				avatar: currentUser.avatar as FormState['avatar']
 			})
 		}
 		setIsOpen(true);
 	}
 
-	const handleUpdateUser = (idUser: number) => {
+	const handleUpdateUser = async(idUser: number) => {
 		//(`update user ${idUser}`);
 		const dataUpdate: User = {
 			id: idUser,
@@ -179,14 +179,21 @@ const Users = () => {
 			email: formData.email,
 			role: formData.role,
 			status: formData.status,
-			avatar: ''
+			avatar: formData.avatar
 		}
+		
 
-		setUsersList((prev) => prev.map(item => item.id === idUser ? {...item, ...dataUpdate} : item ))
-		//console.log(dataUpdate);
-		setIsOpen(false);
-		setFromData(initialFormData);
-		setError({});
+		try{
+			const updatedUser  = await updateUser(dataUpdate, idUser);
+
+			setUsersList((prev) => prev.map(item => item.id === idUser ? updatedUser : item ))
+			console.log(dataUpdate);
+			setIsOpen(false);
+			setFromData(initialFormData);
+			setError({});
+		}catch(error){
+			console.log(error);
+		}
 	}
 
 	

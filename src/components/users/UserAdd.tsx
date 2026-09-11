@@ -4,7 +4,7 @@ type ModalTypes = {
 	isOpen: boolean;
 	setIsOpen : (isOpen: boolean) => void;
 	handleAddUser: () => void;
-	handleUpdateUser: (userId: number) => void;
+	handleUpdateUser: (userId: number, formData: User) => void;
 	handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 	error: FormError 
 }
@@ -28,7 +28,7 @@ const UserAdd = (
 		error
 	} : UserAddProps
 ) => {
-	//console.log(formData.id);
+	//console.log(formData);
 	return (
 		<>
 			<div id="userModal" className={`fixed inset-0 z-50 items-center justify-center ${isOpen ? 'flex' : 'hidden'}`}>
@@ -45,7 +45,7 @@ const UserAdd = (
 					</div>
 					<form onSubmit={(e) => {
 							e.preventDefault();
-							editUser ? handleUpdateUser(formData.id) : handleAddUser();
+							editUser ? handleUpdateUser(formData.id, formData) : handleAddUser();
 						}
 					} className="userAdd-form w-full">
 						<dl className="userAdd-form__item flex justify-between items-center">
@@ -94,7 +94,15 @@ const UserAdd = (
 						<dl className="userAdd-form__item flex justify-between items-center">
 							<dt className="w-[20%]">Avatar</dt>
 							<dd className="w-[70%]">
-								<input type="file" />
+								{
+									editUser ? 
+									(
+										<>
+											<img width={100} src={formData.avatar} alt="" />
+										</>
+									)
+									: <input type="file" />
+								}
 							</dd>
 						</dl>
 						<button type="submit" className="btn-submit block w-[70%] ml-[30%]">
