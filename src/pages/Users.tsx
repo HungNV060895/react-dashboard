@@ -7,7 +7,7 @@ import UserFilter from "@/components/users/UserFilter";
 import UserAdd from "@/components/users/UserAdd";
 import type { FormError, User, FormState } from "@/types/user";
 import {initialFormData} from "@/constants/user";
-import getUsers from "@/services/userApi";
+import {getUsers} from "@/services/userApi";
 
 
 const Users = () => {
