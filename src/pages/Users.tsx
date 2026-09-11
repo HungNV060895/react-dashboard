@@ -7,12 +7,10 @@ import UserFilter from "@/components/users/UserFilter";
 import UserAdd from "@/components/users/UserAdd";
 import type { FormError, User, FormState } from "@/types/user";
 import {initialFormData} from "@/constants/user";
-import {getUsers, createUsers, updateUser} from "@/services/userApi";
+import {getUsers, createUsers, updateUser, deleteUser} from "@/services/userApi";
 
 
 const Users = () => {
-
-	
 
 	// const [usersList, setUsersList] = useState<User[]>(() => {
 	// 	const saved = localStorage.getItem('dataUsers');
@@ -28,6 +26,7 @@ const Users = () => {
 
 	const [search, setSearch] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
+	const [totalPages, setTotalPages] = useState(0);
 	const [role, setRole] = useState('All');
 	const [status, setStatus] = useState('All');
 	const [isOpen, setIsOpen] = useState(false);
@@ -50,26 +49,28 @@ const Users = () => {
 	// const [avatarField, setAvatarField] = useState(null);
 	const [error, setError] = useState<FormError>({});
 
-	const pageSize = 2;
+	const pageSize = 6;
 
 
-
+	console.log(totalPages);
 	useEffect(() => {
 		setLoading(true);
 		const fetchAllUsers = async () => {
 			try{
-				const data = await getUsers();
-				setUsersList(data);
+				const res = await getUsers(currentPage, pageSize);
+				console.log(res);
+				setUsersList(res.data);
+				setTotalPages(res.total);
 			} catch(error) {
 				setIsError(String(error));
 			}finally{
-				console.log("Request completed");
+				//console.log("Request completed");
 				setLoading(false);
 			}
 		}
 		
 		fetchAllUsers();
-	}, [])
+	}, [currentPage])
 
 	useEffect(() => {
 		setCurrentPage(1);
@@ -79,24 +80,26 @@ const Users = () => {
 	// 	localStorage.setItem('dataUsers', JSON.stringify(usersList))
 	// }, [usersList]);
 
-	// const normalizedSearch = search.trim().toLowerCase();
+	const normalizedSearch = search.trim().toLowerCase();
 
-	// const filteredUsers = usersList.filter((user) =>{
-	// 	const matchSearch = user.name.toLowerCase().includes(normalizedSearch) ||
-	// 						user.email.toLowerCase().includes(normalizedSearch);
-	// 	const matchRole = role === 'All' || user.role === role;
-	// 	const matchStatus = status === 'All' || user.status === status;
-	// 	return matchSearch && matchRole && matchStatus;
-	// });
+	const filteredUsers = usersList.filter((user) =>{
+		const matchSearch = user.name.toLowerCase().includes(normalizedSearch) ||
+							user.email.toLowerCase().includes(normalizedSearch);
+		const matchRole = role === 'All' || user.role === role;
+		const matchStatus = status === 'All' || user.status === status;
+		return matchSearch && matchRole && matchStatus;
+	});
 
 	
 
 
-	// const totalPages = Math.ceil(filteredUsers.length / pageSize);
-	// const startIndex = (currentPage - 1) * pageSize;
-	// const endIndex = startIndex + pageSize;
-	// const currentUsers = filteredUsers.slice(startIndex, endIndex);
+	//const totalPages = Math.ceil(filteredUsers.length / pageSize);
+	const startIndex = (currentPage - 1) * pageSize;
+	const endIndex = startIndex + pageSize;
+	const currentUsers = filteredUsers;
 
+
+	console.log(startIndex, endIndex);
 
 	const hadleOpenModal = () => {
 		setIsOpen(true);
@@ -135,8 +138,7 @@ const Users = () => {
 			return;
 		}
 
-		const newUser: User = {
-			id: Date.now(),
+		const newUser: Omit<User, 'id'> = {
 			name: formData.name,
 			email: formData.email,
 			role: formData.role,
@@ -144,8 +146,10 @@ const Users = () => {
 			avatar: ''
 		}
 
-		setUsersList((prev) => [...prev, newUser]);
-		createUsers(newUser).then(data => console.log(data)).catch(dataError => console.log(dataError));
+		createUsers(newUser)
+			.then((data) => setUsersList((prev) => [...prev, data]))
+			.catch((dataError) => console.log(dataError));
+		
 		
 		setIsOpen(false);
 		setFromData(initialFormData);
@@ -196,7 +200,21 @@ const Users = () => {
 		}
 	}
 
-	
+
+	const handleDeleteUser = async(userID: number) => {
+		const toast = confirm('Xoá không em?');
+		console.log(userID);
+		if(toast){
+			try{
+				await deleteUser(userID) ? console.log('ok') : 'Error';
+				setUsersList((prev) => prev.filter((item) => item.id !== userID));
+			}catch(error){
+				console.log(error);
+			}
+		}else{
+			console.log("Không xoá");
+		}
+	}
 	return (
 		<>
 			<section className="sec-user dark:text-white">
@@ -218,14 +236,15 @@ const Users = () => {
 					
 					<div className="user-table relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base">
 						<UserTable 
-							data={usersList} 
-							handleEditUser={handleEditUser} 
+							data={currentUsers} 
+							handleEditUser={handleEditUser}
+							handleDeleteUser={handleDeleteUser}
 							editUser={editUser} 
 							loading={loading}
 							iserror={iserror}
 						/>
 					</div>
-					{/* <UserPagination startIndex={startIndex} currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} /> */}
+					<UserPagination startIndex={startIndex} currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
 				</div>
 			</section>
 			<UserAdd 

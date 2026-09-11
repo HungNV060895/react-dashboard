@@ -3,12 +3,13 @@ import type { User } from "@/types/user";
 type UserTableProps = {
     data: User[];
     handleEditUser: (id: number) => void;
+    handleDeleteUser: (id: number) => void;
     editUser: User | null,
     loading: boolean,
     iserror:  string
 };
 
-const UserTable = ({ data, handleEditUser, editUser, loading, iserror }: UserTableProps) => {
+const UserTable = ({ data, handleEditUser, editUser, handleDeleteUser , loading, iserror }: UserTableProps) => {
     if (iserror) {
         return <p>Lỗi rồi....</p>;
     }
@@ -42,7 +43,7 @@ const UserTable = ({ data, handleEditUser, editUser, loading, iserror }: UserTab
                             <td className="px-6 py-4">{user.status}</td>
                             <td className="px-6 py-4">
                                 <button onClick={() => handleEditUser(user.id)} className="mr-2 btn-primary rounded-full bg-green-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-green-700">Edit</button>
-                                <button className="btn-danger rounded-full bg-red-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-red-700">Delete</button>
+                                <button onClick={() => handleDeleteUser(user.id)} className="btn-danger rounded-full bg-red-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-red-700">Delete</button>
                             </td>
                         </tr>
                     ))}
