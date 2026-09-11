@@ -26,7 +26,7 @@ const Users = () => {
 
 	const [search, setSearch] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
-	const [totalPages, setTotalPages] = useState(0);
+	const [totalUsers, setTotalUsers] = useState(0);
 	const [role, setRole] = useState('All');
 	const [status, setStatus] = useState('All');
 	const [isOpen, setIsOpen] = useState(false);
@@ -52,15 +52,15 @@ const Users = () => {
 	const pageSize = 6;
 
 
-	console.log(totalPages);
+	//console.log(totalPages);
 	useEffect(() => {
 		setLoading(true);
 		const fetchAllUsers = async () => {
 			try{
 				const res = await getUsers(currentPage, pageSize);
-				console.log(res);
+				//console.log(res);
 				setUsersList(res.data);
-				setTotalPages(res.total);
+				setTotalUsers(res.total);
 			} catch(error) {
 				setIsError(String(error));
 			}finally{
@@ -93,13 +93,13 @@ const Users = () => {
 	
 
 
-	//const totalPages = Math.ceil(filteredUsers.length / pageSize);
+	const totalPages = Math.ceil(totalUsers / pageSize);
 	const startIndex = (currentPage - 1) * pageSize;
 	const endIndex = startIndex + pageSize;
 	const currentUsers = filteredUsers;
 
 
-	console.log(startIndex, endIndex);
+	//console.log(startIndex, endIndex);
 
 	const hadleOpenModal = () => {
 		setIsOpen(true);
@@ -244,7 +244,13 @@ const Users = () => {
 							iserror={iserror}
 						/>
 					</div>
-					<UserPagination startIndex={startIndex} currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
+					<UserPagination 
+						startIndex={startIndex}
+						pageSize={pageSize}
+						currentPage={currentPage} 
+						totalPages={totalPages} 
+						totalUsers={totalUsers}
+						onPageChange={setCurrentPage} />
 				</div>
 			</section>
 			<UserAdd 

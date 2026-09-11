@@ -9,8 +9,10 @@ interface UsersResponse {
 //get user
 const getUsers = async (page: number, limit: number): Promise<UsersResponse> => {
     const response = await axiosClient.get<User[]>(`/users?page=${page}&limit=${limit}`);
-    const total = response.data.length;
+    const responseTotal = await axiosClient.get<User[]>('/users');
+    const total = responseTotal.data.length;
     await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log('Total users:', total);
     return {
         data: response.data,
         total

@@ -2,16 +2,18 @@ interface UserPaginationProps {
     currentPage: number;
     totalPages: number;
     startIndex: number;
+    pageSize: number;
+    totalUsers: number;
     onPageChange: (page: number) => void;
 }
 
 
-const UserPagination = ({ currentPage, totalPages, startIndex, onPageChange} : UserPaginationProps) => {
+const UserPagination = ({ currentPage, totalPages, startIndex, pageSize, totalUsers, onPageChange} : UserPaginationProps) => {
     return (
         <>
             <div className="flex justify-between items-center px-4 py-3">
                 <div className="text-sm text-slate-500">
-                Showing <b>{startIndex + 1}-{Math.min(startIndex + 2, totalPages * 2)}</b> of {totalPages * 2}
+                Showing <b>{startIndex + 1}-{Math.min(startIndex + pageSize, totalUsers)}</b> of {totalUsers}
                 </div>
                 <div className="flex space-x-1">
                     <button disabled={currentPage === 1} onClick={() => onPageChange(currentPage - 1)} className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
