@@ -6,16 +6,34 @@ interface UsersResponse {
     total: number
 }
 
+
+
 //get user
-const getUsers = async (page: number, limit: number): Promise<UsersResponse> => {
-    const response = await axiosClient.get<User[]>(`/users?page=${page}&limit=${limit}`);
-    const responseTotal = await axiosClient.get<User[]>('/users');
-    const total = responseTotal.data.length;
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    console.log('Total users:', total);
+const getUsers = async (
+    page: number, 
+    limit: number,
+    search: string,
+    role: string,
+    status: string
+): Promise<UsersResponse> => {
+    const response = await axiosClient.get<User[]>('/users', {
+        params: {
+            page, limit, search: search || undefined,
+            role: role !== 'All' ? role : undefined,
+            status: status !== 'All' ? status : undefined,
+        }
+    });
+    const responseTotal = await axiosClient.get<User[]>('/users', {
+        params: {
+            search: search || undefined,
+            role: role !== 'All' ? role : undefined,
+            status: status !== 'All' ? status : undefined,
+        }
+    });
+    //await new Promise(resolve => setTimeout(resolve, 2000));
     return {
         data: response.data,
-        total
+        total: responseTotal.data.length
     }
 }
 

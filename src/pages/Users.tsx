@@ -51,52 +51,57 @@ const Users = () => {
 
 	const pageSize = 6;
 
+	const fetchUsers = async (page: number) => {
+		setLoading(true);
+		setIsError('');
+
+		try {
+			const res = await getUsers(page, pageSize, search, role, status);
+			setUsersList(res.data);
+			setTotalUsers(res.total);
+			return res;
+		} catch (error) {
+			setIsError('Không thể tải danh sách người dùng. Vui lòng thử lại sau.');
+			throw error;
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	//console.log(totalPages);
+	//console.log(totalUsers);
 	useEffect(() => {
-		setLoading(true);
-		const fetchAllUsers = async () => {
-			try{
-				const res = await getUsers(currentPage, pageSize);
-				//console.log(res);
-				setUsersList(res.data);
-				setTotalUsers(res.total);
-			} catch(error) {
-				setIsError(String(error));
-			}finally{
-				//console.log("Request completed");
-				setLoading(false);
-			}
-		}
-		
-		fetchAllUsers();
-	}, [currentPage])
+		let isMounted = true;
+
+		fetchUsers(currentPage);
+		return () => {
+			isMounted = false;
+		};
+	}, [currentPage, search, role, status]);
+
+	// console.log(currentPage);
 
 	useEffect(() => {
 		setCurrentPage(1);
 	}, [search, role, status]);
 
-	// useEffect(() => {
-	// 	localStorage.setItem('dataUsers', JSON.stringify(usersList))
-	// }, [usersList]);
 
-	const normalizedSearch = search.trim().toLowerCase();
-
-	const filteredUsers = usersList.filter((user) =>{
-		const matchSearch = user.name.toLowerCase().includes(normalizedSearch) ||
-							user.email.toLowerCase().includes(normalizedSearch);
-		const matchRole = role === 'All' || user.role === role;
-		const matchStatus = status === 'All' || user.status === status;
-		return matchSearch && matchRole && matchStatus;
-	});
+	//const normalizedSearch = search.trim().toLowerCase();
+	
+	// const filteredUsers = usersList.filter((user) =>{
+	// 	const matchSearch = user.name.toLowerCase().includes(normalizedSearch) ||
+	// 						user.email.toLowerCase().includes(normalizedSearch);
+	// 	const matchRole = role === 'All' || user.role === role;
+	// 	const matchStatus = status === 'All' || user.status === status;
+	// 	return matchSearch && matchRole && matchStatus;
+	// });
 
 	
 
 
 	const totalPages = Math.ceil(totalUsers / pageSize);
 	const startIndex = (currentPage - 1) * pageSize;
-	const endIndex = startIndex + pageSize;
-	const currentUsers = filteredUsers;
+	const currentUsers = usersList;
 
 
 	//console.log(startIndex, endIndex);
@@ -119,7 +124,7 @@ const Users = () => {
 		}
 	}
 
-	const handleAddUser = () => {
+	const handleAddUser = async () => {
 		const newError: FormError = {};
 
 		if(!formData.name.trim()){
@@ -146,14 +151,25 @@ const Users = () => {
 			avatar: ''
 		}
 
-		createUsers(newUser)
-			.then((data) => setUsersList((prev) => [...prev, data]))
-			.catch((dataError) => console.log(dataError));
-		
-		
-		setIsOpen(false);
-		setFromData(initialFormData);
-		setError({});
+		try {
+			await createUsers(newUser);
+			const nextTotalUsers = totalUsers + 1;
+			const nextTotalPages = Math.ceil(nextTotalUsers / pageSize) || 1;
+
+			setTotalUsers(nextTotalUsers);
+
+			if (nextTotalPages !== currentPage) {
+				setCurrentPage(nextTotalPages);
+			} else {
+				await fetchUsers(currentPage);
+			}
+
+			setIsOpen(false);
+			setFromData(initialFormData);
+			setError({});
+		} catch (dataError) {
+			console.log(dataError);
+		}
 	}
 
 
@@ -176,7 +192,6 @@ const Users = () => {
 	}
 
 	const handleUpdateUser = async(idUser: number) => {
-		//(`update user ${idUser}`);
 		const dataUpdate: User = {
 			id: idUser,
 			name: formData.name,
@@ -191,7 +206,7 @@ const Users = () => {
 			const updatedUser  = await updateUser(dataUpdate, idUser);
 
 			setUsersList((prev) => prev.map(item => item.id === idUser ? updatedUser : item ))
-			console.log(dataUpdate);
+			//console.log(dataUpdate);
 			setIsOpen(false);
 			setFromData(initialFormData);
 			setError({});
@@ -203,12 +218,20 @@ const Users = () => {
 
 	const handleDeleteUser = async(userID: number) => {
 		const toast = confirm('Xoá không em?');
-		console.log(userID);
 		if(toast){
 			try{
-				await deleteUser(userID) ? console.log('ok') : 'Error';
-				setUsersList((prev) => prev.filter((item) => item.id !== userID));
-			}catch(error){
+				await deleteUser(userID);
+				setTotalUsers((prev) => Math.max(prev - 1, 0));
+
+				const newTotal = Math.max(totalUsers - 1, 0);
+				const newTotalPage = Math.ceil(newTotal / pageSize) || 1;
+
+				if (currentPage > newTotalPage) {
+					setCurrentPage(newTotalPage);
+				} else {
+					setUsersList((prev) => prev.filter((item) => item.id !== userID));
+				}
+			} catch (error) {
 				console.log(error);
 			}
 		}else{
@@ -250,6 +273,7 @@ const Users = () => {
 						currentPage={currentPage} 
 						totalPages={totalPages} 
 						totalUsers={totalUsers}
+						loading={loading}
 						onPageChange={setCurrentPage} />
 				</div>
 			</section>
