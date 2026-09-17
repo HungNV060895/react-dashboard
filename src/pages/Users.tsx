@@ -61,7 +61,7 @@ const Users = () => {
 			setTotalUsers(res.total);
 			return res;
 		} catch (error) {
-			setIsError('Không thể tải danh sách người dùng. Vui lòng thử lại sau.');
+			setIsError('Unable to load user list. Please try again later.');
 			throw error;
 		} finally {
 			setLoading(false);
@@ -128,14 +128,14 @@ const Users = () => {
 		const newError: FormError = {};
 
 		if(!formData.name.trim()){
-			newError.name = 'Please fill name';
+			newError.name = 'Please enter your name.';
 		}
 
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 		if(!formData.email.trim()){
-			newError.email = 'Nhap email';
+			newError.email = 'Please enter your email address.';
 		}else if(!emailRegex.test(formData.email)){
-			newError.email = 'Nhap email dung dinh dang';
+			newError.email = 'Enter your email address in the correct format.';
 		}
 
 		if(Object.keys(newError).length > 0){
@@ -206,7 +206,6 @@ const Users = () => {
 			const updatedUser  = await updateUser(dataUpdate, idUser);
 
 			setUsersList((prev) => prev.map(item => item.id === idUser ? updatedUser : item ))
-			//console.log(dataUpdate);
 			setIsOpen(false);
 			setFromData(initialFormData);
 			setError({});

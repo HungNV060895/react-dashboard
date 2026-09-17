@@ -1,6 +1,6 @@
 @layer components {
     .input-field{
-        @apply p-2 text-sm outline-none w-full h-8 border border-gray-300 rounded-md focus:border-gray-500
+        @apply px-2 py-1 text-sm outline-none w-full h-10 border border-gray-300 rounded-md focus:border-gray-500
     }
     .btn-submit{
         @apply max-w-44 h-10 w-full text-sm text-white bg-green-600 rounded-md outline-none border;

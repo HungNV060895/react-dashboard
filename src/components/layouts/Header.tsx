@@ -23,10 +23,7 @@ const Header = () => {
 
     return (
         <>
-            <header className="bg-gray-50 text-slate-950 dark:text-white p-4 dark:bg-gray-800">
-                <h1 className="text-2xl font-bold">
-                    My Dashboard
-                </h1>
+            <header className="flex justify-end bg-gray-50 text-slate-950 dark:text-white px-4 dark:bg-gray-800 sticky top-0 z-10 w-full">
                 <div className="h-16 max-w-64 w-full flex items-center gap-5 header-control">
                     <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center header-control__notification">
                         <LuBellDot />
