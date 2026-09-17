@@ -1,5 +1,6 @@
 import type { ProductType } from "@/types/product";
 import React from "react";
+import { LuPencil, LuTrash } from "react-icons/lu";
 
 
 type ProductListType = {
@@ -9,50 +10,63 @@ type ProductListType = {
 	handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
 }
 
-const ProductList = ({items, handleEditProduct, handleDelete} : ProductListType) => {
-    return (
-        <>
+const ProductList = ({ items, handleEditProduct, handleDelete }: ProductListType) => {
+	const formatMoney = (amount: number): string => {
+		return new Intl.NumberFormat('vi-VN', {
+			style: 'currency',
+			currency: 'VND'
+		}).format(amount);
+	}
+	return (
+		<>
 			{
 				items.length === 0 ? (
 					<p className="p-4 bg-red-400 text-slate-900 mt-5">Không có sản phẩm nào được hiển thị.</p>
 				) : (
-					<table className="border-1 border-collapse border-black">
-						<thead>
-							<tr>
-								<th className="px-6 py-3 font-medium">ID</th>
-								<th className="px-6 py-3 font-medium">Name</th>
-								<th className="px-6 py-3 font-medium">Price</th>
-								<th className="px-6 py-3 font-medium">Category</th>
-								<th className="px-6 py-3 font-medium">Action</th>
-							</tr>
-						</thead>
-						<tbody>
-							{
-								items.map((item) => (
-									<tr key={item.id}>
-										<td className="border-1 border-black px-6 py-3">{item.id}</td>
-										<td className="border-1 border-black px-6 py-3">
-											{item.name}
-										</td>
-										<td className="border-1 border-black px-6 py-3">
-											{item.price} đ
-										</td>
-										<td className="border-1 border-black px-6 py-3">
-											{item.category}
-										</td>
-										<td className="border-1 border-black px-6 py-3">
-											<button className="bg-blue-500 text-white px-4 py-2 roundbutton2 mr-5" onClick={() => handleEditProduct(item.id)}>Edit</button>
-											<button className="bg-red-500 text-white px-4 py-2 roundbutton2" onClick={() => handleDelete(item.id)}>Delete</button>
-										</td>
-									</tr>
-								))
-							}
-						</tbody>
-					</table>
+					<div className="user-table border border-default relative overflow-x-auto bg-neutral-primary-soft shadow-slate-200 rounded-md">
+						<table className="w-full whitespace-nowrap text-sm text-left rtl:text-right text-body dark:color-black">
+							<thead className="bg-slate-700 border-b">
+								<tr>
+									<th scope="col" className="px-6 py-3 font-medium">ID</th>
+									<th scope="col" className="px-6 py-3 font-medium">Name</th>
+									<th scope="col" className="px-6 py-3 font-medium">Price</th>
+									<th scope="col" className="px-6 py-3 font-medium">Category</th>
+									<th scope="col" className="px-6 py-3 font-medium">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								{
+									items.map((item) => (
+										<tr className="odd:bg-white even:bg-gray-200 border-b dark:border-gray-300 dark:text-slate-950 border-gray-200 hover:bg-gray-50 cursor-pointer" key={item.id}>
+											<td className="px-6 py-3">{item.id}</td>
+											<td className="px-6 py-3">
+												<div className="flex items-center gap-2 font-medium">
+													<img src="https://placehold.net/4.png" width={30} alt="" />
+													{item.name}
+												</div>
+											</td>
+											<td className="px-6 py-3">
+												{formatMoney(Number(item.price))}
+											</td>
+											<td className="px-6 py-3">
+												{item.category}
+											</td>
+											<td className="px-6 py-3">
+												<div className="flex">
+													<button className="flex items-center justify-center gap-1 mr-2 btn-primary rounded-full bg-green-500 px-3 py-2 font-semibold text-white shadow-md hover:bg-green-700" onClick={() => handleEditProduct(item.id)}><LuPencil />Edit</button>
+													<button className="flex items-center justify-center gap-1 btn-danger rounded-full bg-red-500 px-3 py-2 font-semibold text-white shadow-md hover:bg-red-700" onClick={() => handleDelete(item.id)}><LuTrash />Delete</button>
+												</div>
+											</td>
+										</tr>
+									))
+								}
+							</tbody>
+						</table>
+					</div>
 				)
 			}
-        </>
-    )
+		</>
+	)
 }
 
 export default ProductList;

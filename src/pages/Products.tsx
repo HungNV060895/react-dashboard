@@ -6,6 +6,7 @@ import SortProduct from "@/components/products/SortProduct";
 import SearchProduct from "@/components/products/SearchProduct";
 import FilterProduct from "@/components/products/FilterProduct";
 import ProductPagination from "@/components/products/ProductPagination";
+import { LuCirclePlus } from "react-icons/lu";
 
 const Products = () => {
 	
@@ -193,11 +194,20 @@ const Products = () => {
 
 	return (
 		<>
-			<h1>Products</h1>
-			<button onClick={() => handleOpenModal()}>Add Product</button>
-			<SearchProduct search={search} handleSearch={handleSearch}/>
-			<FilterProduct handleInputChange={handleInputChange} />
-			<SortProduct handleInputChange={handleInputChange}/>
+		<section className="sec-product dark:text-white">
+			<h1 className="user-ttl text-2xl md:text-4xl font-bold mb-4">Products Management</h1>
+			<p className="txt-intro text-sm md:text-md mb-5">Manage all product in one place. Control access, assign roles, and monitor activity across your platform.</p>
+			<div className="product-control flex flex-col md:flex-wrap md:flex-row items-end justify-between gap-4 w-full mb-12">
+				<div className="flex flex-wrap gap-3">
+					<SearchProduct search={search} handleSearch={handleSearch}/>
+					<FilterProduct handleInputChange={handleInputChange} />
+					<SortProduct handleInputChange={handleInputChange}/>
+				</div>
+				<button onClick={() => handleOpenModal()} className="user-control__btn p-2 border rounded-3xl bg-slate-700 text-white flex items-center justify-center gap-2 hover:bg-slate-400">
+					<LuCirclePlus />
+					Add Product
+				</button>
+			</div>
 			<ProductList 
 				handleInputChange={handleInputChange} 
 				items={currentProduct}
@@ -215,6 +225,7 @@ const Products = () => {
 				handleEditProduct={handleEditProduct}
 				handleUpdateProduct={handleUpdateProduct}
 			/>
+		</section>
 		</>
 	)
 }
