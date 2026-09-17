@@ -1,4 +1,5 @@
 import type { User } from "@/types/user";
+import { LuPencil, LuTrash } from "react-icons/lu";
 
 type UserTableProps = {
     data: User[];
@@ -28,8 +29,8 @@ const UserTable = ({ data, handleEditUser, editUser, handleDeleteUser , loading,
             data.length === 0 ? (
                 <p className="p-6 text-red-500 font-medium">Not found user.</p>
             ) : (
-                <table className="w-full border border-default text-sm text-left rtl:text-right text-body dark:color-black">
-                    <thead className="bg-neutral-secondary-soft border-b border-default">
+                <table className="w-full whitespace-nowrap text-sm text-left rtl:text-right text-body dark:color-black">
+                    <thead className="bg-slate-700 border-b">
                         <tr>
                             <th scope="col" className="px-6 py-3 font-medium">Avatar</th>
                             <th scope="col" className="px-6 py-3 font-medium">Name</th>
@@ -41,7 +42,7 @@ const UserTable = ({ data, handleEditUser, editUser, handleDeleteUser , loading,
                     </thead>
                     <tbody>
                         {data.map((user) => (
-                            <tr key={user.id} className="odd:bg-white odd:gray:bg-gray-900 even:bg-gray-50 even:grey:bg-gray-800 border-b dark:border-gray-700 dark:text-slate-950 border-gray-200">
+                            <tr key={user.id} className="odd:bg-white even:bg-gray-200 border-b dark:border-gray-300 dark:text-slate-950 border-gray-200 hover:bg-gray-50 cursor-pointer">
                                 <td className="px-6 py-4">
                                     {
                                         user.avatar ? 
@@ -54,8 +55,10 @@ const UserTable = ({ data, handleEditUser, editUser, handleDeleteUser , loading,
                                 <td className="px-6 py-4">{user.role}</td>
                                 <td className="px-6 py-4">{user.status}</td>
                                 <td className="px-6 py-4">
-                                    <button onClick={() => handleEditUser(user.id)} className="mr-2 btn-primary rounded-full bg-green-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-green-700">Edit</button>
-                                    <button onClick={() => handleDeleteUser(user.id)} className="btn-danger rounded-full bg-red-500 px-5 py-2 font-semibold text-white shadow-md hover:bg-red-700">Delete</button>
+                                    <div className="flex">
+                                        <button onClick={() => handleEditUser(user.id)} className="flex items-center justify-center gap-1 mr-2 btn-primary rounded-full bg-green-500 px-3 py-2font-semibold text-white shadow-md hover:bg-green-700"><LuPencil />Edit</button>
+                                        <button onClick={() => handleDeleteUser(user.id)} className="flex items-center justify-center gap-1 btn-danger rounded-full bg-red-500 px-3 py-2 font-semibold text-white shadow-md hover:bg-red-700"><LuTrash />Delete</button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}

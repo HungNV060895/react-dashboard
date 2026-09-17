@@ -106,7 +106,7 @@ const Users = () => {
 
 	//console.log(startIndex, endIndex);
 
-	const hadleOpenModal = () => {
+	const handleOpenModal = () => {
 		setIsOpen(true);
 		setEditUser(null);
 		setFromData(initialFormData);
@@ -243,17 +243,15 @@ const Users = () => {
 				<div className="inner">
 					<h2 className="user-ttl text-4xl font-bold mb-4">User Management</h2>
 					<p className="txt-intro text-md mb-5">Manage all users in one place. Control access, assign roles, and monitor activity across your platform.</p>
-					<div className="user-control flex justify-between mb-6">
-						<div className="w-full max-w-xl min-w-[200px] relative flex gap-2">
-							<UsersSearch search={search} setSearch={setSearch}/>
-							<UserFilter role={role} setRole={setRole} status={status} setStatus={setStatus} />
-						</div>
-						<div className="user-control__right max-w-[150px] w-full">
-							<button onClick={() => hadleOpenModal()} className="user-control__btn p-2 border rounded-3xl w-full bg-slate-700 text-white flex items-center justify-center gap-2 hover:bg-slate-400">
-								<LuCirclePlus />
-								Add User
-							</button>
-						</div>
+<div className="user-control flex flex-col md:flex-wrap md:flex-row items-end justify-between gap-4 w-full mb-12">
+					<div className="flex flex-wrap gap-3 w-full md:w-auto">
+						<UsersSearch search={search} setSearch={setSearch}/>
+						<UserFilter role={role} setRole={setRole} status={status} setStatus={setStatus} />
+					</div>
+					<button onClick={() => handleOpenModal()} className="user-control__btn p-2 border rounded-3xl bg-slate-700 text-white flex items-center justify-center gap-2 hover:bg-slate-400">
+						<LuCirclePlus />
+						Add User
+					</button>
 					</div>
 					
 					<div className="user-table relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base">

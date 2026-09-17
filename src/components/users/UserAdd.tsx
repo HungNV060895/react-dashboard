@@ -4,7 +4,7 @@ type ModalTypes = {
 	isOpen: boolean;
 	setIsOpen : (isOpen: boolean) => void;
 	handleAddUser: () => void;
-	handleUpdateUser: (userId: number, formData: User) => void;
+	handleUpdateUser: (userId: number) => void;
 	handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 	error: FormError 
 }
@@ -45,11 +45,11 @@ const UserAdd = (
 					</div>
 					<form onSubmit={(e) => {
 							e.preventDefault();
-							editUser ? handleUpdateUser(formData.id, formData) : handleAddUser();
+							editUser ? handleUpdateUser(formData.id) : handleAddUser();
 						}
 					} className="userAdd-form w-full">
-						<dl className="userAdd-form__item flex justify-between items-center">
-							<dt className="w-[20%]">Name</dt>
+						<dl className="userAdd-form__item flex justify-between items-center mb-4">
+							<dt className="w-[20%] text-sm font-medium text-gray-700">Name</dt>
 							<dd className="w-[70%]">
 								<input type="text" name="name" onChange={handleChange} value={formData.name} className="input-field" placeholder="Nhập name" />
 								{
@@ -57,8 +57,8 @@ const UserAdd = (
 								}
 							</dd>
 						</dl>
-						<dl className="userAdd-form__item flex justify-between items-center">
-							<dt className="w-[20%]">Email</dt>
+						<dl className="userAdd-form__item flex justify-between items-center mb-4">
+							<dt className="w-[20%] text-sm font-medium text-gray-700">Email</dt>
 							<dd className="w-[70%]">
 								<input type="text" name="email" onChange={handleChange} value={formData.email} className="input-field" placeholder="Nhập email" />
 								{
@@ -66,8 +66,8 @@ const UserAdd = (
 								}
 							</dd>
 						</dl>
-						<dl className="userAdd-form__item flex justify-between items-center">
-							<dt className="w-[20%]">Role</dt>
+						<dl className="userAdd-form__item flex justify-between items-center mb-4">
+							<dt className="w-[20%] text-sm font-medium text-gray-700">Role</dt>
 							<dd className="w-[70%]">
 								<select name="role" onChange={handleChange} value={formData.role} id="role" className="input-field">
 									<option value="Admin">Admin</option>
@@ -79,8 +79,8 @@ const UserAdd = (
 								}
 							</dd>
 						</dl>
-						<dl className="userAdd-form__item flex justify-between items-center">
-							<dt className="w-[20%]">Status</dt>
+						<dl className="userAdd-form__item flex justify-between items-center mb-4">
+							<dt className="w-[20%] text-sm font-medium text-gray-700">Status</dt>
 							<dd className="w-[70%]">
 								<select onChange={handleChange} value={formData.status} name="status" id="status" className="input-field">
 									<option value="Active">Active</option>
@@ -91,8 +91,8 @@ const UserAdd = (
 								}
 							</dd>
 						</dl>
-						<dl className="userAdd-form__item flex justify-between items-center">
-							<dt className="w-[20%]">Avatar</dt>
+						<dl className="userAdd-form__item flex justify-between items-center mb-4">
+							<dt className="w-[20%] text-sm font-medium text-gray-700">Avatar</dt>
 							<dd className="w-[70%]">
 								{
 									editUser ? 
@@ -101,11 +101,11 @@ const UserAdd = (
 											<img width={100} src={formData.avatar} alt="" />
 										</>
 									)
-									: <input type="file" />
+									: <input type="file" className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200" />
 								}
 							</dd>
 						</dl>
-						<button type="submit" className="btn-submit block w-[70%] ml-[30%]">
+						<button type="submit" className="btn-submit block w-[70%] ml-[30%] rounded-full bg-slate-700 px-4 py-2.5 font-medium text-white hover:bg-slate-500">
 							{editUser ? 'Update' : 'Add'}
 						</button>
 					</form>
