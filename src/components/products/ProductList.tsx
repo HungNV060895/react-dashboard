@@ -8,10 +8,11 @@ type ProductListType = {
 	handleEditProduct: (productID: number) => void;
 	handleDelete: (productID: number) => void,
 	handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void,
-	loading: boolean
+	loading: boolean,
+	isError: string
 }
 
-const ProductList = ({ data, handleEditProduct, handleDelete, loading }: ProductListType) => {
+const ProductList = ({ data, handleEditProduct, handleDelete, loading, isError }: ProductListType) => {
 	const formatMoney = (amount: number): string => {
 		return new Intl.NumberFormat('vi-VN', {
 			style: 'currency',
@@ -25,11 +26,13 @@ const ProductList = ({ data, handleEditProduct, handleDelete, loading }: Product
             </div>
         </div>;
     }
+
+	if(isError) return <p className="p-4 bg-red-400 text-slate-900 mt-5">{isError}</p>
 	return (
 		<>
 			{
 				data.length === 0 ? (
-					<p className="p-4 bg-red-400 text-slate-900 mt-5">Không có sản phẩm nào được hiển thị.</p>
+					<p className="p-4 bg-red-400 text-slate-900 mt-5">No products are displayed.</p>
 				) : (
 					<div className="user-table border border-default relative overflow-x-auto bg-neutral-primary-soft shadow-slate-200 rounded-md">
 						<table className="w-full whitespace-nowrap text-sm text-left rtl:text-right text-body dark:color-black">

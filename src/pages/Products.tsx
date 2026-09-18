@@ -8,7 +8,7 @@ import FilterProduct from "@/components/products/FilterProduct";
 import ProductPagination from "@/components/products/ProductPagination";
 import { initialProduct } from "@/constants/product";
 import { LuPlus } from "react-icons/lu";
-import { getProduct } from "@/services/productApi";
+import { getProduct, createProduct, updateProduct, deleteProduct } from "@/services/productApi";
 
 const Products = () => {
 
@@ -20,7 +20,7 @@ const Products = () => {
 	//Loading, Error
 	const [loading, setLoading] = useState<boolean>(false);
 	const [error, setError] = useState<string | null>(null);
-	const [isError, setIsError] = useState<string | null>(null);
+	const [isError, setIsError] = useState<string>('');
 
 	//Modal
 	const [isOpen, setIsOpen] = useState(false);
@@ -45,7 +45,7 @@ const Products = () => {
 			const res = await getProduct();
 			setListProduct(res);
 		}catch (error){
-			setIsError("Khong tai dc danh sach san pham!")
+			setIsError("Unable to load products.")
 		}finally{
 			setLoading(false);
 		}
@@ -53,29 +53,9 @@ const Products = () => {
 
 	
 
-	
-
-	
-
-	
-
-	// useEffect(() => {
-	// 	//localStorage.setItem('dataProducts', JSON.stringify(listProduct));
-	// 	//fetchAllProduct();
-	// }, [listProduct])
-
-
-	console.log(listProduct);
 	useEffect(() => {
 		fetchAllProduct();
 	}, [])
-
-
-	// useEffect(() => {
-	// 	if(currentPage > totalPages && totalPages > 0){
-	// 		setCurrentPage(1)
-	// 	}
-	// }, [search, category, sorter])
 
 
 	const handleChangePage = (page: number) => {
@@ -87,17 +67,14 @@ const Products = () => {
 		setEditProduct(null);
 		setDataProduct(initialProduct);
 	}
-	const handleProductAdd = () => {
-		//1. Khởi tại product mới = giá trị ở ô input
-		const newProduct = {
-			id: Date.now(),
+	const handleProductAdd = async() => {
+		const newProduct: Omit<ProductType, 'id'> = {
 			productName: dataProduct.productName,
 			productPrice: dataProduct.productPrice,
 			productCategory: dataProduct.productCategory
 		};
-
-		//2. Gán data product mới và data có sẵn của listProduct
-		setListProduct((prev) => [...prev, newProduct]);
+		await createProduct(newProduct);
+		await fetchAllProduct();
 		setIsOpen(false);
 	}
 
@@ -216,6 +193,7 @@ const Products = () => {
 			<div className="main-content p-6 md:p-12 bg-[#E2E8F0]">
 				<ProductList 
 					loading={loading}
+					isError={isError}
 					handleInputChange={handleInputChange} 
 					data={listProduct}
 					handleEditProduct={handleEditProduct} 

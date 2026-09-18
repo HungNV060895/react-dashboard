@@ -33,16 +33,16 @@ const ProductAdd = ({isOpen, setIsOpen, handleInputChange, handleProductAdd, han
                         }}>
                         <dl>
                             <dt>Name</dt>
-                            <dd><input onChange={handleInputChange} type="text" name="name" value={dataProduct.name} className="input-field" /></dd>
+                            <dd><input onChange={handleInputChange} type="text" name="productName" value={dataProduct.productName} className="input-field" /></dd>
                         </dl>
                         <dl>
                             <dt>Price</dt>
-                            <dd><input onChange={handleInputChange}  type="text" name="price" value={dataProduct.price} className="input-field" /></dd>
+                            <dd><input onChange={handleInputChange}  type="text" name="productPrice" value={dataProduct.productPrice} className="input-field" /></dd>
                         </dl>
                         <dl>
                             <dt>Category</dt>
                             <dd>
-                                <select onChange={handleInputChange}  name="category" value={dataProduct.category || "Máy tính"} id="category">
+                                <select onChange={handleInputChange} name="productCategory" value={dataProduct.productCategory || "Máy tính"} id="category">
                                     <option value="Máy tính">Máy tính</option>
                                     <option value="Điện thoại">Điện thoại</option>
                                     <option value="Đồ gia dụng">Đồ gia dụng</option>

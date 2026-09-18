@@ -32,14 +32,7 @@ const Users = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	//state add users
-	const [formData, setFromData] = useState<FormState>({
-		id: 0,
-		name: "",
-		email: "",
-		role: 'Admin',
-		status: 'Active',
-		avatar: ''
-	})
+	const [formData, setFromData] = useState<FormState>(initialFormData)
 
 	
 	// const [nameField, setNameField] = useState('');
