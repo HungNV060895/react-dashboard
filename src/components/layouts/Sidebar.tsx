@@ -4,7 +4,7 @@ import { sidebarMenus } from "@constants/menu";
 
 const Sidebar = () => {
 	return (
-		<aside className='w-64 p-4 shrink-0 bg-blue-200 h-screen hidden md:block'>
+		<aside className='w-64 p-4 shrink-0 bg-sidebar text-sidebar-text h-screen hidden lg:block'>
 			<div className="p-6 text-xl font-bold">
 				My Dashboard
 			</div>
@@ -20,9 +20,12 @@ const Sidebar = () => {
 								`
 								flex items-center gap-3
 								px-6 py-3
-								hover:bg-slate-700
-								transition
-								${isActive ? "bg-slate-700" : ""}`
+								rounded-lg
+								hover:bg-slate-700 hover:after:opacity-100
+								transition-all
+								relative
+								after:w-2 after:h-2 after:bg-blue-600 after:rounded-full after:absolute after:right-4 after:opacity-0
+								${isActive ? "after:opacity-100 bg-slate-700" : ""}`
 							}
 						>
 							<Icon size={18} />

@@ -9,9 +9,9 @@ function App() {
 
 			<div className='flex h-screen overflow-hidden'>
 				<Sidebar />
-				<main className='flex-1  bg-slate-100 dark:bg-slate-900 overflow-y-auto overflow-x-hidden'>
+				<main className='flex-1 bg-slate-100 dark:bg-main overflow-y-auto overflow-x-hidden'>
 					<Header />
-					<div className='wrapper p-6'>
+					<div className='wrapper relative'>
 						<Outlet />
 					</div>
 				</main>

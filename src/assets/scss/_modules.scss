@@ -11,6 +11,10 @@
     .txt-error{
         @apply text-xs text-red-600
     }
+
+    .search-label{
+        @apply block uppercase mb-2 font-semibold text-[#94A3B8] text-xs
+    }
 }
 
 

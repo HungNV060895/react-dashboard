@@ -4,13 +4,8 @@
 @use 'sass:math';
 @use 'sass:map';
 @use 'sass:string';
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght,XOPQ,XTRA,YOPQ,YTDE,YTFI,YTLC,YTUC@8..144,100..1000,96,468,79,-203,738,514,712&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
-
-$font-jp: "游ゴシック体", "Yu Gothic", YuGothic, "ヒラギノ角ゴPro W3", "Hiragino Kaku Gothic Pro", Osaka, "Meiryo", "メイリオ", "MS Pゴシック", Arial, Helvetica, Verdana, sans-serif;
-$font-en: "Ms Madi", cursive;
-$font-poppins: "Poppins", sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 $font-Inter: "Inter", sans-serif;
-$font-roboto: "Roboto", sans-serif;
 
 
 //====================================================

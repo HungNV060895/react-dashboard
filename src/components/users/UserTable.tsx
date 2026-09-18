@@ -42,7 +42,7 @@ const UserTable = ({ data, handleEditUser, editUser, handleDeleteUser , loading,
                     </thead>
                     <tbody>
                         {data.map((user) => (
-                            <tr key={user.id} className="odd:bg-white even:bg-gray-200 border-b dark:border-gray-300 dark:text-slate-950 border-gray-200 hover:bg-gray-50 cursor-pointer">
+                            <tr key={user.id} className="odd:bg-white even:bg-[#F8FAFC] border-b dark:border-gray-300 dark:text-slate-950 border-gray-200 hover:bg-zinc-100 transition ease-in-out cursor-pointer">
                                 <td className="px-6 py-4">
                                     {
                                         user.avatar ? 
@@ -56,8 +56,8 @@ const UserTable = ({ data, handleEditUser, editUser, handleDeleteUser , loading,
                                 <td className="px-6 py-4">{user.status}</td>
                                 <td className="px-6 py-4">
                                     <div className="flex">
-                                        <button onClick={() => handleEditUser(user.id)} className="flex items-center justify-center gap-1 mr-2 btn-primary rounded-full bg-green-500 px-3 py-2font-semibold text-white shadow-md hover:bg-green-700"><LuPencil />Edit</button>
-                                        <button onClick={() => handleDeleteUser(user.id)} className="flex items-center justify-center gap-1 btn-danger rounded-full bg-red-500 px-3 py-2 font-semibold text-white shadow-md hover:bg-red-700"><LuTrash />Delete</button>
+                                        <button onClick={() => handleEditUser(user.id)} className="flex items-center justify-center gap-1 mr-2 btn-primary rounded-full bg-green-500 px-3 py-2font-semibold text-white shadow-md hover:bg-green-700 transition-all"><LuPencil />Edit</button>
+                                        <button onClick={() => handleDeleteUser(user.id)} className="flex items-center justify-center gap-1 btn-danger rounded-full bg-red-500 px-3 py-2 font-semibold text-white shadow-md hover:bg-red-700 transition-all"><LuTrash />Delete</button>
                                     </div>
                                 </td>
                             </tr>

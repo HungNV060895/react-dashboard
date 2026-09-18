@@ -1,13 +1,13 @@
 import UserPagination from "@/components/users/UserPagination";
-import  UsersSearch from "@/components/users/UsersSearch";
-import { LuCirclePlus } from "react-icons/lu";
+import UsersSearch from "@/components/users/UsersSearch";
+import { LuPlus } from "react-icons/lu";
 import UserTable from "@/components/users/UserTable";
-import React, { useState,  useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import UserFilter from "@/components/users/UserFilter";
 import UserAdd from "@/components/users/UserAdd";
 import type { FormError, User, FormState } from "@/types/user";
-import {initialFormData} from "@/constants/user";
-import {getUsers, createUsers, updateUser, deleteUser} from "@/services/userApi";
+import { initialFormData } from "@/constants/user";
+import { getUsers, createUsers, updateUser, deleteUser } from "@/services/userApi";
 
 
 const Users = () => {
@@ -16,7 +16,7 @@ const Users = () => {
 	// 	const saved = localStorage.getItem('dataUsers');
 	// 	return saved ? JSON.parse(saved) : []
 	// });
-	
+
 	const [loading, setLoading] = useState<boolean>(false);
 	const [iserror, setIsError] = useState<string>("");
 	const [usersList, setUsersList] = useState<User[]>([]);
@@ -87,7 +87,7 @@ const Users = () => {
 
 
 	//const normalizedSearch = search.trim().toLowerCase();
-	
+
 	// const filteredUsers = usersList.filter((user) =>{
 	// 	const matchSearch = user.name.toLowerCase().includes(normalizedSearch) ||
 	// 						user.email.toLowerCase().includes(normalizedSearch);
@@ -96,7 +96,7 @@ const Users = () => {
 	// 	return matchSearch && matchRole && matchStatus;
 	// });
 
-	
+
 
 
 	const totalPages = Math.ceil(totalUsers / pageSize);
@@ -114,31 +114,31 @@ const Users = () => {
 	//Add User
 	//check validate
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-		const {name, value} = e.target;
+		const { name, value } = e.target;
 
-		setFromData((prev) => ({...prev, [name]: value}));
+		setFromData((prev) => ({ ...prev, [name]: value }));
 
-		
-		if(error[name as keyof FormError]){
-			setError((prev) => ({...prev, [name]: ''}))
+
+		if (error[name as keyof FormError]) {
+			setError((prev) => ({ ...prev, [name]: '' }))
 		}
 	}
 
 	const handleAddUser = async () => {
 		const newError: FormError = {};
 
-		if(!formData.name.trim()){
+		if (!formData.name.trim()) {
 			newError.name = 'Please enter your name.';
 		}
 
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		if(!formData.email.trim()){
+		if (!formData.email.trim()) {
 			newError.email = 'Please enter your email address.';
-		}else if(!emailRegex.test(formData.email)){
+		} else if (!emailRegex.test(formData.email)) {
 			newError.email = 'Enter your email address in the correct format.';
 		}
 
-		if(Object.keys(newError).length > 0){
+		if (Object.keys(newError).length > 0) {
 			setError(newError);
 			return;
 		}
@@ -174,10 +174,10 @@ const Users = () => {
 
 
 
-	const handleEditUser = (idUser : number) => {
+	const handleEditUser = (idUser: number) => {
 		const currentUser = usersList.find((item) => item.id === idUser);
 		console.log("User trước khi update:", currentUser);
-		if(currentUser){
+		if (currentUser) {
 			setEditUser(currentUser);
 			setFromData({
 				id: currentUser.id,
@@ -191,7 +191,7 @@ const Users = () => {
 		setIsOpen(true);
 	}
 
-	const handleUpdateUser = async(idUser: number) => {
+	const handleUpdateUser = async (idUser: number) => {
 		const dataUpdate: User = {
 			id: idUser,
 			name: formData.name,
@@ -200,25 +200,25 @@ const Users = () => {
 			status: formData.status,
 			avatar: formData.avatar
 		}
-		
 
-		try{
-			const updatedUser  = await updateUser(dataUpdate, idUser);
 
-			setUsersList((prev) => prev.map(item => item.id === idUser ? updatedUser : item ))
+		try {
+			const updatedUser = await updateUser(dataUpdate, idUser);
+
+			setUsersList((prev) => prev.map(item => item.id === idUser ? updatedUser : item))
 			setIsOpen(false);
 			setFromData(initialFormData);
 			setError({});
-		}catch(error){
+		} catch (error) {
 			console.log(error);
 		}
 	}
 
 
-	const handleDeleteUser = async(userID: number) => {
+	const handleDeleteUser = async (userID: number) => {
 		const toast = confirm('Xoá không em?');
-		if(toast){
-			try{
+		if (toast) {
+			try {
 				await deleteUser(userID);
 				setTotalUsers((prev) => Math.max(prev - 1, 0));
 
@@ -233,50 +233,49 @@ const Users = () => {
 			} catch (error) {
 				console.log(error);
 			}
-		}else{
+		} else {
 			console.log("Không xoá");
 		}
 	}
 	return (
 		<>
 			<section className="sec-user dark:text-white">
-				<div className="inner">
+				<div className="heading-page p-12">
 					<h2 className="user-ttl text-4xl font-bold mb-4">User Management</h2>
 					<p className="txt-intro text-md mb-5">Manage all users in one place. Control access, assign roles, and monitor activity across your platform.</p>
-<div className="user-control flex flex-col md:flex-wrap md:flex-row items-end justify-between gap-4 w-full mb-12">
-					<div className="flex flex-wrap gap-3 w-full md:w-auto">
-						<UsersSearch search={search} setSearch={setSearch}/>
+					<div className="user-control flex flex-col md:flex-wrap md:flex-row items-end justify-between gap-4 w-full">
+						<UsersSearch search={search} setSearch={setSearch} />
 						<UserFilter role={role} setRole={setRole} status={status} setStatus={setStatus} />
+						<button onClick={() => handleOpenModal()} className="min-w-32 p-2 bg-[#2563EB] rounded-lg bg-slate-700 text-white font-semibold flex items-center justify-center gap-2 hover:bg-blue-400 transition-all">
+							<LuPlus />
+							Add User
+						</button>
 					</div>
-					<button onClick={() => handleOpenModal()} className="user-control__btn p-2 border rounded-3xl bg-slate-700 text-white flex items-center justify-center gap-2 hover:bg-slate-400">
-						<LuCirclePlus />
-						Add User
-					</button>
-					</div>
-					
-					<div className="user-table relative overflow-x-auto bg-neutral-primary-soft shadow-xs rounded-base">
-						<UserTable 
-							data={currentUsers} 
+				</div>
+				<div className="main-content p-12 bg-[#E2E8F0]">
+					<div className="user-table relative rounded-lg overflow-x-auto bg-white">
+						<UserTable
+							data={currentUsers}
 							handleEditUser={handleEditUser}
 							handleDeleteUser={handleDeleteUser}
-							editUser={editUser} 
+							editUser={editUser}
 							loading={loading}
 							iserror={iserror}
 						/>
 					</div>
-					<UserPagination 
+					<UserPagination
 						startIndex={startIndex}
 						pageSize={pageSize}
-						currentPage={currentPage} 
-						totalPages={totalPages} 
+						currentPage={currentPage}
+						totalPages={totalPages}
 						totalUsers={totalUsers}
 						loading={loading}
 						onPageChange={setCurrentPage} />
 				</div>
 			</section>
-			<UserAdd 
-				isOpen={isOpen} 
-				setIsOpen={setIsOpen} 
+			<UserAdd
+				isOpen={isOpen}
+				setIsOpen={setIsOpen}
 				handleAddUser={handleAddUser}
 				handleChange={handleChange}
 				handleUpdateUser={handleUpdateUser}
