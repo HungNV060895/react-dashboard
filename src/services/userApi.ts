@@ -1,4 +1,5 @@
 import type { User } from "@/types/user";
+import axios from "axios";
 import axiosClient from "@/api/axiosClient";
 
 interface UsersResponse {
@@ -16,24 +17,35 @@ const getUsers = async (
     role: string,
     status: string
 ): Promise<UsersResponse> => {
-    const response = await axiosClient.get<User[]>('/users', {
-        params: {
-            page, limit, search: search || undefined,
-            role: role !== 'All' ? role : undefined,
-            status: status !== 'All' ? status : undefined,
+    const params = {
+        search: search || undefined,
+        role: role !== 'All' ? role : undefined,
+        status: status !== 'All' ? status : undefined,
+    };
+
+    try {
+        const response = await axiosClient.get<User[]>('/users', {
+            params: { page, limit, ...params }
+        });
+        
+        const responseTotal = await axiosClient.get<User[]>('/users', { params });
+        const filteredData = status === 'All'
+            ? response.data
+            : response.data.filter((user) => user.status === status);
+        const filteredTotal = status === 'All'
+            ? responseTotal.data
+            : responseTotal.data.filter((user) => user.status === status);
+
+        return {
+            data: filteredData,
+            total: filteredTotal.length
+        };
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
+            return { data: [], total: 0 };
         }
-    });
-    const responseTotal = await axiosClient.get<User[]>('/users', {
-        params: {
-            search: search || undefined,
-            role: role !== 'All' ? role : undefined,
-            status: status !== 'All' ? status : undefined,
-        }
-    });
-    //await new Promise(resolve => setTimeout(resolve, 2000));
-    return {
-        data: response.data,
-        total: responseTotal.data.length
+
+        throw error;
     }
 }
 
@@ -47,7 +59,7 @@ const updateUser = async(updateUser: User, userID: number): Promise<User> => {
     return response.data;
 }
 
-const deleteUser = async (userID: Number) : Promise<User> => {
+const deleteUser = async (userID: number) : Promise<User> => {
     const response = await axiosClient.delete(`/users/${userID}`);
     return response.data;
 }

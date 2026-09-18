@@ -41,7 +41,7 @@ const Users = () => {
 		avatar: ''
 	})
 
-
+	console.log(search);
 	// const [nameField, setNameField] = useState('');
 	// const [emailField, setEmailField] = useState('');
 	// const [roleField, setRoleField] = useState<"Admin" | "User">('Admin');
@@ -59,6 +59,7 @@ const Users = () => {
 			const res = await getUsers(page, pageSize, search, role, status);
 			setUsersList(res.data);
 			setTotalUsers(res.total);
+			
 			return res;
 		} catch (error) {
 			setIsError('Unable to load user list. Please try again later.');
@@ -68,8 +69,6 @@ const Users = () => {
 		}
 	};
 
-	//console.log(totalPages);
-	//console.log(totalUsers);
 	useEffect(() => {
 		let isMounted = true;
 
@@ -78,8 +77,6 @@ const Users = () => {
 			isMounted = false;
 		};
 	}, [currentPage, search, role, status]);
-
-	// console.log(currentPage);
 
 	useEffect(() => {
 		setCurrentPage(1);
