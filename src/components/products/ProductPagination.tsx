@@ -28,7 +28,7 @@ const ProductPagination = ({currentPage, totalPages, handleChangePage, postPerPa
 						// mapFn là hàm ánh xạ được áp dụng cho từng phần tử của mảng mới, 
 						// và thisArg là giá trị được sử dụng làm this khi gọi mapFn.
 						Array.from({length: totalPages}, (_, index) => (
-							<button onClick={() => handleChangePage(index + 1)} className={`
+							<button key={index} onClick={() => handleChangePage(index + 1)} className={`
 								px-3 py-1 min-w-9 min-h-9 text-sm font-normal rounded transition duration-200 ease hover:bg-slate-50 hover:border-slate-400 border border-slate-200
 								${currentPage  === index + 1 ? 'bg-blue-800 text-white pointer-events-none' : 'bg-white text-slate-500'}
 							`}>

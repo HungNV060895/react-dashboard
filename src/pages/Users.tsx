@@ -41,7 +41,7 @@ const Users = () => {
 		avatar: ''
 	})
 
-	console.log(search);
+	
 	// const [nameField, setNameField] = useState('');
 	// const [emailField, setEmailField] = useState('');
 	// const [roleField, setRoleField] = useState<"Admin" | "User">('Admin');
@@ -70,12 +70,7 @@ const Users = () => {
 	};
 
 	useEffect(() => {
-		let isMounted = true;
-
 		fetchUsers(currentPage);
-		return () => {
-			isMounted = false;
-		};
 	}, [currentPage, search, role, status]);
 
 	useEffect(() => {
@@ -173,7 +168,6 @@ const Users = () => {
 
 	const handleEditUser = (idUser: number) => {
 		const currentUser = usersList.find((item) => item.id === idUser);
-		console.log("User trước khi update:", currentUser);
 		if (currentUser) {
 			setEditUser(currentUser);
 			setFromData({
@@ -237,13 +231,13 @@ const Users = () => {
 	return (
 		<>
 			<section className="sec-user dark:text-white">
-				<div className="heading-page p-12">
-					<h2 className="user-ttl text-4xl font-bold mb-4">User Management</h2>
+				<div className="heading-page p-6 md:p-12">
+					<h2 className="user-ttl text-2xl md:text-4xl font-bold mb-4">User Management</h2>
 					<p className="txt-intro text-md mb-5">Manage all users in one place. Control access, assign roles, and monitor activity across your platform.</p>
 					<div className="user-control flex flex-col md:flex-wrap md:flex-row items-end justify-between gap-4 w-full">
 						<UsersSearch search={search} setSearch={setSearch} />
 						<UserFilter role={role} setRole={setRole} status={status} setStatus={setStatus} />
-						<button onClick={() => handleOpenModal()} className="min-w-32 p-2 bg-[#2563EB] rounded-lg bg-slate-700 text-white font-semibold flex items-center justify-center gap-2 hover:bg-blue-400 transition-all">
+						<button onClick={() => handleOpenModal()} className="min-w-32 p-2 bg-[#2563EB] rounded-lg  text-white font-semibold flex items-center justify-center gap-2 hover:bg-blue-400 transition-all">
 							<LuPlus />
 							Add User
 						</button>

@@ -4,23 +4,31 @@ import { LuPencil, LuTrash } from "react-icons/lu";
 
 
 type ProductListType = {
-	items: ProductType[],
+	data: ProductType[],
 	handleEditProduct: (productID: number) => void;
 	handleDelete: (productID: number) => void,
-	handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void
+	handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void,
+	loading: boolean
 }
 
-const ProductList = ({ items, handleEditProduct, handleDelete }: ProductListType) => {
+const ProductList = ({ data, handleEditProduct, handleDelete, loading }: ProductListType) => {
 	const formatMoney = (amount: number): string => {
 		return new Intl.NumberFormat('vi-VN', {
 			style: 'currency',
 			currency: 'VND'
 		}).format(amount);
 	}
+	if (loading) {
+        return <div className="p-6">
+            <div className="flex justify-center items-center h-64">
+                <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        </div>;
+    }
 	return (
 		<>
 			{
-				items.length === 0 ? (
+				data.length === 0 ? (
 					<p className="p-4 bg-red-400 text-slate-900 mt-5">Không có sản phẩm nào được hiển thị.</p>
 				) : (
 					<div className="user-table border border-default relative overflow-x-auto bg-neutral-primary-soft shadow-slate-200 rounded-md">
@@ -36,25 +44,25 @@ const ProductList = ({ items, handleEditProduct, handleDelete }: ProductListType
 							</thead>
 							<tbody>
 								{
-									items.map((item) => (
-										<tr className="odd:bg-white even:bg-gray-200 border-b dark:border-gray-300 dark:text-slate-950 border-gray-200 hover:bg-gray-50 cursor-pointer" key={item.id}>
+									data.map((item) => (
+										<tr key={item.id} className="odd:bg-white even:bg-gray-200 border-b dark:border-gray-300 dark:text-slate-950 border-gray-200 hover:bg-gray-50 cursor-pointer">
 											<td className="px-6 py-3">{item.id}</td>
 											<td className="px-6 py-3">
 												<div className="flex items-center gap-2 font-medium">
 													<img src="https://placehold.net/4.png" width={30} alt="" />
-													{item.name}
+													{item.productName}
 												</div>
 											</td>
 											<td className="px-6 py-3">
-												{formatMoney(Number(item.price))}
+												{formatMoney(Number(item.productPrice))}
 											</td>
 											<td className="px-6 py-3">
-												{item.category}
+												{item.productCategory}
 											</td>
 											<td className="px-6 py-3">
 												<div className="flex">
-													<button className="flex items-center justify-center gap-1 mr-2 btn-primary rounded-full bg-green-500 px-3 py-2 font-semibold text-white shadow-md hover:bg-green-700" onClick={() => handleEditProduct(item.id)}><LuPencil />Edit</button>
-													<button className="flex items-center justify-center gap-1 btn-danger rounded-full bg-red-500 px-3 py-2 font-semibold text-white shadow-md hover:bg-red-700" onClick={() => handleDelete(item.id)}><LuTrash />Delete</button>
+													<button className="flex items-center justify-center gap-1 mr-2 btn-primary rounded-full bg-green-500 px-3 py-2 font-semibold text-white shadow-md hover:bg-green-700 transition-all" onClick={() => handleEditProduct(item.id)}><LuPencil />Edit</button>
+													<button className="flex items-center justify-center gap-1 btn-danger rounded-full bg-red-500 px-3 py-2 font-semibold text-white shadow-md hover:bg-red-700 transition-all" onClick={() => handleDelete(item.id)}><LuTrash />Delete</button>
 												</div>
 											</td>
 										</tr>

@@ -1,13 +1,13 @@
 export interface ProductType {
     id: number,
-    name: string,
-    price: string,
-    category: string
+    productName: string,
+    productPrice: string,
+    productCategory: string
 }
 
 export interface ProductFormState{
     id:  0,
-    name: '',
-    price: "",
-    category: "Máy tính"
+    productName: '',
+    productPrice: "",
+    productCategory: "Máy tính"
 }
