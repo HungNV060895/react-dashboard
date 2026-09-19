@@ -8,6 +8,8 @@ import UserAdd from "@/components/users/UserAdd";
 import type { FormError, User, FormState } from "@/types/user";
 import { initialFormData } from "@/constants/user";
 import { getUsers, createUsers, updateUser, deleteUser } from "@/services/userApi";
+import {Toaster, toast} from "react-hot-toast";
+import ModalConfirm from "@/components/users/ModalConfirm";
 
 
 const Users = () => {
@@ -16,7 +18,6 @@ const Users = () => {
 	// 	const saved = localStorage.getItem('dataUsers');
 	// 	return saved ? JSON.parse(saved) : []
 	// });
-
 	const [loading, setLoading] = useState<boolean>(false);
 	const [iserror, setIsError] = useState<string>("");
 	const [usersList, setUsersList] = useState<User[]>([]);
@@ -152,8 +153,10 @@ const Users = () => {
 			setIsOpen(false);
 			setFromData(initialFormData);
 			setError({});
+			toast.success('Add user success!');
 		} catch (dataError) {
 			console.log(dataError);
+			toast.error('Add user unsuccess!');
 		}
 	}
 
@@ -193,15 +196,17 @@ const Users = () => {
 			setIsOpen(false);
 			setFromData(initialFormData);
 			setError({});
+			toast.success('Update user success!');
 		} catch (error) {
 			console.log(error);
+			toast.error('Update user unsuccess!');
 		}
 	}
 
 
 	const handleDeleteUser = async (userID: number) => {
-		const toast = confirm('Xoá không em?');
-		if (toast) {
+		const isConfirm = confirm('Xoá không em?');
+		if (isConfirm) {
 			try {
 				await deleteUser(userID);
 				setTotalUsers((prev) => Math.max(prev - 1, 0));
@@ -214,6 +219,8 @@ const Users = () => {
 				} else {
 					setUsersList((prev) => prev.filter((item) => item.id !== userID));
 				}
+
+				toast.success('Update user success!');
 			} catch (error) {
 				console.log(error);
 			}
@@ -223,6 +230,8 @@ const Users = () => {
 	}
 	return (
 		<>
+			<Toaster />
+			<ModalConfirm />
 			<section className="sec-user dark:text-white">
 				<div className="heading-page p-6 md:p-12">
 					<h2 className="user-ttl text-2xl md:text-4xl font-bold mb-4">User Management</h2>
