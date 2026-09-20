@@ -1,4 +1,4 @@
-import type { ProductType } from "@/types/product";
+import type { ProductError, ProductType } from "@/types/product";
 import { useEffect, useState } from "react";
 import ProductList from "@/components/products/ProductList";
 import ProductAdd from "@/components/products/ProductAdd";
@@ -9,6 +9,7 @@ import ProductPagination from "@/components/products/ProductPagination";
 import { initialProduct } from "@/constants/product";
 import { LuPlus } from "react-icons/lu";
 import { getProduct, createProduct, updateProduct, deleteProduct } from "@/services/productApi";
+import toast, { Toaster } from "react-hot-toast";
 
 const Products = () => {
 
@@ -19,7 +20,7 @@ const Products = () => {
 
 	//Loading, Error
 	const [loading, setLoading] = useState<boolean>(false);
-	const [error, setError] = useState<string | null>(null);
+	const [error, setError] = useState<ProductError>({});
 	const [isError, setIsError] = useState<string>('');
 
 	//Modal
@@ -40,7 +41,7 @@ const Products = () => {
 
 	const fetchAllProduct = async () => {
 		setLoading(true);
-		setError("");
+		setIsError('');
 		try{
 			const res = await getProduct();
 			setListProduct(res);
@@ -62,20 +63,64 @@ const Products = () => {
 		setCurrentPage(page)
 	}
 
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+		const {name, value} = e.target;
+		
+
+		setDataProduct((prev) => ({
+			...prev, [name] : value
+		}));
+
+
+		if(error[name as keyof ProductError]){
+			setError((prev) => ({...prev, [name]: ''}));
+		}
+
+		if(name === 'sortprice' || name === 'sortname'){
+			setSorter(value);
+		}
+
+		if(name === 'categoryFilter'){
+			setCategory(value);
+		}
+	}
+
 	const handleOpenModal = () => {
 		setIsOpen(true);
 		setEditProduct(null);
 		setDataProduct(initialProduct);
 	}
 	const handleProductAdd = async() => {
-		const newProduct: Omit<ProductType, 'id'> = {
-			productName: dataProduct.productName,
-			productPrice: dataProduct.productPrice,
-			productCategory: dataProduct.productCategory
-		};
-		await createProduct(newProduct);
-		await fetchAllProduct();
-		setIsOpen(false);
+
+		const newError: ProductError = {};
+
+		if(!dataProduct.productName.trim()){
+			newError.productName = "Please enter product name!";
+		}
+
+		if(!dataProduct.productPrice){
+			newError.productPrice = "Please enter product price!";
+		}
+
+		if(Object.keys(newError).length > 0){
+			setError(newError);
+		}
+
+
+		try{
+			const newProduct: Omit<ProductType, 'id'> = {
+				productName: dataProduct.productName,
+				productPrice: dataProduct.productPrice,
+				productCategory: dataProduct.productCategory
+			};
+			await createProduct(newProduct);
+			await fetchAllProduct();
+			setIsOpen(false);
+			toast.success('Add product success!');
+		}catch(error){
+			toast.error('Add product unsuccess!');
+		}
+		
 	}
 
 	const handleEditProduct = (id: number) => {
@@ -92,41 +137,41 @@ const Products = () => {
 		setIsOpen(true);
 	}
 
-	const handleUpdateProduct = (idProduct: number) => {
+	const handleUpdateProduct = async(idProduct: number) => {
 		const dataUpdate = {
 			id: idProduct,
 			productName: dataProduct.productName,
 			productPrice: dataProduct.productPrice,
 			productCategory: dataProduct.productCategory
 		}
-		setListProduct((prev) => prev.map((item) => item.id === idProduct ? {...item, ...dataUpdate} : item))
-		setIsOpen(false);
-		setDataProduct(initialProduct)
-	}
 
-	const handleDelete = (idProduct: number) => {
-		let result = confirm('có xoá không?');
-		result ? 
-			setListProduct((prev) => prev.filter((item) => item.id !== idProduct))
-		: listProduct;
-	}
+		try{
+			const dateUpdated = await updateProduct(dataUpdate, idProduct);
+			setIsOpen(false);
+			setDataProduct(initialProduct);
 
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-		const {name, value} = e.target;
+			setListProduct(product => product.map((item) => item.id === idProduct ? dateUpdated : item));
 
-		setDataProduct((prev) => ({
-			...prev, [name] : value
-		}));
-
-
-		if(name === 'sortprice' || name === 'sortname'){
-			setSorter(value);
+			toast.success('Update Product Success')
+		}catch(error){
+			toast.error('Delete Product Unsuccess')
 		}
+		
+	}
 
-		if(name === 'categoryFilter'){
-			setCategory(value);
+	const handleDelete = async(idProduct: number) => {
+		let isConfirm = confirm('Are you sure you want to delete it?');
+		if(isConfirm){
+			try{
+				await deleteProduct(idProduct);
+				await fetchAllProduct();
+				toast.success('Delete Product Success')
+			}catch(error){
+				toast.error('Delete Product Unsuccess')
+			}
 		}
 	}
+
 
 	const handleSearch = (keyword: string) => {
 		setSearch(keyword);
@@ -176,6 +221,7 @@ const Products = () => {
 	
 	return (
 		<>
+		<Toaster position="top-right"/>
 		<section className="sec-product dark:text-white">
 			<div className="heading-page p-6 md:p-12">
 				<h1 className="user-ttl text-3xl md:text-4xl font-bold mb-4">Products Management</h1>
@@ -211,6 +257,7 @@ const Products = () => {
 			handleInputChange={handleInputChange}
 			handleEditProduct={handleEditProduct}
 			handleUpdateProduct={handleUpdateProduct}
+			error={error}
 		/>
 		</>
 	)

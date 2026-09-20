@@ -17,12 +17,12 @@ const createProduct = async (dataProduct: Omit<ProductType, 'id'>): Promise<Prod
 
 
 const updateProduct = async (updateProduct: ProductType, idProduct: number): Promise<ProductType> => {
-    const response = await axiosClient.put(`/products/id=${idProduct}`, updateProduct);
+    const response = await axiosClient.put(`/products/${idProduct}`, updateProduct);
     return response.data;
 }
 
 const deleteProduct = async (idProduct: number): Promise<ProductType> => {
-    const response = await axiosClient.delete(`/products/id=${idProduct}`);
+    const response = await axiosClient.delete(`/products/${idProduct}`);
     return response.data;
 }
 

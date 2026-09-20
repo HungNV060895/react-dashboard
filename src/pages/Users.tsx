@@ -21,7 +21,6 @@ const Users = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const [iserror, setIsError] = useState<string>("");
 	const [usersList, setUsersList] = useState<User[]>([]);
-	//console.log(usersList);
 
 	const [editUser, setEditUser] = useState<User | null>(null);
 
@@ -205,7 +204,7 @@ const Users = () => {
 
 
 	const handleDeleteUser = async (userID: number) => {
-		const isConfirm = confirm('Xoá không em?');
+		const isConfirm = confirm('Are you sure you want to delete it?');
 		if (isConfirm) {
 			try {
 				await deleteUser(userID);
@@ -223,9 +222,8 @@ const Users = () => {
 				toast.success('Update user success!');
 			} catch (error) {
 				console.log(error);
+				toast.error('Update user unsuccess!');
 			}
-		} else {
-			console.log("Không xoá");
 		}
 	}
 	return (

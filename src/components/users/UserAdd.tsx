@@ -105,7 +105,7 @@ const UserAdd = (
 								}
 							</dd>
 						</dl>
-						<button type="submit" className="btn-submit block w-[70%] ml-[30%] rounded-full bg-slate-700 px-4 py-2.5 font-medium text-white hover:bg-slate-500">
+						<button type="submit" className="block w-[70%] ml-[30%] rounded-full bg-slate-700 px-4 py-2.5 font-medium text-white hover:bg-slate-500">
 							{editUser ? 'Update' : 'Add'}
 						</button>
 					</form>
