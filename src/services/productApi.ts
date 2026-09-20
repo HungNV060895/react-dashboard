@@ -2,12 +2,20 @@ import axiosClient from "@/api/axiosClient";
 import { ProductType } from "@/types/product";
 
 interface ProductRespon {
-    data: ProductType
+    data: ProductType[],
+    total: number
 }
 
-const getProduct = async ():Promise<ProductType[]> => {
-    const response = await axiosClient.get('/products');
-    return response.data;
+const getProduct = async (page: number, limit: number):Promise<ProductRespon> => {
+    const response = await axiosClient.get<ProductType[]>('/products', {
+        params: {page, limit}
+    });
+
+    const responseAll = await axiosClient.get<ProductType[]>('/products');
+    return {
+        data: response.data,
+        total: responseAll.data.length
+    };
 }
 
 const createProduct = async (dataProduct: Omit<ProductType, 'id'>): Promise<ProductType> => {

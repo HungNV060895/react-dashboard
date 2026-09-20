@@ -6,7 +6,7 @@ import SortProduct from "@/components/products/SortProduct";
 import SearchProduct from "@/components/products/SearchProduct";
 import FilterProduct from "@/components/products/FilterProduct";
 import ProductPagination from "@/components/products/ProductPagination";
-import { initialProduct } from "@/constants/product";
+import { initialProduct, PAGE_SIZE } from "@/constants/product";
 import { LuPlus } from "react-icons/lu";
 import { getProduct, createProduct, updateProduct, deleteProduct } from "@/services/productApi";
 import toast, { Toaster } from "react-hot-toast";
@@ -34,7 +34,8 @@ const Products = () => {
 
 	//Pagination
 	const [currentPage, setCurrentPage] = useState<number>(1);
-
+	const [postPerPage, setPostPerPage] = useState<number>(1);
+	const [totalProduct, setTotalProduct] = useState<number>();
 
 	//Data Initial
 	const [dataProduct, setDataProduct] = useState<ProductType>(initialProduct)
@@ -43,8 +44,15 @@ const Products = () => {
 		setLoading(true);
 		setIsError('');
 		try{
-			const res = await getProduct();
-			setListProduct(res);
+			const res = await getProduct(currentPage, PAGE_SIZE);
+			setListProduct(res.data);
+
+			//Tính số trang
+			const num_page = Math.ceil(res.total / PAGE_SIZE);
+
+			setTotalProduct(res.total);
+			setPostPerPage(num_page);
+
 		}catch (error){
 			setIsError("Unable to load products.")
 		}finally{
@@ -58,9 +66,13 @@ const Products = () => {
 		fetchAllProduct();
 	}, [])
 
+	useEffect(() => {
+		fetchAllProduct();
+	}, [currentPage])
+
 
 	const handleChangePage = (page: number) => {
-		setCurrentPage(page)
+		setCurrentPage(page);
 	}
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -245,7 +257,13 @@ const Products = () => {
 					handleEditProduct={handleEditProduct} 
 					handleDelete={handleDelete }
 				/>
-				{/* <ProductPagination currentPage={currentPage} dataProduct={listProductSearch} startIndex={startIndex} postPerPage={postPerPage} totalPages={totalPages} handleChangePage={handleChangePage} /> */}
+				<ProductPagination 
+					currentPage={currentPage} 
+					postPerPage={postPerPage}
+					// dataProduct={listProductSearch} 
+					// startIndex={startIndex} 
+					// postPerPage={postPerPage}
+					handleChangePage={handleChangePage} />
 			</div>
 		</section>
 		<ProductAdd 
