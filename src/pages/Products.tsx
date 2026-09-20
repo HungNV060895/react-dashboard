@@ -35,7 +35,7 @@ const Products = () => {
 	//Pagination
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [postPerPage, setPostPerPage] = useState<number>(1);
-	const [totalProduct, setTotalProduct] = useState<number>();
+	const [totalProduct, setTotalProduct] = useState<number>(0);
 
 	//Data Initial
 	const [dataProduct, setDataProduct] = useState<ProductType>(initialProduct)
@@ -110,12 +110,13 @@ const Products = () => {
 			newError.productName = "Please enter product name!";
 		}
 
-		if(!dataProduct.productPrice){
-			newError.productPrice = "Please enter product price!";
+		if(dataProduct.productPrice == 0){
+			newError.productPrice = "Please enter a price for a product other than 0!!";
 		}
 
 		if(Object.keys(newError).length > 0){
 			setError(newError);
+			return;
 		}
 
 
@@ -127,7 +128,21 @@ const Products = () => {
 			};
 			await createProduct(newProduct);
 			await fetchAllProduct();
+
+			//Hiển thị page có sản phầm vừa thêm
+			const nextTotalProduct = totalProduct + 1;
+			const newPostPerPage = Math.ceil(nextTotalProduct/PAGE_SIZE);
+
+			setCurrentPage(newPostPerPage);
+
+			if(newPostPerPage !== currentPage){
+				setCurrentPage(newPostPerPage);
+			}else{
+				await fetchAllProduct();
+			}
+
 			setIsOpen(false);
+			
 			toast.success('Add product success!');
 		}catch(error){
 			toast.error('Add product unsuccess!');
@@ -176,7 +191,22 @@ const Products = () => {
 		if(isConfirm){
 			try{
 				await deleteProduct(idProduct);
-				await fetchAllProduct();
+
+				const nextTotalProduct = totalProduct - 1;
+				
+				setTotalProduct((prev) => Math.max(prev - 1, 0));
+
+				console.log(nextTotalProduct, totalProduct);
+
+				const newPostPerPage = Math.ceil(nextTotalProduct / PAGE_SIZE);
+
+				if(currentPage > newPostPerPage){
+					setCurrentPage(newPostPerPage);
+				}else{
+					await fetchAllProduct();
+				}
+
+				//await fetchAllProduct();
 				toast.success('Delete Product Success')
 			}catch(error){
 				toast.error('Delete Product Unsuccess')
@@ -260,9 +290,9 @@ const Products = () => {
 				<ProductPagination 
 					currentPage={currentPage} 
 					postPerPage={postPerPage}
-					// dataProduct={listProductSearch} 
-					// startIndex={startIndex} 
-					// postPerPage={postPerPage}
+					totalProduct={totalProduct}
+					page_size={PAGE_SIZE}
+					// dataProduct={listProductSearch}
 					handleChangePage={handleChangePage} />
 			</div>
 		</section>
