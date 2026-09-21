@@ -62,7 +62,8 @@ const Dashboard = () => {
 	return (
 		<>
 			<section className="p-12">
-				<h1 className="text-4xl text-slate-950 dark:text-white mb-5">Dashboard Overview</h1>
+				<h1 className="text-4xl text-slate-950 dark:text-white mb-1">Dashboard Overview</h1>
+				<p className="text-lg mb-10 text-slate-900 dark:text-white ">Welcome back! Here's what's happening with your business today.</p>
 				<ListCard listProduct={listProduct} listUsers={listUsers} num_categories={num_categories} totalPrice={totalPrice} />
 				<ProductChart chartData={chartData} />
 				<div className="grid grid-cols-2 gap-8">
