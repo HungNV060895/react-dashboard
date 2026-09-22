@@ -2,7 +2,7 @@ import UserPagination from "@/components/users/UserPagination";
 import UsersSearch from "@/components/users/UsersSearch";
 import { LuPlus } from "react-icons/lu";
 import UserTable from "@/components/users/UserTable";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import UserFilter from "@/components/users/UserFilter";
 import UserAdd from "@/components/users/UserAdd";
 import type { FormError, User, FormState } from "@/types/user";
@@ -30,6 +30,7 @@ const Users = () => {
 	const [role, setRole] = useState('All');
 	const [status, setStatus] = useState('All');
 	const [isOpen, setIsOpen] = useState(false);
+	const latestRequestRef = useRef(0);
 
 	//state add users
 	const [formData, setFromData] = useState<FormState>(initialFormData)
@@ -45,20 +46,27 @@ const Users = () => {
 	const pageSize = 6;
 
 	const fetchUsers = async (page: number) => {
+		const requestId = ++latestRequestRef.current;
 		setLoading(true);
 		setIsError('');
 
 		try {
 			const res = await getUsers(page, pageSize, search, role, status);
-			setUsersList(res.data);
-			setTotalUsers(res.total);
+			if (requestId === latestRequestRef.current) {
+				setUsersList(res.data);
+				setTotalUsers(res.total);
+			}
 			
 			return res;
 		} catch (error) {
-			setIsError('Unable to load user list. Please try again later.');
+			if (requestId === latestRequestRef.current) {
+				setIsError('Unable to load user list. Please try again later.');
+			}
 			throw error;
 		} finally {
-			setLoading(false);
+			if (requestId === latestRequestRef.current) {
+				setLoading(false);
+			}
 		}
 	};
 

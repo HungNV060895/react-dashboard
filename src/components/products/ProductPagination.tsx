@@ -13,7 +13,7 @@ const ProductPagination = ({currentPage, handleChangePage, postPerPage, totalPro
 	return (
 		<>
 			<div className="flex flex-col md:flex-row md:justify-between items-center px-4 py-3 mt-5 gap-4 md:mt-12">
-				<div className="text-sm text-slate-500">
+				<div className="text-sm text-slate-400">
 					Showing <b>{page_size * (currentPage - 1)}-{Math.min((page_size * currentPage), totalProduct)}</b> of {totalProduct} results
 				</div>
 				<div className="flex space-x-1">
@@ -29,8 +29,8 @@ const ProductPagination = ({currentPage, handleChangePage, postPerPage, totalPro
 						// và thisArg là giá trị được sử dụng làm this khi gọi mapFn.
 						Array.from({length: postPerPage}, (_, index) => (
 							<button key={index} onClick={() => handleChangePage(index + 1)} className={`
-								px-3 py-1 min-w-9 min-h-9 text-sm font-normal rounded transition duration-200 ease hover:bg-slate-50 hover:border-slate-400 border border-slate-200
-								${currentPage  === index + 1 ? 'bg-blue-800 text-white pointer-events-none' : 'bg-white text-slate-500'}
+								px-3 py-1 min-w-9 min-h-9 text-sm font-normal rounded transition duration-200 ease hover:bg-slate-50 hover:border-slate-400 bg-slate-800 border border-slate-700 text-slate-300
+								${currentPage  === index + 1 ? 'bg-indigo-600 border-indigo-600 text-white pointer-events-none' : 'bg-white text-slate-500'}
 							`}>
 								{index + 1}
 							</button>

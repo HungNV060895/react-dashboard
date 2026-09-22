@@ -6,9 +6,9 @@ interface ProductRespon {
     total: number
 }
 
-const getProduct = async (page: number, limit: number):Promise<ProductRespon> => {
+const getProduct = async (page: number, limit: number, search: string, productCategory: string):Promise<ProductRespon> => {
     const response = await axiosClient.get<ProductType[]>('/products', {
-        params: {page, limit}
+        params: {page, limit, search, productCategory}
     });
 
     const responseAll = await axiosClient.get<ProductType[]>('/products');

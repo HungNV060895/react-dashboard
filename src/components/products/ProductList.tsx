@@ -31,7 +31,7 @@ const ProductList = ({ data, handleEditProduct, handleDelete, loading, isError }
 	return (
 		<>
 			{
-				data.length === 0 ? (
+				!data?.length ? (
 					<p className="p-4 bg-red-400 text-slate-900 mt-5">No products are displayed.</p>
 				) : (
 					<div className="user-table border border-default relative overflow-x-auto bg-neutral-primary-soft shadow-slate-200 rounded-md">
@@ -64,8 +64,8 @@ const ProductList = ({ data, handleEditProduct, handleDelete, loading, isError }
 											</td>
 											<td className="px-6 py-3">
 												<div className="flex">
-													<button className="flex items-center justify-center gap-1 mr-2 btn-primary rounded-full bg-green-500 px-3 py-2 font-semibold text-white shadow-md hover:bg-green-700 transition-all" onClick={() => handleEditProduct(item.id)}><LuPencil />Edit</button>
-													<button className="flex items-center justify-center gap-1 btn-danger rounded-full bg-red-500 px-3 py-2 font-semibold text-white shadow-md hover:bg-red-700 transition-all" onClick={() => handleDelete(item.id)}><LuTrash />Delete</button>
+													<button className="flex items-center justify-center gap-1 mr-2 btn-primary rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 px-3 py-2 font-semibold shadow-md transition-all" onClick={() => handleEditProduct(item.id)}><LuPencil />Edit</button>
+													<button className="flex items-center justify-center gap-1 btn-danger rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 px-3 py-2 font-semibold shadow-md transition-all" onClick={() => handleDelete(item.id)}><LuTrash />Delete</button>
 												</div>
 											</td>
 										</tr>

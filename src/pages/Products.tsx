@@ -19,7 +19,7 @@ const Products = () => {
 	const [editProduct, setEditProduct] = useState<ProductType | null>(null);
 
 	//Loading, Error
-	const [loading, setLoading] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<ProductError>({});
 	const [isError, setIsError] = useState<string>('');
 
@@ -44,7 +44,7 @@ const Products = () => {
 		setLoading(true);
 		setIsError('');
 		try{
-			const res = await getProduct(currentPage, PAGE_SIZE);
+			const res = await getProduct(currentPage, PAGE_SIZE, search, category);
 			setListProduct(res.data);
 
 			//Tính số trang
@@ -68,7 +68,7 @@ const Products = () => {
 
 	useEffect(() => {
 		fetchAllProduct();
-	}, [currentPage])
+	}, [currentPage, search, category])
 
 
 	const handleChangePage = (page: number) => {
