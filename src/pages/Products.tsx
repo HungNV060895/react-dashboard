@@ -1,5 +1,5 @@
 import type { ProductError, ProductType } from "@/types/product";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ProductList from "@/components/products/ProductList";
 import ProductAdd from "@/components/products/ProductAdd";
 import SortProduct from "@/components/products/SortProduct";
@@ -15,7 +15,6 @@ const Products = () => {
 
 	//State Product
 	const [listProduct, setListProduct] = useState<ProductType[]>([]);
-	const [items, setItems] = useState<ProductType[]>([]);
 	const [editProduct, setEditProduct] = useState<ProductType | null>(null);
 
 	//Loading, Error
@@ -29,6 +28,7 @@ const Products = () => {
 	//Search - Filter - Sort
 	const [sorter, setSorter] = useState<string>("");
 	const [search, setSearch] = useState<string>("");
+	const [debouncedSearch, setDebouncedSearch] = useState<string>("");
 	const [category, setCategory] = useState<string>("");
 
 
@@ -40,36 +40,45 @@ const Products = () => {
 	//Data Initial
 	const [dataProduct, setDataProduct] = useState<ProductType>(initialProduct)
 
-	const fetchAllProduct = async () => {
+	const lastRequestRef = useRef(0);
+
+	const fetchAllProduct = async (page: number) => {
+
+		const requestIDLast = ++lastRequestRef.current;
+
 		setLoading(true);
 		setIsError('');
 		try{
-			const res = await getProduct(currentPage, PAGE_SIZE, search, category);
-			setListProduct(res.data);
+			const res = await getProduct(page, PAGE_SIZE, search, category);
 
-			//Tính số trang
-			const num_page = Math.ceil(res.total / PAGE_SIZE);
-
-			setTotalProduct(res.total);
-			setPostPerPage(num_page);
-
+			if(requestIDLast === lastRequestRef.current){
+				setListProduct(res.data);
+				setTotalProduct(res.total);
+			}
 		}catch (error){
-			setIsError("Unable to load products.")
+			if(requestIDLast === lastRequestRef.current){
+				setIsError("Unable to load products.")
+			}
 		}finally{
-			setLoading(false);
+			if(requestIDLast === lastRequestRef.current){
+				setLoading(false);
+			}
 		}
 	}
 
-	
 
 	useEffect(() => {
-		fetchAllProduct();
-	}, [])
+		fetchAllProduct(currentPage);
+		console.log(totalProduct);
+	}, [currentPage, search, category, sorter]);
 
 	useEffect(() => {
-		fetchAllProduct();
-	}, [currentPage, search, category])
+		setCurrentPage(1);
+	}, [search, category, sorter])
 
+
+	const totalPage = Math.ceil(totalProduct / PAGE_SIZE);
+	//setPostPerPage(totalPage);
 
 	const handleChangePage = (page: number) => {
 		setCurrentPage(page);
@@ -127,7 +136,7 @@ const Products = () => {
 				productCategory: dataProduct.productCategory
 			};
 			await createProduct(newProduct);
-			await fetchAllProduct();
+			await fetchAllProduct(currentPage);
 
 			//Hiển thị page có sản phầm vừa thêm
 			const nextTotalProduct = totalProduct + 1;
@@ -138,7 +147,7 @@ const Products = () => {
 			if(newPostPerPage !== currentPage){
 				setCurrentPage(newPostPerPage);
 			}else{
-				await fetchAllProduct();
+				await fetchAllProduct(currentPage);
 			}
 
 			setIsOpen(false);
@@ -203,7 +212,7 @@ const Products = () => {
 				if(currentPage > newPostPerPage){
 					setCurrentPage(newPostPerPage);
 				}else{
-					await fetchAllProduct();
+					await fetchAllProduct(currentPage);
 				}
 
 				//await fetchAllProduct();
@@ -219,7 +228,13 @@ const Products = () => {
 		setSearch(keyword);
 	}
 
-
+	let listProductSorted = listProduct.sort((a: ProductType, b: ProductType) => {
+		if(sorter  === 'htol') return (Number(b.productPrice) - Number(a.productPrice));
+		if(sorter  === 'ltoh') return (Number(a.productPrice) - Number(b.productPrice));
+		if(sorter  === 'atoz') return a.productName.localeCompare(b.productName);
+		if(sorter  === 'ztoa') return b.productName.localeCompare(a.productName);
+		return 0;
+	});
 	// let listProductSearch = 
 	// listProduct.filter((item) => {
 	// 	const matchSearch = item.name.trim().toLowerCase().includes(search.trim().toLowerCase());
@@ -283,13 +298,13 @@ const Products = () => {
 					loading={loading}
 					isError={isError}
 					handleInputChange={handleInputChange} 
-					data={listProduct}
+					data={listProductSorted}
 					handleEditProduct={handleEditProduct} 
 					handleDelete={handleDelete }
 				/>
 				<ProductPagination 
-					currentPage={currentPage} 
-					postPerPage={postPerPage}
+					currentPage={currentPage}
+					totalPage={totalPage}
 					totalProduct={totalProduct}
 					page_size={PAGE_SIZE}
 					// dataProduct={listProductSearch}

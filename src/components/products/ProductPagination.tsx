@@ -4,12 +4,12 @@ type ProductPaginationProps = {
 	handleChangePage : (page: number) => void;
 	// dataProduct: ProductType[];
 	currentPage: number;
-	postPerPage: number;
+	totalPage: number;
 	totalProduct: number;
 	page_size: number
 }
 
-const ProductPagination = ({currentPage, handleChangePage, postPerPage, totalProduct, page_size} : ProductPaginationProps) => {
+const ProductPagination = ({currentPage, handleChangePage, totalPage, totalProduct, page_size} : ProductPaginationProps) => {
 	return (
 		<>
 			<div className="flex flex-col md:flex-row md:justify-between items-center px-4 py-3 mt-5 gap-4 md:mt-12">
@@ -27,7 +27,7 @@ const ProductPagination = ({currentPage, handleChangePage, postPerPage, totalPro
 						// Trong đó, arrayLike là đối tượng giống mảng cần chuyển đổi thành mảng, 
 						// mapFn là hàm ánh xạ được áp dụng cho từng phần tử của mảng mới, 
 						// và thisArg là giá trị được sử dụng làm this khi gọi mapFn.
-						Array.from({length: postPerPage}, (_, index) => (
+						Array.from({length: totalPage}, (_, index) => (
 							<button key={index} onClick={() => handleChangePage(index + 1)} className={`
 								px-3 py-1 min-w-9 min-h-9 text-sm font-normal rounded transition duration-200 ease hover:bg-slate-50 hover:border-slate-400 bg-slate-800 border border-slate-700 text-slate-300
 								${currentPage  === index + 1 ? 'bg-indigo-600 border-indigo-600 text-white pointer-events-none' : 'bg-white text-slate-500'}
@@ -36,7 +36,7 @@ const ProductPagination = ({currentPage, handleChangePage, postPerPage, totalPro
 							</button>
 						))
 					}
-					<button onClick={() => handleChangePage(currentPage + 1)} disabled={currentPage === postPerPage} className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease disabled:opacity-50">
+					<button onClick={() => handleChangePage(currentPage + 1)} disabled={currentPage === totalPage} className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease disabled:opacity-50">
 						Next
 					</button>
 				</div>

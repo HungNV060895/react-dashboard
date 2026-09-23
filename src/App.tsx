@@ -2,11 +2,11 @@
 import { Outlet } from 'react-router-dom'
 import Header from '@components/layouts/Header'
 import Sidebar from '@components/layouts/Sidebar'
+import { DocsBotChat } from './components/DocsBotChat'
 
 function App() {
 	return (
 		<>
-
 			<div className='flex h-screen overflow-hidden'>
 				<Sidebar />
 				<main className='flex-1 bg-slate-100 dark:bg-main overflow-y-auto overflow-x-hidden'>
@@ -16,6 +16,7 @@ function App() {
 					</div>
 				</main>
 			</div>
+			<DocsBotChat />
 		</>
 	)
 }

@@ -25,6 +25,8 @@ const Users = () => {
 	const [editUser, setEditUser] = useState<User | null>(null);
 
 	const [search, setSearch] = useState('');
+	const [debounecedSearch, setDebounecedSearch] = useState('');
+
 	const [currentPage, setCurrentPage] = useState(1);
 	const [totalUsers, setTotalUsers] = useState(0);
 	const [role, setRole] = useState('All');
@@ -34,24 +36,21 @@ const Users = () => {
 
 	//state add users
 	const [formData, setFromData] = useState<FormState>(initialFormData)
-
-	
-	// const [nameField, setNameField] = useState('');
-	// const [emailField, setEmailField] = useState('');
-	// const [roleField, setRoleField] = useState<"Admin" | "User">('Admin');
-	// const [statusField, setStatusField] = useState<"Active" | "Inactive">('Active');
-	// const [avatarField, setAvatarField] = useState(null);
 	const [error, setError] = useState<FormError>({});
 
 	const pageSize = 6;
 
 	const fetchUsers = async (page: number) => {
+		
 		const requestId = ++latestRequestRef.current;
 		setLoading(true);
 		setIsError('');
 
 		try {
+			
 			const res = await getUsers(page, pageSize, search, role, status);
+
+
 			if (requestId === latestRequestRef.current) {
 				setUsersList(res.data);
 				setTotalUsers(res.total);
@@ -71,12 +70,24 @@ const Users = () => {
 	};
 
 	useEffect(() => {
+		const timer = setTimeout(() => {
+			setDebounecedSearch(search);
+		}, 300)
+
+		//Clearup
+		return () => {
+			clearTimeout(timer);
+		}
+	}, [search]);
+
+
+	useEffect(() => {
 		fetchUsers(currentPage);
-	}, [currentPage, search, role, status]);
+	}, [currentPage, debounecedSearch, role, status]);
 
 	useEffect(() => {
 		setCurrentPage(1);
-	}, [search, role, status]);
+	}, [debounecedSearch, role, status]);
 
 
 	//const normalizedSearch = search.trim().toLowerCase();

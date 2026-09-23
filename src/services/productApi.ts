@@ -6,12 +6,14 @@ interface ProductRespon {
     total: number
 }
 
-const getProduct = async (page: number, limit: number, search: string, productCategory: string):Promise<ProductRespon> => {
+const getProduct = async (page: number, limit: number, productName: string, productCategory: string):Promise<ProductRespon> => {
     const response = await axiosClient.get<ProductType[]>('/products', {
-        params: {page, limit, search, productCategory}
+        params: {page, limit, productName, productCategory}
     });
 
-    const responseAll = await axiosClient.get<ProductType[]>('/products');
+    const responseAll = await axiosClient.get<ProductType[]>('/products', {
+        params: {productName, productCategory}
+    });
     return {
         data: response.data,
         total: responseAll.data.length

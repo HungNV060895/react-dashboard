@@ -31,7 +31,7 @@ const ProductList = ({ data, handleEditProduct, handleDelete, loading, isError }
 	return (
 		<>
 			{
-				!data?.length ? (
+				data.length === 0 ? (
 					<p className="p-4 bg-red-400 text-slate-900 mt-5">No products are displayed.</p>
 				) : (
 					<div className="user-table border border-default relative overflow-x-auto bg-neutral-primary-soft shadow-slate-200 rounded-md">
