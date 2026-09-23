@@ -14,7 +14,7 @@ const UserPagination = ({ currentPage, totalPages, startIndex, pageSize, totalUs
         return (
             <>
                 <div className="flex justify-between items-center px-4 py-3">
-                    <div className="text-sm text-slate-500">
+                    <div className="text-sm text-slate-400">
                     Showing <b>{startIndex + 1}-{Math.min(startIndex + pageSize, totalUsers)}</b> of {totalUsers}
                     </div>
                     <div className="flex space-x-1">

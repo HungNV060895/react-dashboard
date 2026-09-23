@@ -4,13 +4,13 @@ import { LuPencil, LuTrash } from "react-icons/lu";
 type UserTableProps = {
     data: User[];
     handleEditUser: (id: number) => void;
-    handleDeleteUser: (id: number) => void;
+    handleOpenDeleteModal: (user: User) => void;
     editUser: User | null,
     loading: boolean,
     iserror:  string
 };
 
-const UserTable = ({ data, handleEditUser, editUser, handleDeleteUser , loading, iserror }: UserTableProps) => {
+const UserTable = ({ data, handleEditUser, editUser, handleOpenDeleteModal , loading, iserror }: UserTableProps) => {
     if (iserror) {
         return <p className="p-6 text-red-500 font-medium">{iserror}</p>;
     }
@@ -56,8 +56,8 @@ const UserTable = ({ data, handleEditUser, editUser, handleDeleteUser , loading,
                                 <td className="px-6 py-4">{user.status}</td>
                                 <td className="px-6 py-4">
                                     <div className="flex">
-                                        <button onClick={() => handleEditUser(user.id)} className="flex items-center justify-center gap-1 mr-2 btn-primary rounded-full bg-green-500 px-3 py-2font-semibold text-white shadow-md hover:bg-green-700 transition-all"><LuPencil />Edit</button>
-                                        <button onClick={() => handleDeleteUser(user.id)} className="flex items-center justify-center gap-1 btn-danger rounded-full bg-red-500 px-3 py-2 font-semibold text-white shadow-md hover:bg-red-700 transition-all"><LuTrash />Delete</button>
+                                        <button onClick={() => handleEditUser(user.id)} className="flex items-center justify-center gap-1 mr-2 btn-primary rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 px-3 py-1 font-semibold shadow-md transition-all"><LuPencil />Edit</button>
+                                        <button onClick={() => handleOpenDeleteModal(user)} className="flex items-center justify-center gap-1 btn-danger rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 px-3 py-1 font-semibold shadow-md transition-all"><LuTrash />Delete</button>
                                     </div>
                                 </td>
                             </tr>

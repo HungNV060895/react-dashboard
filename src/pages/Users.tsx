@@ -9,20 +9,19 @@ import type { FormError, User, FormState } from "@/types/user";
 import { initialFormData } from "@/constants/user";
 import { getUsers, createUsers, updateUser, deleteUser } from "@/services/userApi";
 import {Toaster, toast} from "react-hot-toast";
-import ModalConfirm from "@/components/users/ModalConfirm";
+import ModalConfirm from "@/components/ModalConfirm";
 
 
 const Users = () => {
-
-	// const [usersList, setUsersList] = useState<User[]>(() => {
-	// 	const saved = localStorage.getItem('dataUsers');
-	// 	return saved ? JSON.parse(saved) : []
-	// });
 	const [loading, setLoading] = useState<boolean>(false);
 	const [iserror, setIsError] = useState<string>("");
+	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [isConfirm, setIsConfirm] = useState<boolean>(false);
+	
 	const [usersList, setUsersList] = useState<User[]>([]);
-
 	const [editUser, setEditUser] = useState<User | null>(null);
+	const [userToDelete, setUserToDelete] = useState<User | null>(null);
+	const [isDeleting, setIsDeleting] = useState(false);
 
 	const [search, setSearch] = useState('');
 	const [debounecedSearch, setDebounecedSearch] = useState('');
@@ -31,7 +30,6 @@ const Users = () => {
 	const [totalUsers, setTotalUsers] = useState(0);
 	const [role, setRole] = useState('All');
 	const [status, setStatus] = useState('All');
-	const [isOpen, setIsOpen] = useState(false);
 	const latestRequestRef = useRef(0);
 
 	//state add users
@@ -88,20 +86,6 @@ const Users = () => {
 	useEffect(() => {
 		setCurrentPage(1);
 	}, [debounecedSearch, role, status]);
-
-
-	//const normalizedSearch = search.trim().toLowerCase();
-
-	// const filteredUsers = usersList.filter((user) =>{
-	// 	const matchSearch = user.name.toLowerCase().includes(normalizedSearch) ||
-	// 						user.email.toLowerCase().includes(normalizedSearch);
-	// 	const matchRole = role === 'All' || user.role === role;
-	// 	const matchStatus = status === 'All' || user.status === status;
-	// 	return matchSearch && matchRole && matchStatus;
-	// });
-
-
-
 
 	const totalPages = Math.ceil(totalUsers / pageSize);
 	const startIndex = (currentPage - 1) * pageSize;
@@ -222,33 +206,53 @@ const Users = () => {
 	}
 
 
-	const handleDeleteUser = async (userID: number) => {
-		const isConfirm = confirm('Are you sure you want to delete it?');
-		if (isConfirm) {
-			try {
-				await deleteUser(userID);
-				setTotalUsers((prev) => Math.max(prev - 1, 0));
+	const handleCancelDelete = () => {
+		setIsConfirm(false);
+		setUserToDelete(null);
+	}
 
-				const newTotal = Math.max(totalUsers - 1, 0);
-				const newTotalPage = Math.ceil(newTotal / pageSize) || 1;
 
-				if (currentPage > newTotalPage) {
-					setCurrentPage(newTotalPage);
-				} else {
-					setUsersList((prev) => prev.filter((item) => item.id !== userID));
-				}
+	const handleOpenDeleteModal = (user: User) => {
+		setIsConfirm(true);
+		setUserToDelete(user);
+	}
 
-				toast.success('Update user success!');
-			} catch (error) {
-				console.log(error);
-				toast.error('Update user unsuccess!');
+	const handleConfirmDelete = async () => {
+		if(!userToDelete) return;
+		const userID = userToDelete.id;
+		setIsDeleting(true);
+		try {
+			await new Promise(r => setTimeout(r, 1000));
+			await deleteUser(userID);
+			setTotalUsers((prev) => Math.max(prev - 1, 0));
+
+			const newTotal = Math.max(totalUsers - 1, 0);
+			const newTotalPage = Math.ceil(newTotal / pageSize) || 1;
+
+			if (currentPage > newTotalPage) {
+				setCurrentPage(newTotalPage);
+			} else {
+				setUsersList((prev) => prev.filter((item) => item.id !== userID));
 			}
+			setIsConfirm(false);
+			toast.success('Delete user success!');
+		} catch (error) {
+			setIsConfirm(false);
+			toast.error('Delete user unsuccess!');
+		}finally{
+			setIsDeleting(false);
 		}
 	}
 	return (
 		<>
 			<Toaster />
-			<ModalConfirm />
+			<ModalConfirm 
+				message={`Are you sure you want to delete ${userToDelete?.name}?`}
+				isConfirm={isConfirm}
+				handleCancelDelete={handleCancelDelete}
+				handleConfirmDelete={handleConfirmDelete}
+				isDeleting={isDeleting}
+			/>
 			<section className="sec-user dark:text-white">
 				<div className="heading-page p-6 md:p-12">
 					<h2 className="user-ttl text-2xl md:text-4xl font-bold mb-4">User Management</h2>
@@ -267,7 +271,7 @@ const Users = () => {
 						<UserTable
 							data={currentUsers}
 							handleEditUser={handleEditUser}
-							handleDeleteUser={handleDeleteUser}
+							handleOpenDeleteModal={handleOpenDeleteModal}
 							editUser={editUser}
 							loading={loading}
 							iserror={iserror}

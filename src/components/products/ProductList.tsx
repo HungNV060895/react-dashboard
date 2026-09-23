@@ -6,13 +6,13 @@ import { LuPencil, LuTrash } from "react-icons/lu";
 type ProductListType = {
 	data: ProductType[],
 	handleEditProduct: (productID: number) => void;
-	handleDelete: (productID: number) => void,
 	handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void,
+	handleOpenDeleteModal: (product: ProductType) => void,
 	loading: boolean,
 	isError: string
 }
 
-const ProductList = ({ data, handleEditProduct, handleDelete, loading, isError }: ProductListType) => {
+const ProductList = ({ data, handleEditProduct, handleOpenDeleteModal, loading, isError }: ProductListType) => {
 	const formatMoney = (amount: number): string => {
 		return new Intl.NumberFormat('vi-VN', {
 			style: 'currency',
@@ -48,7 +48,7 @@ const ProductList = ({ data, handleEditProduct, handleDelete, loading, isError }
 							<tbody>
 								{
 									data.map((item) => (
-										<tr key={item.id} className="odd:bg-white even:bg-gray-200 border-b dark:border-gray-300 dark:text-slate-950 border-gray-200 hover:bg-gray-50 cursor-pointer">
+										<tr key={item.id} className="odd:bg-white even:bg-[#F8FAFC] border-b dark:border-gray-300 dark:text-slate-950 border-gray-200 hover:bg-zinc-100 transition ease-in-out cursor-pointer">
 											<td className="px-6 py-3">{item.id}</td>
 											<td className="px-6 py-3">
 												<div className="flex items-center gap-2 font-medium">
@@ -64,8 +64,8 @@ const ProductList = ({ data, handleEditProduct, handleDelete, loading, isError }
 											</td>
 											<td className="px-6 py-3">
 												<div className="flex">
-													<button className="flex items-center justify-center gap-1 mr-2 btn-primary rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 px-3 py-2 font-semibold shadow-md transition-all" onClick={() => handleEditProduct(item.id)}><LuPencil />Edit</button>
-													<button className="flex items-center justify-center gap-1 btn-danger rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 px-3 py-2 font-semibold shadow-md transition-all" onClick={() => handleDelete(item.id)}><LuTrash />Delete</button>
+													<button className="flex items-center justify-center gap-1 mr-2 btn-primary rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 px-3 py-1 font-semibold shadow-md transition-all" onClick={() => handleEditProduct(item.id)}><LuPencil />Edit</button>
+													<button className="flex items-center justify-center gap-1 btn-danger rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 hover:bg-rose-500/20 px-3 py-1 font-semibold shadow-md transition-all" onClick={() => handleOpenDeleteModal(item)}><LuTrash />Delete</button>
 												</div>
 											</td>
 										</tr>

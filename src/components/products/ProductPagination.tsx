@@ -21,19 +21,18 @@ const ProductPagination = ({currentPage, handleChangePage, totalPage, totalProdu
 						Prev
 					</button>
 					{
-						// Array là một đối tượng giống mảng có độ dài cố định. 
-						// Nó có thể được sử dụng để tạo một mảng mới với các phần tử được khởi tạo từ một hàm. 
-						// Cú pháp của Array.from() là: Array.from(arrayLike, mapFn, thisArg). 
-						// Trong đó, arrayLike là đối tượng giống mảng cần chuyển đổi thành mảng, 
-						// mapFn là hàm ánh xạ được áp dụng cho từng phần tử của mảng mới, 
-						// và thisArg là giá trị được sử dụng làm this khi gọi mapFn.
 						Array.from({length: totalPage}, (_, index) => (
-							<button key={index} onClick={() => handleChangePage(index + 1)} className={`
-								px-3 py-1 min-w-9 min-h-9 text-sm font-normal rounded transition duration-200 ease hover:bg-slate-50 hover:border-slate-400 bg-slate-800 border border-slate-700 text-slate-300
-								${currentPage  === index + 1 ? 'bg-indigo-600 border-indigo-600 text-white pointer-events-none' : 'bg-white text-slate-500'}
-							`}>
-								{index + 1}
-							</button>
+							<button 
+                                key={index} 
+                                onClick={() => handleChangePage(index + 1)}
+                                className={`px-3 py-1 min-w-9 min-h-9 text-sm font-normal rounded transition duration-200 ease ${
+                                    currentPage === index + 1 
+                                        ? 'bg-blue-500 text-white border border-blue-500' 
+                                        : 'text-slate-500 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-400'
+                                }`}
+                            >
+                                {index + 1}
+                            </button>
 						))
 					}
 					<button onClick={() => handleChangePage(currentPage + 1)} disabled={currentPage === totalPage} className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease disabled:opacity-50">
