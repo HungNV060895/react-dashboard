@@ -1,12 +1,15 @@
 import { LuMenu } from "react-icons/lu";
 import Themes from "./Themes";
 
-const Header = () => {
+type TSidebar = {
+    onToggle: () => void
+}
 
+const Header = ({onToggle} : TSidebar) => {
     return (
         <>
             <header className="flex justify-end bg-gray-50 text-slate-950 dark:text-white px-4 dark:bg-gray-800 sticky top-0 z-10 w-full">
-                <button className="w-11 h-11 flex rounded-md items-center justify-center border border-gray-200 absolute left-2 top-1/2 -translate-y-1/2 hover:bg-slate-500 transition-all"><LuMenu /></button>
+                <button onClick={()=> onToggle()} className="w-11 h-11 flex rounded-md items-center justify-center border border-gray-200 absolute left-2 top-1/2 -translate-y-1/2 hover:bg-slate-500 transition-all"><LuMenu /></button>
                 <div className="h-16 max-w-52 w-full flex items-center gap-5 header-control">
                     <div className="flex items-center gap-2 header-control__info">
                         <div>

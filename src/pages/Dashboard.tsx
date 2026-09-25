@@ -16,10 +16,10 @@ const Dashboard = () => {
 
 		const fetchProducts = async () => {
 			try {
-				const res = await getProduct(1, 10000000);
+				const res = await getProduct(1, 10, '', '');
 				setListProduct(res.data)
 			} catch (error) {
-				console.error('Unable to fetch users for dashboard:', error);
+				//console.error('Unable to fetch users for dashboard:', error);
 				setListProduct([]);
 			}
 		}
@@ -28,10 +28,10 @@ const Dashboard = () => {
 
 		const fetchUsers = async () => {
 			try {
-				const res = await getUsers(1, 1000, '', 'All', 'All');
+				const res = await getUsers(1, 10, '', 'All', 'All');
 				setListUsers(res.data);
 			} catch (error) {
-				console.error('Unable to fetch users for dashboard:', error);
+				//console.error('Unable to fetch users for dashboard:', error);
 				setListUsers([]);
 			}
 		};
@@ -50,8 +50,6 @@ const Dashboard = () => {
 		return acc + Number(item.productPrice)
 	}, 0);
 
-
-	console.log(listProduct);
 	const currentProduct = listProduct.slice(Math.max(listProduct.length - 5, 0), listProduct.length);
 	const currentUsers = listUsers.slice(Math.max(listUsers.length - 5, 0), listUsers.length);
 

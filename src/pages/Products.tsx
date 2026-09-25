@@ -301,7 +301,6 @@ const Products = () => {
 						totalPage={totalPage}
 						totalProduct={totalProduct}
 						page_size={PAGE_SIZE}
-						// dataProduct={listProductSearch}
 						handleChangePage={handleChangePage} />
 				</div>
 			</section>
