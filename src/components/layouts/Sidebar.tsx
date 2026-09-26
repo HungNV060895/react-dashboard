@@ -4,9 +4,10 @@ import SidebarItem from "./SidebarItem";
 
 type TSidebar = {
 	isOpen: boolean;
+	setIsOpen: (isOpen: boolean) => void,
 };
 
-const Sidebar = ({ isOpen }: TSidebar) => {
+const Sidebar = ({ isOpen, setIsOpen}: TSidebar) => {
 	return (
 		<aside
 			className={`
@@ -41,7 +42,7 @@ const Sidebar = ({ isOpen }: TSidebar) => {
 			{/* Menu */}
 			<nav className="mt-4 flex flex-col gap-1">
 				{sidebarMenus.map((item) => (
-					<SidebarItem key={item.path} item={item} isOpen={isOpen} />
+					<SidebarItem key={item.path} item={item} isOpen={isOpen} setIsOpen={setIsOpen} />
 				))}
 			</nav>
 		</aside>

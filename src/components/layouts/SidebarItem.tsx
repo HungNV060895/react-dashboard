@@ -8,13 +8,14 @@ type TSidebarItem = {
 		icon: IconType;
 	};
 	isOpen: boolean;
+	setIsOpen: (isOpen: boolean) => void,
 };
 
-const SidebarItem = ({ item, isOpen }: TSidebarItem) => {
+const SidebarItem = ({ item, isOpen, setIsOpen }: TSidebarItem) => {
 	const Icon = item.icon;
-
 	return (
 		<NavLink
+			onClick={() => setIsOpen(true)}
 			to={item.path}
 			title={!isOpen ? item.title : undefined}
 			className={({ isActive }) =>
@@ -22,7 +23,7 @@ const SidebarItem = ({ item, isOpen }: TSidebarItem) => {
 					flex items-center gap-3 py-3 rounded-lg relative
 					transition-all duration-200
 					hover:bg-slate-700
-					${isOpen ? "px-6 justify-start" : "px-0 gap-0 justify-center"}
+					${isOpen ? "px-6 justify-start" : "px-3 md:px-0 md:gap-0 md:justify-center"}
 					${isActive ? "bg-slate-700 text-blue-500" : ""}
 				`
 			}

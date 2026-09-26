@@ -266,7 +266,7 @@ const Users = () => {
 						</button>
 					</div>
 				</div>
-				<div className="main-content p-12 bg-[#E2E8F0]">
+				<div className="main-content p-6 md:p-12 bg-[#E2E8F0]">
 					<div className="user-table relative rounded-lg overflow-x-auto bg-white">
 						<UserTable
 							data={currentUsers}

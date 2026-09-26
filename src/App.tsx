@@ -13,7 +13,7 @@ function App() {
 	return (
 		<>
 			<div className='flex h-screen overflow-hidden'>
-				<Sidebar isOpen={isOpen} />
+				<Sidebar isOpen={isOpen} setIsOpen={setIsOpen}  />
 				<main className='flex-1 bg-slate-100 dark:bg-main overflow-y-auto overflow-x-hidden'>
 					<Header onToggle={onToggle} />
 					<div className='wrapper relative'>

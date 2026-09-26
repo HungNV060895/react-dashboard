@@ -13,7 +13,7 @@ const UserPagination = ({ currentPage, totalPages, startIndex, pageSize, totalUs
     if(!loading){
         return (
             <>
-                <div className="flex justify-between items-center px-4 py-3">
+                <div className="flex flex-col md:flex-row md:justify-between items-center px-4 py-3 mt-5 gap-4 md:mt-12">
                     <div className="text-sm text-slate-400">
                     Showing <b>{startIndex + 1}-{Math.min(startIndex + pageSize, totalUsers)}</b> of {totalUsers}
                     </div>
