@@ -16,11 +16,11 @@ This project is a practical React project focused on building a dashboard with R
 
 ### User Management
 
-![User Management](./screenshots/users.png)
+![User Management](./screenshots/user.png)
 
 ### Product Management
 
-![Product Management](./screenshots/products.png)
+![Product Management](./screenshots/product.png)
 
 ## 🛠️ Tech Stack
 
