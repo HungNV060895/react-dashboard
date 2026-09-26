@@ -16,7 +16,7 @@ const Dashboard = () => {
 
 		const fetchProducts = async () => {
 			try {
-				const res = await getProduct(1, 10, '', '');
+				const res = await getProduct(1, 100000, '', '');
 				setListProduct(res.data)
 			} catch (error) {
 				//console.error('Unable to fetch users for dashboard:', error);
@@ -28,7 +28,7 @@ const Dashboard = () => {
 
 		const fetchUsers = async () => {
 			try {
-				const res = await getUsers(1, 10, '', 'All', 'All');
+				const res = await getUsers(1, 10000, '', 'All', 'All');
 				setListUsers(res.data);
 			} catch (error) {
 				//console.error('Unable to fetch users for dashboard:', error);
