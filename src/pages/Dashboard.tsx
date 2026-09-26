@@ -59,12 +59,12 @@ const Dashboard = () => {
 		.slice(0, 5);
 	return (
 		<>
-			<section className="p-12">
+			<section className="py-8 px-4 lg:p-12">
 				<h1 className="text-4xl text-slate-950 dark:text-white mb-1">Dashboard Overview</h1>
 				<p className="text-lg mb-10 text-slate-900 dark:text-white ">Welcome back! Here's what's happening with your business today.</p>
 				<ListCard listProduct={listProduct} listUsers={listUsers} num_categories={num_categories} totalPrice={totalPrice} />
 				<ProductChart chartData={chartData} />
-				<div className="grid grid-cols-2 gap-8">
+				<div className="md:grid md:grid-cols-2 md:gap-8">
 					<CurrentProduct currentProduct={currentProduct} />
 					<CurrentUser currentUsers={currentUsers} />
 				</div>

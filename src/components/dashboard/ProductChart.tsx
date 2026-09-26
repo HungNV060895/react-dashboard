@@ -6,7 +6,21 @@ interface ChartDataProps {
     total: number
 }
 
+import { useEffect, useState } from "react";
+
+const useIsMobile = (breakpoint = 768) => {
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < breakpoint);
+        check();
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
+    }, [breakpoint]);
+    return isMobile;
+};
+
 const ProductChart = ({ chartData }: { chartData: ChartDataProps[] }) => {
+    const isMobile = useIsMobile();
     return (
         <>
             <h2 className="text-2xl text-slate-950 dark:text-white mb-5"><LuChartPie className="inline-block relative bottom-1" /> Chart Product</h2>
@@ -30,7 +44,18 @@ const ProductChart = ({ chartData }: { chartData: ChartDataProps[] }) => {
                                         <stop offset="100%" stopColor="#C4B5FD" />
                                     </linearGradient>
                                 </defs>
-                                <XAxis dataKey="category"   interval={0} stroke="#ccc" />
+                                <XAxis 
+                                    dataKey="category"
+                                    stroke="#ccc"
+                                    interval={isMobile ? "preserveStartEnd" : 0}
+                                    angle={isMobile ? -60 : 0}
+                                    textAnchor={isMobile ? "end" : "middle"}
+                                    height={isMobile ? 100 : 70}
+                                    tick={{ fontSize: isMobile ? 10 : 12 }}
+                                    tickFormatter={(v) =>
+                                        isMobile && v.length > 14 ? v.slice(0, 14) + "…" : v
+                                    }
+                                />
                                 <Tooltip 
                                     cursor={false}
                                     contentStyle={{
@@ -44,7 +69,7 @@ const ProductChart = ({ chartData }: { chartData: ChartDataProps[] }) => {
                                     }}
                                 />
                                 <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} opacity={0.3} />
-                                <Bar dataKey="total" name="Total" fill="url(#purpleBar)" fillOpacity={0.85} radius={[6, 6, 0, 0]} barSize={100} />
+                                <Bar dataKey="total" name="Total" fill="url(#purpleBar)" fillOpacity={0.85} radius={[6, 6, 0, 0]} maxBarSize={100} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
