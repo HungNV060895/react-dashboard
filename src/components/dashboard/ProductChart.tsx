@@ -30,7 +30,7 @@ const ProductChart = ({ chartData }: { chartData: ChartDataProps[] }) => {
                                         <stop offset="100%" stopColor="#C4B5FD" />
                                     </linearGradient>
                                 </defs>
-                                <XAxis dataKey="category" stroke="#ccc" />
+                                <XAxis dataKey="category"   interval={0} stroke="#ccc" />
                                 <Tooltip 
                                     cursor={false}
                                     contentStyle={{

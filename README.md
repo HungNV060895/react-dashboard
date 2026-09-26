@@ -129,7 +129,7 @@ src/
 ### 1. Clone the repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/HungNV060895/react-dashboard.git
 ```
 
 ### 2. Install dependencies
@@ -147,7 +147,7 @@ npm run dev
 The application will run at:
 
 ```text
-http://localhost:5173
+http://localhost:3000
 ```
 
 ### 4. Build for production
@@ -191,6 +191,6 @@ Planned improvements for the next version:
 
 ## 👨‍💻 Author
 
-Hung
+HungNV
 
 Frontend Developer

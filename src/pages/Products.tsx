@@ -8,7 +8,7 @@ import FilterProduct from "@/components/products/FilterProduct";
 import ProductPagination from "@/components/products/ProductPagination";
 import { initialProduct, PAGE_SIZE } from "@/constants/product";
 import { LuPlus } from "react-icons/lu";
-import { getProduct, createProduct, updateProduct, deleteProduct } from "@/services/productApi";
+import { getProduct, getProductCategories, createProduct, updateProduct, deleteProduct } from "@/services/productApi";
 import toast, { Toaster } from "react-hot-toast";
 import ModalConfirm from "@/components/ModalConfirm";
 
@@ -34,6 +34,7 @@ const Products = () => {
 	const [search, setSearch] = useState<string>("");
 	const [debouncedSearch, setDebouncedSearch] = useState<string>("");
 	const [category, setCategory] = useState<string>("");
+	const [categories, setCategories] = useState<string[]>([]);
 
 
 	//Pagination
@@ -44,6 +45,18 @@ const Products = () => {
 	const [dataProduct, setDataProduct] = useState<ProductType>(initialProduct)
 
 	const lastRequestRef = useRef(0);
+
+	useEffect(() => {
+		const fetchCategories = async () => {
+			try {
+				setCategories(await getProductCategories());
+			} catch {
+				setCategories([]);
+			}
+		};
+
+		void fetchCategories();
+	}, []);
 
 	const fetchAllProduct = async (page: number) => {
 
@@ -279,7 +292,7 @@ const Products = () => {
 					<p className="txt-intro text-sm md:text-md mb-5">Manage all product in one place. Control access, assign roles, and monitor activity across your platform.</p>
 					<div className="product-control flex flex-col md:flex-wrap md:flex-row items-end justify-between gap-4 w-full mb-12">
 						<SearchProduct search={search} handleSearch={handleSearch} />
-						<FilterProduct handleInputChange={handleInputChange} />
+						<FilterProduct categories={categories} handleInputChange={handleInputChange} />
 						<SortProduct handleInputChange={handleInputChange} />
 						<button onClick={() => handleOpenModal()} className="min-w-32 p-2 bg-[#2563EB] rounded-lg text-white font-semibold flex items-center justify-center gap-2 hover:bg-blue-400 transition-all">
 							<LuPlus />

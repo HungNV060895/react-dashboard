@@ -53,10 +53,10 @@ const Dashboard = () => {
 	const currentProduct = listProduct.slice(Math.max(listProduct.length - 5, 0), listProduct.length);
 	const currentUsers = listUsers.slice(Math.max(listUsers.length - 5, 0), listUsers.length);
 
-	const chartData = Object.entries(grouped).map(([category, total]) => ({
-		category, total
-	}))
-
+	const chartData = Object.entries(grouped)
+		.map(([category, total]) => ({ category, total }))
+		.sort((first, second) => second.total - first.total)
+		.slice(0, 5);
 	return (
 		<>
 			<section className="p-12">

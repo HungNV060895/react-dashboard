@@ -20,6 +20,14 @@ const getProduct = async (page: number, limit: number, productName: string, prod
     };
 }
 
+const getProductCategories = async (): Promise<string[]> => {
+    const response = await axiosClient.get<ProductType[]>('/products');
+    return [...new Set(response.data
+        .map((product) => product.productCategory)
+        .filter((category) => category.trim().length > 0))]
+        .sort((first, second) => first.localeCompare(second));
+}
+
 const createProduct = async (dataProduct: Omit<ProductType, 'id'>): Promise<ProductType> => {
     const response = await axiosClient.post<ProductType>('/products', dataProduct);
     return response.data;
@@ -36,4 +44,4 @@ const deleteProduct = async (idProduct: number): Promise<ProductType> => {
     return response.data;
 }
 
-export {getProduct, createProduct, updateProduct, deleteProduct};
+export {getProduct, getProductCategories, createProduct, updateProduct, deleteProduct};
