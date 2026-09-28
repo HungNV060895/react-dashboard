@@ -1,5 +1,5 @@
 import { LuChartPie } from "react-icons/lu";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, darkTheme } from "recharts";
 
 interface ChartDataProps {
     category: string,

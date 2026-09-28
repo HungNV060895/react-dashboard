@@ -30,7 +30,7 @@ const UserTable = ({ data, handleEditUser, editUser, handleOpenDeleteModal , loa
                 <p className="p-6 text-red-500 font-medium">Not found user.</p>
             ) : (
                 <table className="w-full whitespace-nowrap text-sm text-left rtl:text-right text-body dark:color-black">
-                    <thead className="bg-slate-700 border-b">
+                    <thead className=" dark:bg-slate-700 border-b">
                         <tr>
                             <th scope="col" className="px-6 py-3 font-medium">Avatar</th>
                             <th scope="col" className="px-6 py-3 font-medium">Name</th>

@@ -10,7 +10,7 @@ const SearchProduct = ({ search, handleSearch }: ProductListType) => {
                 <label htmlFor="search-input" className="search-label">Search</label>
                 <div className="relative">
                     <input type="text"
-                        className="bg-gray-700 w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-white text-white text-sm border border-gray-500 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                        className="bg-gray-700 w-full pr-11 h-10 pl-3 py-2 bg-transparent dark:placeholder:text-white dark:text-white text-sm border border-gray-500 rounded transition duration-200 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
                         placeholder="Search for product..." 
                         onChange={(e) => handleSearch(e.target.value)} 
                         name="search" 

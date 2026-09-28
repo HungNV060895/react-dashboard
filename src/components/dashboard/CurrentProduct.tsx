@@ -14,7 +14,7 @@ const CurrentProduct = ({ currentProduct }: { currentProduct: ProductType[] }) =
 										<tr key={item.id}>
 											<td className="px-4 py-2">
 												{item.productName}
-												<span className="block text-sm text-[#94A3B8] font-thin">{item.productCategory}</span>
+												<span className="block text-sm text-black dark:text-[#94A3B8] font-thin">{item.productCategory}</span>
 											</td>
 											<td className="px-4 py-2 whitespace-nowrap">{item.productPrice.toLocaleString('vn-VN')} đ</td>
 											<td className="px-4 py-2">

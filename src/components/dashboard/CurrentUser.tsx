@@ -14,7 +14,7 @@ const CurrentUser = ({ currentUsers }: { currentUsers: User[] }) => {
 									<tr key={item.id}>
 										<td className="px-4 py-2">
 											{item.name}
-											<span className="block text-sm font-thin text-[#94A3B8]">{item.email}</span>
+											<span className="block text-sm font-thin text-black dark:text-[#94A3B8]">{item.email}</span>
 										</td>
 										<td className="px-4 py-2">{item.role}</td>
 										<td className="px-4 py-2">

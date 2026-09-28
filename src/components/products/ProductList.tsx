@@ -34,9 +34,9 @@ const ProductList = ({ data, handleEditProduct, handleOpenDeleteModal, loading, 
 				data.length === 0 ? (
 					<p className="p-4 bg-red-400 text-slate-900 mt-5">No products are displayed.</p>
 				) : (
-					<div className="user-table border border-default relative overflow-x-auto bg-neutral-primary-soft shadow-slate-200 rounded-md">
+					<div className="border border-default relative overflow-x-auto bg-white shadow-slate-200 rounded-md">
 						<table className="w-full whitespace-nowrap text-sm text-left rtl:text-right text-body dark:color-black">
-							<thead className="bg-slate-700 border-b">
+							<thead className="dark:bg-slate-700 border-b">
 								<tr>
 									<th scope="col" className="px-6 py-3 font-medium">ID</th>
 									<th scope="col" className="px-6 py-3 font-medium">Name</th>
