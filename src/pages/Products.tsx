@@ -91,11 +91,10 @@ const Products = () => {
 		return () => {
 			clearTimeout(timer);
 		}
-	})
+	}, [search])
 
 	useEffect(() => {
 		fetchAllProduct(currentPage);
-		console.log(totalProduct);
 	}, [currentPage, debouncedSearch, category, sorter]);
 
 	useEffect(() => {

@@ -222,7 +222,6 @@ const Users = () => {
 		const userID = userToDelete.id;
 		setIsDeleting(true);
 		try {
-			await new Promise(r => setTimeout(r, 1000));
 			await deleteUser(userID);
 			setTotalUsers((prev) => Math.max(prev - 1, 0));
 
