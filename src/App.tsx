@@ -2,7 +2,7 @@
 import { Outlet } from 'react-router-dom'
 import Header from '@components/layouts/Header'
 import Sidebar from '@components/layouts/Sidebar'
-import Breadcrumb from '@components/layouts/Breadcrumb'
+import Breadcrumb from './components/layouts/Breadcrumb'
 import { DocsBotChat } from './components/DocsBotChat'
 import { useState } from 'react'
 
