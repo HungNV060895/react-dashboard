@@ -1,23 +1,33 @@
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 
+const THEME_CHANGE_EVENT = "dashboard-theme-change";
+
+const getSavedMode = () => localStorage.getItem("themes") === "light" ? "light" : "dark";
+
 const Themes = () => {
-    const [mode, setMode] = useState<string>(
-        localStorage.getItem('themes') || 'dark'
-    );
+    const [mode, setMode] = useState(getSavedMode);
 
     const handleChangeMode = () => {
-        mode === 'dark' ? setMode('light') : setMode('dark');
+        const nextMode = mode === "dark" ? "light" : "dark";
+        localStorage.setItem("themes", nextMode);
+        setMode(nextMode);
+        window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
     }
 
     useEffect(() => {
-        localStorage.setItem('themes', mode);
+        const syncMode = () => setMode(getSavedMode());
+        window.addEventListener(THEME_CHANGE_EVENT, syncMode);
+        window.addEventListener("storage", syncMode);
+        return () => {
+            window.removeEventListener(THEME_CHANGE_EVENT, syncMode);
+            window.removeEventListener("storage", syncMode);
+        };
+    }, []);
 
-        if (mode === 'dark') {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+    useEffect(() => {
+        localStorage.setItem("themes", mode);
+        document.documentElement.classList.toggle("dark", mode === "dark");
     }, [mode])
     return (
         <button
