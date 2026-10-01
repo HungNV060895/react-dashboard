@@ -1,5 +1,5 @@
 import type { ProductError, ProductType } from "@/types/product";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ProductList from "@/components/products/ProductList";
 import ProductAdd from "@/components/products/ProductAdd";
 import SortProduct from "@/components/products/SortProduct";
@@ -7,7 +7,7 @@ import SearchProduct from "@/components/products/SearchProduct";
 import FilterProduct from "@/components/products/FilterProduct";
 import ProductPagination from "@/components/products/ProductPagination";
 import { initialProduct, PAGE_SIZE } from "@/constants/product";
-import { LuPlus } from "react-icons/lu";
+import { PackagePlus } from "lucide-react";
 import { getProduct, getProductCategories, createProduct, updateProduct, deleteProduct } from "@/services/productApi";
 import toast, { Toaster } from "react-hot-toast";
 import ModalConfirm from "@/components/ModalConfirm";
@@ -58,14 +58,14 @@ const Products = () => {
 		void fetchCategories();
 	}, []);
 
-	const fetchAllProduct = async (page: number) => {
+	const fetchAllProduct = useCallback(async (page: number) => {
 
 		const requestIDLast = ++lastRequestRef.current;
 		setLoading(true);
 		setIsError('');
 
 		try {
-			const res = await getProduct(page, PAGE_SIZE, search, category);
+			const res = await getProduct(page, PAGE_SIZE, debouncedSearch, category);
 
 			if (requestIDLast === lastRequestRef.current) {
 				setListProduct(res.data);
@@ -80,7 +80,7 @@ const Products = () => {
 				setLoading(false);
 			}
 		}
-	}
+	}, [debouncedSearch, category]);
 
 
 	useEffect(() => {
@@ -95,7 +95,7 @@ const Products = () => {
 
 	useEffect(() => {
 		fetchAllProduct(currentPage);
-	}, [currentPage, debouncedSearch, category, sorter]);
+	}, [currentPage, fetchAllProduct]);
 
 	useEffect(() => {
 		setCurrentPage(1);
@@ -267,7 +267,7 @@ const Products = () => {
 		setSearch(keyword);
 	}
 
-	let listProductSorted = listProduct.sort((a: ProductType, b: ProductType) => {
+	const listProductSorted = [...listProduct].sort((a: ProductType, b: ProductType) => {
 		if (sorter === 'htol') return (Number(b.productPrice) - Number(a.productPrice));
 		if (sorter === 'ltoh') return (Number(a.productPrice) - Number(b.productPrice));
 		if (sorter === 'atoz') return a.productName.localeCompare(b.productName);
@@ -285,21 +285,23 @@ const Products = () => {
 				handleConfirmDelete={handleConfirmDelete}
 				isDeleting={isDeleting}
 			/>
-			<section className="sec-product dark:text-white">
-				<div className="heading-page p-6 md:p-12">
-					<h1 className="user-ttl text-3xl md:text-4xl font-bold mb-4">Products Management</h1>
-					<p className="txt-intro text-sm md:text-md mb-5">Manage all product in one place. Control access, assign roles, and monitor activity across your platform.</p>
-					<div className="product-control flex flex-col md:flex-wrap md:flex-row items-end justify-between gap-4 w-full mb-12">
-						<SearchProduct search={search} handleSearch={handleSearch} />
-						<FilterProduct categories={categories} handleInputChange={handleInputChange} />
-						<SortProduct handleInputChange={handleInputChange} />
-						<button onClick={() => handleOpenModal()} className="min-w-32 p-2 bg-[#2563EB] rounded-lg text-white font-semibold flex items-center justify-center gap-2 hover:bg-blue-400 transition-all">
-							<LuPlus />
-							Add Product
-						</button>
+			<section className="space-y-5 py-5 sm:py-7">
+				<div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+					<div className="min-w-0">
+						<p className="mb-1 text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-300">Catalog</p>
+						<h1 className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white sm:text-3xl">Products</h1>
+						<p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">Manage your catalog, pricing and product categories.</p>
 					</div>
+					<button type="button" onClick={handleOpenModal} className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-teal-700 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal-700/20">
+						<PackagePlus size={17} /> Add product
+					</button>
 				</div>
-				<div className="main-content p-6 md:p-12 bg-[#E2E8F0]">
+				<div className="grid grid-cols-1 gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:grid-cols-2 xl:grid-cols-[minmax(220px,1fr)_150px_150px_150px] xl:items-end">
+					<SearchProduct search={search} handleSearch={handleSearch} />
+					<FilterProduct categories={categories} handleInputChange={handleInputChange} />
+					<SortProduct handleInputChange={handleInputChange} />
+				</div>
+				<div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
 					<ProductList
 						loading={loading}
 						isError={isError}
@@ -308,6 +310,8 @@ const Products = () => {
 						data={listProductSorted}
 						handleEditProduct={handleEditProduct}
 					/>
+				</div>
+				<div className="-mx-2 sm:mx-0">
 					<ProductPagination
 						currentPage={currentPage}
 						totalPage={totalPage}
@@ -323,7 +327,6 @@ const Products = () => {
 				dataProduct={dataProduct}
 				handleProductAdd={handleProductAdd}
 				handleInputChange={handleInputChange}
-				handleEditProduct={handleEditProduct}
 				handleUpdateProduct={handleUpdateProduct}
 				error={error}
 			/>

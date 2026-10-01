@@ -1,50 +1,42 @@
 import { sidebarMenus } from "@constants/menu";
-import { LuLayoutDashboard } from "react-icons/lu";
+import { PanelsTopLeft } from "lucide-react";
 import SidebarItem from "./SidebarItem";
 
 type TSidebar = {
 	isOpen: boolean;
-	setIsOpen: (isOpen: boolean) => void,
+	setIsOpen: (isOpen: boolean) => void;
+	mobileOpen: boolean;
+	onNavigate: () => void;
 };
 
-const Sidebar = ({ isOpen, setIsOpen}: TSidebar) => {
+
+const Sidebar = ({ isOpen, setIsOpen, mobileOpen, onNavigate }: TSidebar) => {
 	return (
 		<aside
-			className={`
-				${isOpen ? "w-64 p-4" : "w-60 p-2 translate-x-0 lg:w-20 lg:p-2 opacity-100"}
-				shrink-0 bg-sidebar text-sidebar-text h-screen 
-				opacity-0 lg:opacity-100 -translate-x-full lg:translate-x-0 fixed top-[64px] lg:top-0 lg:relative left-0 bottom-0 
-				lg:block
-				transition-[width,padding] duration-300 ease-in-out
-				overflow-hidden z-10
-		`}
+			className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col overflow-hidden bg-slate-950 px-4 py-5 text-white shadow-2xl shadow-slate-950/10 transition-[width,transform] duration-300 ease-out lg:static lg:z-auto lg:h-dvh lg:shrink-0 lg:translate-x-0 lg:shadow-none ${mobileOpen ? "translate-x-0" : "-translate-x-full"} ${isOpen ? "lg:w-64 lg:px-4" : "lg:w-20 lg:px-2"}`}
 		>
-			{/* Logo / Brand */}
-			<div
-				className={`
-				flex items-center gap-3 px-2 py-4 h-16
-				${isOpen ? "justify-center" : "justify-center gap-0"}
-				transition-all duration-300
-			`}
-			>
-				<LuLayoutDashboard className={`${isOpen ? "hidden" : "text-3xl shrink-0"}`} />
-				<span
-					className={`
-						text-2xl font-bold whitespace-nowrap
-						transition-all duration-300
-						${isOpen ? "opacity-100 max-w-[200px]" : "opacity-0 max-w-0"}
-					`}
-				>
-					My Dashboard
+			<div className={`flex h-12 shrink-0 items-center gap-3 px-2 ${isOpen ? "lg:justify-start" : "lg:justify-center"}`}>
+				<span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-teal-400 text-slate-950"><PanelsTopLeft size={19} /></span>
+				<span className={`truncate text-base font-semibold tracking-tight transition-opacity ${isOpen ? "lg:opacity-100" : "lg:hidden"}`}>
+					Northstar <span className="font-normal text-slate-400">Admin</span>
 				</span>
 			</div>
 
-			{/* Menu */}
-			<nav className="mt-4 flex flex-col gap-1">
+			<p className={`mb-2 mt-9 px-3 text-[11px] font-semibold uppercase tracking-wider text-slate-500 ${isOpen ? "lg:block" : "lg:hidden"}`}>
+				Workspace
+			</p>
+			<nav aria-label="Main navigation" className="flex flex-col gap-1">
 				{sidebarMenus.map((item) => (
-					<SidebarItem key={item.path} item={item} isOpen={isOpen} setIsOpen={setIsOpen} />
+					<SidebarItem key={item.path} item={item} isOpen={isOpen} setIsOpen={setIsOpen} onNavigate={onNavigate} />
 				))}
 			</nav>
+			<div className="mt-auto rounded-xl border border-white/10 bg-white/[0.04] p-3">
+				<p className={`text-xs font-medium text-slate-200 ${isOpen ? "lg:block" : "lg:hidden"}`}>Workspace status</p>
+				<div className={`mt-2 flex items-center gap-2 text-xs text-slate-400 ${isOpen ? "lg:flex" : "lg:hidden"}`}>
+					<span className="size-2 rounded-full bg-emerald-400" /> All systems operational
+				</div>
+				<div className={`mx-auto mt-1 hidden size-2 rounded-full bg-emerald-400 ${isOpen ? "lg:hidden" : "lg:block"}`} title="All systems operational" />
+			</div>
 		</aside>
 	);
 };

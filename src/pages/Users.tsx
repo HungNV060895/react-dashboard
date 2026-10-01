@@ -1,8 +1,8 @@
 import UserPagination from "@/components/users/UserPagination";
 import UsersSearch from "@/components/users/UsersSearch";
-import { LuPlus } from "react-icons/lu";
+import { UserPlus } from "lucide-react";
 import UserTable from "@/components/users/UserTable";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import UserFilter from "@/components/users/UserFilter";
 import UserAdd from "@/components/users/UserAdd";
 import type { FormError, User, FormState } from "@/types/user";
@@ -11,6 +11,7 @@ import { getUsers, createUsers, updateUser, deleteUser } from "@/services/userAp
 import {Toaster, toast} from "react-hot-toast";
 import ModalConfirm from "@/components/ModalConfirm";
 
+const pageSize = 6;
 
 const Users = () => {
 	const [loading, setLoading] = useState<boolean>(false);
@@ -36,9 +37,7 @@ const Users = () => {
 	const [formData, setFromData] = useState<FormState>(initialFormData)
 	const [error, setError] = useState<FormError>({});
 
-	const pageSize = 6;
-
-	const fetchUsers = async (page: number) => {
+	const fetchUsers = useCallback(async (page: number) => {
 		
 		const requestId = ++latestRequestRef.current;
 		setLoading(true);
@@ -46,7 +45,7 @@ const Users = () => {
 
 		try {
 			
-			const res = await getUsers(page, pageSize, search, role, status);
+			const res = await getUsers(page, pageSize, debounecedSearch, role, status);
 
 
 			if (requestId === latestRequestRef.current) {
@@ -65,7 +64,7 @@ const Users = () => {
 				setLoading(false);
 			}
 		}
-	};
+	}, [debounecedSearch, role, status]);
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
@@ -81,7 +80,7 @@ const Users = () => {
 
 	useEffect(() => {
 		fetchUsers(currentPage);
-	}, [currentPage, debounecedSearch, role, status]);
+	}, [currentPage, fetchUsers]);
 
 	useEffect(() => {
 		setCurrentPage(1);
@@ -136,7 +135,7 @@ const Users = () => {
 			email: formData.email,
 			role: formData.role,
 			status: formData.status,
-			avatar: ''
+			avatar: formData.avatar
 		}
 
 		try {
@@ -252,30 +251,30 @@ const Users = () => {
 				handleConfirmDelete={handleConfirmDelete}
 				isDeleting={isDeleting}
 			/>
-			<section className="sec-user dark:text-white">
-				<div className="heading-page p-6 md:p-12">
-					<h2 className="user-ttl text-2xl md:text-4xl font-bold mb-4">User Management</h2>
-					<p className="txt-intro text-md mb-5">Manage all users in one place. Control access, assign roles, and monitor activity across your platform.</p>
-					<div className="user-control flex flex-col md:flex-wrap md:flex-row items-end justify-between gap-4 w-full">
-						<UsersSearch search={search} setSearch={setSearch} />
-						<UserFilter role={role} setRole={setRole} status={status} setStatus={setStatus} />
-						<button onClick={() => handleOpenModal()} className="min-w-32 p-2 bg-[#2563EB] rounded-lg  text-white font-semibold flex items-center justify-center gap-2 hover:bg-blue-400 transition-all">
-							<LuPlus />
-							Add User
-						</button>
+			<section className="space-y-5 py-5 sm:py-7">
+				<div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+					<div className="min-w-0">
+						<p className="mb-1 text-xs font-semibold uppercase tracking-wider text-teal-700 dark:text-teal-300">Workspace</p>
+						<h1 className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white sm:text-3xl">User management</h1>
+						<p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">Manage team access, roles and account status.</p>
 					</div>
+					<button type="button" onClick={handleOpenModal} className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-teal-700 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal-700/20">
+						<UserPlus size={17} /> Add user
+					</button>
 				</div>
-				<div className="main-content p-6 md:p-12 bg-[#E2E8F0]">
-					<div className="user-table relative rounded-lg overflow-x-auto bg-white">
+				<div className="grid grid-cols-1 gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:grid-cols-2 xl:grid-cols-[minmax(220px,1fr)_150px_150px_auto] xl:items-end">
+					<UsersSearch search={search} setSearch={setSearch} />
+					<UserFilter role={role} setRole={setRole} status={status} setStatus={setStatus} />
+				</div>
+				<div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
 						<UserTable
 							data={currentUsers}
 							handleEditUser={handleEditUser}
 							handleOpenDeleteModal={handleOpenDeleteModal}
-							editUser={editUser}
 							loading={loading}
 							iserror={iserror}
 						/>
-					</div>
+				</div>
 					<UserPagination
 						startIndex={startIndex}
 						pageSize={pageSize}
@@ -284,7 +283,6 @@ const Users = () => {
 						totalUsers={totalUsers}
 						loading={loading}
 						onPageChange={setCurrentPage} />
-				</div>
 			</section>
 			<UserAdd
 				isOpen={isOpen}

@@ -1,5 +1,9 @@
 @use "_vars.scss" as *;
 
 html{
-    font-family: $font-Inter !important;
+    font-family: $font-primary !important;
+}
+
+body:has([role="dialog"][aria-modal="true"]:not(.hidden)) #docsbotai-root {
+    display: none !important;
 }

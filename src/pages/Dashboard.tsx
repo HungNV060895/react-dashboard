@@ -59,12 +59,15 @@ const Dashboard = () => {
 		.slice(0, 5);
 	return (
 		<>
-			<section className="py-8 px-4 lg:p-12">
-				<h1 className="text-4xl text-slate-950 dark:text-white mb-1">Dashboard Overview</h1>
-				<p className="text-lg mb-10 text-slate-900 dark:text-white ">Welcome back! Here's what's happening with your business today.</p>
+			<section className="space-y-6 py-5 sm:py-7">
+				<div>
+					<p className="mb-1 text-xs font-semibold uppercase tracking-wider text-teal-700 dark:text-teal-300">Workspace</p>
+					<h1 className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white sm:text-3xl">Dashboard overview</h1>
+					<p className="mt-1.5 text-sm leading-6 text-slate-500 dark:text-slate-400">A clear view of your users and product catalog.</p>
+				</div>
 				<ListCard listProduct={listProduct} listUsers={listUsers} num_categories={num_categories} totalPrice={totalPrice} />
 				<ProductChart chartData={chartData} />
-				<div className="md:grid md:grid-cols-2 md:gap-8">
+				<div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
 					<CurrentProduct currentProduct={currentProduct} />
 					<CurrentUser currentUsers={currentUsers} />
 				</div>

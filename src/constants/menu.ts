@@ -22,11 +22,11 @@ export const sidebarMenus = [
 		path: "/products",
 		icon: Package,
 	},
-	// {
-	// 	title: "Orders",
-	// 	path: "/orders",
-	// 	icon: ShoppingCart,
-	// },
+	{
+		title: "Orders",
+		path: "/orders",
+		icon: ShoppingCart,
+	},
 	{
 		title: "Settings",
 		path: "/settings",

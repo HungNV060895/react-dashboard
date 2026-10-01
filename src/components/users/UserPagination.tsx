@@ -1,3 +1,5 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
 interface UserPaginationProps {
     currentPage: number;
     totalPages: number;
@@ -10,38 +12,31 @@ interface UserPaginationProps {
 
 
 const UserPagination = ({ currentPage, totalPages, startIndex, pageSize, totalUsers, loading, onPageChange} : UserPaginationProps) => {
-    if(!loading){
-        return (
-            <>
-                <div className="flex flex-col md:flex-row md:justify-between items-center px-4 py-3 mt-5 gap-4 md:mt-12">
-                    <div className="text-sm text-slate-400">
-                    Showing <b>{startIndex + 1}-{Math.min(startIndex + pageSize, totalUsers)}</b> of {totalUsers}
-                    </div>
-                    <div className="flex space-x-1">
-                        <button disabled={currentPage === 1} onClick={() => onPageChange(currentPage - 1)} className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
-                            Prev
-                        </button>
-                        {Array.from({ length: totalPages }, (_, index) => (
-                            <button 
-                                key={index} 
-                                onClick={() => onPageChange(index + 1)}
-                                className={`px-3 py-1 min-w-9 min-h-9 text-sm font-normal rounded transition duration-200 ease ${
-                                    currentPage === index + 1 
-                                        ? 'bg-blue-500 text-white border border-blue-500' 
-                                        : 'text-slate-500 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-400'
-                                }`}
-                            >
-                                {index + 1}
-                            </button>
-                        ))}
-                        <button disabled={currentPage === totalPages} onClick={() => onPageChange(currentPage + 1)} className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease">
-                            Next
-                        </button>
-                    </div>
-                </div>
-            </>
-        )
-    }
+    if (loading) return null;
+
+    const pages: (number | "ellipsis")[] = totalPages <= 5
+        ? Array.from({ length: totalPages }, (_, index) => index + 1)
+        : currentPage <= 3
+            ? [1, 2, 3, 4, "ellipsis", totalPages]
+            : currentPage >= totalPages - 2
+                ? [1, "ellipsis", totalPages - 3, totalPages - 2, totalPages - 1, totalPages]
+                : [1, "ellipsis", currentPage - 1, currentPage, currentPage + 1, "ellipsis", totalPages];
+
+    return (
+        <div className="flex flex-col gap-3 py-2 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-center text-sm text-slate-500 dark:text-slate-400 sm:text-left">
+                Showing <span className="font-medium text-slate-700 dark:text-slate-200">{totalUsers === 0 ? 0 : startIndex + 1}-{Math.min(startIndex + pageSize, totalUsers)}</span> of {totalUsers}
+            </p>
+            {totalPages > 0 && <nav aria-label="User pages" className="flex items-center justify-center gap-1">
+                <button type="button" disabled={currentPage <= 1} onClick={() => onPageChange(currentPage - 1)} aria-label="Previous page" className="inline-flex size-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"><ChevronLeft size={17} /></button>
+                {pages.map((page, index) => page === "ellipsis"
+                    ? <span key={`ellipsis-${index}`} className="flex size-9 items-center justify-center text-sm text-slate-400" aria-hidden="true">…</span>
+                    : <button key={page} type="button" onClick={() => onPageChange(page)} aria-current={currentPage === page ? "page" : undefined} aria-label={`Page ${page}`} className={`inline-flex size-9 items-center justify-center rounded-lg text-sm font-medium transition ${currentPage === page ? "bg-teal-700 text-white" : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"}`}>{page}</button>
+                )}
+                <button type="button" disabled={currentPage >= totalPages} onClick={() => onPageChange(currentPage + 1)} aria-label="Next page" className="inline-flex size-9 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800"><ChevronRight size={17} /></button>
+            </nav>}
+        </div>
+    );
 }
 
 export default UserPagination;

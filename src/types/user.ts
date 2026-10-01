@@ -3,7 +3,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    role: 'Admin' | 'User';
+    role: 'Admin' | 'User' | 'Guest';
     status: 'Active' | 'Inactive';
     avatar: string
 }
@@ -14,8 +14,8 @@ export interface FormState {
     id: number,
     name: string;
     email: string;
-    role: 'Admin',
-    status: 'Active',
+    role: 'Admin' | 'User' | 'Guest',
+    status: 'Active' | 'Inactive',
     avatar: string
 }
 
