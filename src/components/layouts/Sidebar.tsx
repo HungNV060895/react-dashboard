@@ -13,7 +13,7 @@ type TSidebar = {
 const Sidebar = ({ isOpen, setIsOpen, mobileOpen, onNavigate }: TSidebar) => {
 	return (
 		<aside
-			className={`fixed inset-y-0 left-0 z-40 flex w-72 flex-col overflow-hidden bg-slate-950 px-4 py-5 text-white shadow-2xl shadow-slate-950/10 transition-[width,transform] duration-300 ease-out lg:static lg:z-auto lg:h-dvh lg:shrink-0 lg:translate-x-0 lg:shadow-none ${mobileOpen ? "translate-x-0" : "-translate-x-full"} ${isOpen ? "lg:w-64 lg:px-4" : "lg:w-20 lg:px-2"}`}
+			className={`fixed inset-y-0 left-0 z-40 flex h-screen w-72 flex-col overflow-hidden bg-slate-950 px-4 py-5 text-white shadow-2xl shadow-slate-950/10 transition-[width,transform] duration-300 ease-out lg:fixed lg:z-40 lg:translate-x-0 lg:shadow-none ${mobileOpen ? "translate-x-0" : "-translate-x-full"} ${isOpen ? "lg:w-64 lg:px-4" : "lg:w-20 lg:px-2"}`}
 		>
 			<div className={`flex h-12 shrink-0 items-center gap-3 px-2 ${isOpen ? "lg:justify-start" : "lg:justify-center"}`}>
 				<span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-teal-400 text-slate-950"><PanelsTopLeft size={19} /></span>

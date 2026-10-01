@@ -35,7 +35,7 @@ function App() {
 					mobileOpen={isMobileNavOpen}
 					onNavigate={closeMobileNav}
 				/>
-				<main className="min-w-0 flex-1">
+				<main className={`min-w-0 flex-1 transition-[margin] duration-300 ${isOpen ? "lg:ml-64" : "lg:ml-20"}`}>
 					<Header onToggle={onToggle} />
 					<div className="mx-auto w-full max-w-[1600px] px-4 sm:px-6 lg:px-8">
 						<Breadcrumb />
