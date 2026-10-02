@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, Controller } from "react-hook-form"
 import {
 	ArrowLeft,
 	Check,
@@ -11,8 +11,12 @@ import {
 	Save,
 	ShieldCheck,
 	UserRound,
+	KeyRound,
+	CalendarDays
 } from "lucide-react"
 import { Link } from "react-router-dom"
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 enum RoleEnum {
 	admin = 'Admin',
@@ -28,9 +32,12 @@ enum StatusEnum {
 interface IFormInput {
 	name: string
 	email: string
+	password: string
+	confirmPassword: string
 	role: RoleEnum
 	status: StatusEnum
 	avatar: string
+	birthday: Date | null
 }
 
 const Orders = () => {
@@ -38,7 +45,10 @@ const Orders = () => {
 		name: "Nguyễn Văn A",
 		email: "a@gmail.com",
 		role: RoleEnum.user,
+		password: "124564",
+		confirmPassword: "124564",
 		status: StatusEnum.active,
+		birthday: new Date("2000-01-01"),
 		avatar: "",
 	};
 
@@ -50,22 +60,29 @@ const Orders = () => {
 			email: user.email,
 			role: user.role,
 			status: user.status,
+			birthday: user.birthday,
 			avatar: user.avatar
 		})
 	}
 
-	const { register, handleSubmit, reset, setValue, watch, getValues, setError, clearErrors, formState: { errors } } = useForm<IFormInput>({
+	const { register, handleSubmit, reset, setValue, watch, getValues, setError, clearErrors, control, formState: { errors } } = useForm<IFormInput>({
 		defaultValues: {
 			name: "",
 			email: "",
 			role: RoleEnum.admin,
 			status: StatusEnum.active,
+			birthday: null,
 			avatar: "",
 		}
 	});
 
+	console.log(register("name"));
+
 	const role = watch("role");
 	const avatar = watch("avatar");
+
+
+
 	const handlePrev = () => {
 		const currentValues = getValues();
 		console.log("Current Values:", currentValues);
@@ -149,6 +166,54 @@ const Orders = () => {
 							</div>
 							<p className="mt-2 text-xs text-slate-500">Dùng URL ảnh công khai để hiển thị ảnh đại diện.</p>
 						</div>
+						<div>
+							<label htmlFor="birthday" className="mb-2 block text-sm font-medium text-slate-700">Ngày sinh</label>
+							<div className="relative">
+								<CalendarDays size={17} className="pointer-events-none absolute z-10 left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+								<Controller
+									name="birthday"
+									control={control}
+									render={({ field }) => (
+										<DatePicker 
+											selected={field.value}
+											onChange={field.onChange}
+										id="birthday" className="h-11 w-full rounded-lg border border-slate-200 bg-white pl-10 pr-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-50" />
+									)}
+								/>
+							</div>
+							<p className="mt-2 text-xs text-slate-500">Dùng URL ảnh công khai để hiển thị ảnh đại diện.</p>
+						</div>
+						<div>
+							<label htmlFor="password" className="mb-2 block text-sm font-medium text-slate-700">Mật khẩu <span className="text-rose-600">*</span></label>
+							<div className="relative">
+								<KeyRound size={17} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+								<input id="password" type="password" placeholder="Ví dụ: 123456" aria-invalid={errors.password ? "true" : "false"} {...register("password", {
+									required: "Vui lòng nhập mật khẩu",
+									minLength: { value: 6, message: "Mật khẩu phải có ít nhất 6 ký tự" }
+								})} className={`h-11 w-full rounded-lg border bg-white pl-10 pr-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-4 ${errors.password ? "border-rose-300 focus:border-rose-400 focus:ring-rose-100" : "border-slate-200 focus:border-teal-500 focus:ring-teal-50"}`} />
+							</div>
+							{errors.password && <p role="alert" className="mt-2 text-sm text-rose-600">{errors.password.message}</p>}
+						</div>
+						<div>
+							<label htmlFor="confirmPassword" className="mb-2 block text-sm font-medium text-slate-700">Nhập lại mật khẩu <span className="text-rose-600">*</span></label>
+							<div className="relative">
+								<KeyRound size={17} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+								<input id="confirmPassword" type="password" placeholder="Ví dụ: 123456" aria-invalid={errors.confirmPassword ? "true" : "false"} {...register("confirmPassword", {
+									required: "Vui lòng nhập lại mật khẩu",
+									validate: (value) => {
+										const pass = getValues("password");
+										if (value !== pass) {
+											return "Mật khẩu nhập lại không khớp";
+										}
+
+										// If the passwords match, return true to indicate validation success
+										return true;
+									},
+									minLength: { value: 6, message: "Mật khẩu phải có ít nhất 6 ký tự" }
+								})} className={`h-11 w-full rounded-lg border bg-white pl-10 pr-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-4 ${errors.password ? "border-rose-300 focus:border-rose-400 focus:ring-rose-100" : "border-slate-200 focus:border-teal-500 focus:ring-teal-50"}`} />
+							</div>
+							{errors.confirmPassword && <p role="alert" className="mt-2 text-sm text-rose-600">{errors.confirmPassword.message}</p>}
+						</div>
 					</div>
 					<div className="flex flex-col-reverse gap-3 border-t border-slate-100 bg-slate-50/70 px-6 py-4 sm:flex-row sm:justify-end sm:px-8">
 						<button type="button" onClick={() => reset()} className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
@@ -203,6 +268,7 @@ const Orders = () => {
 							<button type="button" onClick={handlePrev} className="w-full rounded-md px-3 py-2 text-left text-xs text-slate-600 hover:bg-slate-50">In dữ liệu hiện tại ra console</button>
 							<button type="button" onClick={() => setError("email", { type: "server", message: "Email đã tồn tại" })} className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-xs text-slate-600 hover:bg-slate-50"><CircleAlert size={14} /> Mô phỏng lỗi email từ API</button>
 							<button type="button" onClick={handleClearErrors} className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-xs text-slate-600 hover:bg-slate-50"><Check size={14} /> Xóa thông báo lỗi</button>
+							<button type="button" onClick={() => setError("password", { type: "server", message: "Mật khẩu không hợp lệ" })} className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-xs text-slate-600 hover:bg-slate-50"><CircleAlert size={14} /> Mô phỏng lỗi mật khẩu từ API</button>
 						</div>
 					</details>
 				</aside>
