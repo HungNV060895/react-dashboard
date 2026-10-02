@@ -31,7 +31,7 @@ This project is a practical React project focused on building a dashboard with R
 * Tailwind CSS
 * Axios
 * Recharts
-* React Icons
+* Lucide Icons
 * MockAPI
 
 ## ✨ Features
