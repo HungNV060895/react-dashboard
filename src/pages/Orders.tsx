@@ -69,6 +69,7 @@ const Orders = () => {
 	const handlePrev = () => {
 		const currentValues = getValues();
 		console.log("Current Values:", currentValues);
+		console.log("Errors:", errors);
 	}
 
 	const handleClearErrors = () => {
