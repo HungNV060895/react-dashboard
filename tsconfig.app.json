@@ -34,7 +34,9 @@
       "@helpers/*": ["./src/helpers/*"],
       "@sections/*": ["./src/components/sections/*"],
       "@share/*": ["./src/components/share/*"],
-      "@constants/*": ["./src/constants/*"]
+      "@constants/*": ["./src/constants/*"],
+      "@schemas/*": ["./src/schemas/*"],
+      "@services/*": ["./src/services/*"]
     }
   },
   "include": ["src"]
