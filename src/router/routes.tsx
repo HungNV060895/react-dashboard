@@ -5,6 +5,7 @@ import Orders from '@/pages/Orders'
 import Products from '@/pages/Products'
 import Users from '@/pages/Users'
 import Settings from '@/pages/Settings'
+import TestQuery from '@/pages/TestQuery'
 
 export const routes: RouteObject[] = [
   {
@@ -30,6 +31,10 @@ export const routes: RouteObject[] = [
       {
         path: '/settings',
         element: <Settings />,
+      },
+      {
+        path: '/test-query',
+        element: <TestQuery />,
       },
     ],
   },

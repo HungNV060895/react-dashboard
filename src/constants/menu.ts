@@ -4,6 +4,7 @@ import {
 	Package,
 	ShoppingCart,
 	Settings,
+	DatabaseBackupIcon,
 } from "lucide-react";
 
 export const sidebarMenus = [
@@ -31,5 +32,10 @@ export const sidebarMenus = [
 		title: "Settings",
 		path: "/settings",
 		icon: Settings,
+	},
+	{
+		title: "TanStack Query Test",
+		path: "/test-query",
+		icon: DatabaseBackupIcon,
 	},
 ];

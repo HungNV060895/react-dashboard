@@ -7,6 +7,7 @@ const routeTitles: Record<string, string> = {
 	"/products": "Products",
 	"/orders": "Orders",
 	"/settings": "Settings",
+	"/test-query": "TanStack Query Test",
 };
 
 const Breadcrumb = () => {

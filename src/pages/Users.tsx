@@ -8,7 +8,7 @@ import UserAdd from "@/components/users/UserAdd";
 import type { FormError, User, FormState } from "@/types/user";
 import { initialFormData } from "@/constants/user";
 import { getUsers, createUsers, updateUser, deleteUser } from "@/services/userApi";
-import {Toaster, toast} from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 import ModalConfirm from "@/components/ModalConfirm";
 
 const pageSize = 6;
@@ -18,7 +18,7 @@ const Users = () => {
 	const [iserror, setIsError] = useState<string>("");
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const [isConfirm, setIsConfirm] = useState<boolean>(false);
-	
+
 	const [usersList, setUsersList] = useState<User[]>([]);
 	const [editUser, setEditUser] = useState<User | null>(null);
 	const [userToDelete, setUserToDelete] = useState<User | null>(null);
@@ -38,13 +38,13 @@ const Users = () => {
 	const [error, setError] = useState<FormError>({});
 
 	const fetchUsers = useCallback(async (page: number) => {
-		
+
 		const requestId = ++latestRequestRef.current;
 		setLoading(true);
 		setIsError('');
 
 		try {
-			
+
 			const res = await getUsers(page, pageSize, debounecedSearch, role, status);
 
 
@@ -52,7 +52,7 @@ const Users = () => {
 				setUsersList(res.data);
 				setTotalUsers(res.total);
 			}
-			
+
 			return res;
 		} catch (error) {
 			if (requestId === latestRequestRef.current) {
@@ -217,7 +217,7 @@ const Users = () => {
 	}
 
 	const handleConfirmDelete = async () => {
-		if(!userToDelete) return;
+		if (!userToDelete) return;
 		const userID = userToDelete.id;
 		setIsDeleting(true);
 		try {
@@ -237,14 +237,14 @@ const Users = () => {
 		} catch (error) {
 			setIsConfirm(false);
 			toast.error('Delete user unsuccess!');
-		}finally{
+		} finally {
 			setIsDeleting(false);
 		}
 	}
 	return (
 		<>
 			<Toaster />
-			<ModalConfirm 
+			<ModalConfirm
 				message={`Are you sure you want to delete ${userToDelete?.name}?`}
 				isConfirm={isConfirm}
 				handleCancelDelete={handleCancelDelete}
@@ -267,22 +267,22 @@ const Users = () => {
 					<UserFilter role={role} setRole={setRole} status={status} setStatus={setStatus} />
 				</div>
 				<div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
-						<UserTable
-							data={currentUsers}
-							handleEditUser={handleEditUser}
-							handleOpenDeleteModal={handleOpenDeleteModal}
-							loading={loading}
-							iserror={iserror}
-						/>
-				</div>
-					<UserPagination
-						startIndex={startIndex}
-						pageSize={pageSize}
-						currentPage={currentPage}
-						totalPages={totalPages}
-						totalUsers={totalUsers}
+					<UserTable
+						data={currentUsers}
+						handleEditUser={handleEditUser}
+						handleOpenDeleteModal={handleOpenDeleteModal}
 						loading={loading}
-						onPageChange={setCurrentPage} />
+						iserror={iserror}
+					/>
+				</div>
+				<UserPagination
+					startIndex={startIndex}
+					pageSize={pageSize}
+					currentPage={currentPage}
+					totalPages={totalPages}
+					totalUsers={totalUsers}
+					loading={loading}
+					onPageChange={setCurrentPage} />
 			</section>
 			<UserAdd
 				isOpen={isOpen}
