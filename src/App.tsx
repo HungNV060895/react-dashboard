@@ -45,7 +45,7 @@ function App() {
 					</div>
 				</main>
 			</div>
-			<DocsBotChat />
+			{/* <DocsBotChat /> */}
 		</>
 	)
 }

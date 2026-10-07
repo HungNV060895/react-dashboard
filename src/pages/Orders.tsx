@@ -1,36 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createUser } from "@services/user.services";
 import { Link } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import UserForm from "@/components/UserForm";
 import { UserFormValues } from "@/schemas/user.schema";
 
-enum RoleEnum {
-    admin = 'Admin',
-    user = 'User',
-    guest = 'Guest'
-}
-
-enum StatusEnum {
-    active = 'Active',
-    inactive = 'Inactive'
-}
-
-const userEdit = {
-	id:1,
-	name:"Nguyễn Văn A",
-	email:"a@gmail.com",
-	role:RoleEnum.user,
-	status:StatusEnum.active,
-	birthday:new Date("2000-01-01"),
-	avatar:"https://ui-avatars.com/api/?name=Nam",
-	password:"123456",
-	confirmPassword:"123456"
-};
-
 const Orders = () => {
 	const [loading, setLoading] = useState(false);
-	const [user, setUser] = useState<UserFormValues>();
 	
 	const handleCreate = async (data: UserFormValues) => {
 		try {
@@ -49,12 +25,6 @@ const Orders = () => {
 		}
 	}
 
-	useEffect(() => {
-		setTimeout(() => {
-			setUser(userEdit);
-		}, 1000)
-	})
-
 	return (
 		<>
 			
@@ -69,7 +39,7 @@ const Orders = () => {
 						<ArrowLeft size={16} /> Danh sách người dùng
 					</Link>
 				</div>
-				<UserForm onSubmit={handleCreate} loading={loading} defaultValues={user} />
+				<UserForm onSubmit={handleCreate} loading={loading} />
 		</div>
 		</>
 	)

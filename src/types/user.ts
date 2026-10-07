@@ -20,3 +20,7 @@ export interface FormState {
 }
 
 
+export interface UpdateUserPayload {
+    data: User,
+    id: number
+}
