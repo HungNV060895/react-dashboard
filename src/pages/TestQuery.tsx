@@ -1,16 +1,12 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { getUsers, createUsers, deleteUser, updateUser } from "@/services/userApi";
 import { useState } from "react";
 import { Pencil, Trash2 } from "lucide-react";
+import { useUsers } from "@/hooks/useUser";
+import { useCreateUser } from "@/hooks/useCreateUser";
+import { useUpdateUser } from "@/hooks/useUpdateUser";
+import { useDeleteUser } from "@/hooks/useDeleteUser";
+
 import type { User } from "@/types/user";
-
-interface UpdateUserPayload {
-	data: User,
-	id: number
-}
-
-
 
 enum RoleEnum {
 	admin = 'Admin',
@@ -31,14 +27,6 @@ type UserFormValues = {
 	avatar: string;
 };
 
-const USER_INITIAL_DATA = {
-	name: "User Test",
-	email: "test@gmail.com",
-	role: RoleEnum.admin,
-	status: StatusEnum.active,
-	avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-};
-
 const DEFAULT_FORM_VALUES = {
     name:"",
     email:"",
@@ -48,10 +36,6 @@ const DEFAULT_FORM_VALUES = {
 };
 
 const TestQuery = () => {
-
-	const queryClient = useQueryClient();
-
-
 	//State Area
 	const [page, setPage] = useState(1);
 	const [search, setSearch] = useState('');
@@ -66,55 +50,15 @@ const TestQuery = () => {
 		status
 	}
 
-
+	const { data: UserResponse, isLoading, error } = useUsers(params);
+	
 	const { register, handleSubmit, reset } = useForm<UserFormValues>({
 		defaultValues: DEFAULT_FORM_VALUES,
 	});
 
-	const createMutation = useMutation({
-		mutationFn: createUsers,
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ['users']
-			})
-
-			reset(DEFAULT_FORM_VALUES);
-
-			console.log("User created successfully");
-		}
-	});
-
-	const deleteMutation = useMutation({
-		mutationFn: deleteUser,
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ['users']
-			});
-
-			console.log('Delete success');
-		}
-	})
-
-	const updateMutation = useMutation({
-		mutationFn: ({ data, id }: UpdateUserPayload) => updateUser(data, id),
-		onSuccess: () => {
-			queryClient.invalidateQueries({
-				queryKey: ['users']
-			});
-
-			setUserEdited(null);
-
-			reset(DEFAULT_FORM_VALUES);
-		}
-	})
-
-
-
-	const { data: UserResponse, isLoading, error } = useQuery({
-		queryKey: ['users', params],
-		queryFn: () => getUsers(params.page, 100, params.search, params.role, params.status),
-		staleTime: 50000, // 50s
-	});
+	const createMutation = useCreateUser();
+	const updateMutation = useUpdateUser();
+	const deleteMutation = useDeleteUser();
 	return (
 		<div>
 			<form onSubmit={handleSubmit((values) => {
@@ -126,10 +70,20 @@ const TestQuery = () => {
 									...values
 								},
 								id: userEdited.id
+							},
+							{
+								onSuccess: () => {
+									setUserEdited(null);
+									reset(DEFAULT_FORM_VALUES)
+								}
 							}
 						)
 					}else{
-						createMutation.mutate(values)
+						createMutation.mutate(values, {
+							onSuccess: () => {
+								reset(DEFAULT_FORM_VALUES);
+							}
+						})
 					}
 				})
 				} className="grid max-w-3xl gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:grid-cols-2 sm:p-6 dark:border-slate-700 dark:bg-slate-900">
