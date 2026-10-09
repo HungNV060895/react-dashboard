@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 interface UpdateUserPayload {
 	data: User,
-	id: number
+	id: string
 }
 
 export const useUpdateUser = () => {

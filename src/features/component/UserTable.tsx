@@ -1,6 +1,4 @@
 import { Pencil, Trash2 } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { useState } from "react";
 import { useUsers } from "@features/hooks/useUser";
 import type { User } from "@features/types/user";
 
@@ -9,8 +7,8 @@ interface IUser {
     isLoading: boolean,
     isFetching: boolean,
     error: Error | null,
-    onDelete: (id: number) => void;
-    onUpdate: (userEdited: User, id: number) => void
+    onDelete: (id: string) => void;
+    onUpdate: (userEdited: User, id: string) => void
 }
 
 
@@ -26,7 +24,6 @@ const UserTable = ({data, isLoading, isFetching, onDelete, onUpdate}: IUser) => 
 					{data.map((user: User) => (
 						<li key={user.id}>
 							{user.name}
-
 							<button className="border border-red-500 text-red-400 p-2 rounded-lg ml-5" onClick={() => onDelete(user.id)}>
 								<Trash2 size={16} />
 							</button>

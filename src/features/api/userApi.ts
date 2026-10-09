@@ -24,7 +24,7 @@ const getUsers = async (
 
 	try {
 		const response = await axiosClient.get<User[]>('/users', {
-			params: { page, limit, ...params }
+			params: { _page: page, _per_page: limit, ...params }
 		});
 		
 		const responseTotal = await axiosClient.get<User[]>('/users', { params });
@@ -53,7 +53,7 @@ const createUsers = async (dataUser: Omit<User, 'id'>): Promise<User> => {
 	return response.data;
 }
 
-const updateUser = async(updateUser: User, userID: number): Promise<User> => {
+const updateUser = async(updateUser: User, userID: string): Promise<User> => {
 	// await new Promise(r => setTimeout(r, 3000));
 	console.log(
         "PUT URL:",
@@ -70,7 +70,7 @@ const updateUser = async(updateUser: User, userID: number): Promise<User> => {
 	return response.data;
 }
 
-const deleteUser = async (userID: number) : Promise<User> => {
+const deleteUser = async (userID: string) : Promise<User> => {
 	const response = await axiosClient.delete(`/users/${userID}`);
 	return response.data;
 }

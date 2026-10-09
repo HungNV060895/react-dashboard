@@ -61,7 +61,7 @@ const updateUser = async(updateUser: User, userID: number): Promise<User> => {
 	return response.data;
 }
 
-const deleteUser = async (userID: number) : Promise<User> => {
+const deleteUser = async (userID: string) : Promise<User> => {
 	const response = await axiosClient.delete(`/users/${userID}`);
 	return response.data;
 }

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 
-import { useUsers } from "@/hooks/useUser";
+import { useUsers } from "@features/hooks/useUser";
 import { useCreateUser } from "@features/hooks/useCreateUser";
 import { useUpdateUser } from "@features/hooks/useUpdateUser";
 import { useDeleteUser } from "@features/hooks/useDeleteUser";
@@ -130,8 +130,8 @@ const UserPage = () => {
 				isLoading={isLoading}
 				isFetching={isFetching}
 				error={error}
-				onDelete={(id: number) => deleteMutation.mutate(id)}
-				onUpdate={(user: User, id: number) => updateMutation.mutate({ data: user, id })}
+				onDelete={(id: string) => deleteMutation.mutate(id)}
+				onUpdate={(user: User, id: string) => updateMutation.mutate({ data: user, id })}
 			/>
 			<button disabled={page === 1} onClick={() => setPage((prev) => prev - 1)}>Prev Page</button>
 			<button onClick={() => setPage((prev) => prev + 1)}>Next Page</button>
