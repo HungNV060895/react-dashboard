@@ -1,6 +1,6 @@
 
 export interface User {
-    id: string;
+    id: number;
     name: string;
     email: string;
     role: 'Admin' | 'User' | 'Guest';
@@ -11,7 +11,7 @@ export interface User {
 export type FormError = Partial<Record<keyof FormState, string>>;
 
 export interface FormState {
-    id: string,
+    id: number,
     name: string;
     email: string;
     role: 'Admin' | 'User' | 'Guest',
@@ -22,5 +22,5 @@ export interface FormState {
 
 export interface UpdateUserPayload {
     data: User,
-    id: string
+    id: number
 }

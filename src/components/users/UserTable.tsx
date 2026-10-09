@@ -3,7 +3,7 @@ import { Pencil, Trash2, UserRound } from "lucide-react";
 
 type UserTableProps = {
     data: User[];
-    handleEditUser: (id: number) => void;
+    handleEditUser: (id: string) => void;
     handleOpenDeleteModal: (user: User) => void;
     loading: boolean,
     iserror:  string

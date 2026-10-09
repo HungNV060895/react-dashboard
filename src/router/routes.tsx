@@ -5,7 +5,7 @@ import Orders from '@/pages/Orders'
 import Products from '@/pages/Products'
 import Users from '@/pages/Users'
 import Settings from '@/pages/Settings'
-import TestQuery from '@/pages/TestQuery'
+import UserPage from '@features/pages/UserPage'
 
 export const routes: RouteObject[] = [
   {
@@ -33,8 +33,8 @@ export const routes: RouteObject[] = [
         element: <Settings />,
       },
       {
-        path: '/test-query',
-        element: <TestQuery />,
+        path: '/tanstack-user',
+        element: <UserPage />,
       },
     ],
   },

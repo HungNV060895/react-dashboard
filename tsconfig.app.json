@@ -36,7 +36,8 @@
       "@share/*": ["./src/components/share/*"],
       "@constants/*": ["./src/constants/*"],
       "@schemas/*": ["./src/schemas/*"],
-      "@services/*": ["./src/services/*"]
+      "@services/*": ["./src/services/*"],
+      "@features/*": ["./src/features/*"]
     }
   },
   "include": ["src"]

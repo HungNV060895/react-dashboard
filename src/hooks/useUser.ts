@@ -9,7 +9,7 @@ interface UserParams {
 }
 
 export const useUsers = (params:UserParams) => {
-    return  useQuery({
+    return useQuery({
         queryKey: ['users', params],
 		queryFn: () => getUsers(params.page, 10, params.search, params.role, params.status),
 		staleTime: 50000, // 50s

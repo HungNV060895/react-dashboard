@@ -1,5 +1,5 @@
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
-import { getUsers } from "@/services/userApi";
+import { getUsers } from "@features/api/userApi";
 
 interface UserParams {
     page:number;

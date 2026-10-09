@@ -1,5 +1,5 @@
-import { updateUser } from "@/services/userApi";
-import { User } from "@/types/user"
+import { updateUser } from "@features/api/userApi";
+import { User } from "@features/types/user"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 interface UpdateUserPayload {
@@ -28,8 +28,7 @@ export const useUpdateUser = () => {
 				return{
 					...dataOld,
 					data:
-						dataOld.data.map((item: User) => item.id === id ? data : item),
-					total: dataOld.total - 1
+						dataOld.data.map((item: User) => item.id === id ? data : item)
 				}
 			});
 

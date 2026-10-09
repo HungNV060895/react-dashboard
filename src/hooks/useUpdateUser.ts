@@ -1,5 +1,5 @@
-import { updateUser } from "@/services/userApi";
-import { User } from "@/types/user"
+import { updateUser } from "@features/api/userApi";
+import { User } from "@features/types/user"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 interface UpdateUserPayload {

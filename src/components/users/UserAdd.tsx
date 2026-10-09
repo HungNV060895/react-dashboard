@@ -6,7 +6,7 @@ type ModalTypes = {
 	isOpen: boolean;
 	setIsOpen : (isOpen: boolean) => void;
 	handleAddUser: () => void;
-	handleUpdateUser: (userId: number) => void;
+	handleUpdateUser: (userId: string) => void;
 	handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 	error: FormError 
 }

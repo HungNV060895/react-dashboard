@@ -34,8 +34,8 @@ export const sidebarMenus = [
 		icon: Settings,
 	},
 	{
-		title: "TanStack Query Test",
-		path: "/test-query",
+		title: "TanStack Query User",
+		path: "/tanstack-user",
 		icon: DatabaseBackupIcon,
 	},
 ];
