@@ -5,6 +5,7 @@ import { useUsers } from "@/hooks/useUser";
 import { useCreateUser } from "@/hooks/useCreateUser";
 import { useUpdateUser } from "@/hooks/useUpdateUser";
 import { useDeleteUser } from "@/hooks/useDeleteUser";
+import { useDebounce } from "@/hooks/useDebounce";
 
 import type { User } from "@/types/user";
 
@@ -43,17 +44,18 @@ const TestQuery = () => {
 	const [status, setStatus] = useState('All');
 
 	const [userEdited, setUserEdited] = useState<User | null>(null);
+	const debounceSearch = useDebounce(search, 500);
+	console.log(debounceSearch);
 	const params = {
 		page,
-		search,
+		search: debounceSearch,
 		role,
 		status
 	}
 
-	const { data: UserResponse, isLoading, error } = useUsers(params);
-	
+	const { data: UserResponse, isLoading, isFetching ,error } = useUsers(params);
 	const { register, handleSubmit, reset } = useForm<UserFormValues>({
-		defaultValues: DEFAULT_FORM_VALUES,
+		defaultValues: DEFAULT_FORM_VALUES
 	});
 
 	const createMutation = useCreateUser();
@@ -87,7 +89,7 @@ const TestQuery = () => {
 					}
 				})
 				} className="grid max-w-3xl gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:grid-cols-2 sm:p-6 dark:border-slate-700 dark:bg-slate-900">
-				<button type="submit">Update</button>
+				<button type="submit">{ userEdited ? 'Update' : 'Create'}</button>
 				<div className="space-y-1.5">
 					<label htmlFor="user-name" className="block text-sm font-medium text-slate-700 dark:text-slate-200">Name</label>
 					<input id="user-name" type="text" placeholder="Enter user's name" {...register("name")} className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-50 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:ring-teal-900/30" />
@@ -117,9 +119,15 @@ const TestQuery = () => {
 				</div>
 			</form>
 
-
+			{/* Search area */}
+			<div className="space-y-1.5">
+				<label htmlFor="search" className="block text-sm font-medium text-slate-700 dark:text-slate-200">Search</label>
+				<input id="search" type="text" placeholder="Enter key word.." name="search" 
+						onChange={(e) => setSearch(e.target.value)} className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-50 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:ring-teal-900/30" />
+			</div>
 			<h1>Test Query</h1>
 			{isLoading && <p>Loading...</p>}
+			{isFetching && <p>Updateing...</p>}
 			{error && <p>Error: {error.message}</p>}
 			{UserResponse && (
 				<ul>
