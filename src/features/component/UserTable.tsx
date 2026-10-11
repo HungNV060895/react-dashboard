@@ -1,14 +1,13 @@
 import { Pencil, Trash2 } from "lucide-react";
-import { useUsers } from "@features/hooks/useUser";
 import type { User } from "@features/types/user";
 
 interface IUser {
-    data: User[],
-    isLoading: boolean,
-    isFetching: boolean,
-    error: Error | null,
+    data: User[];
+    isLoading: boolean;
+    isFetching: boolean;
+    error: Error | null;
     onDelete: (id: string) => void;
-    onUpdate: (userEdited: User, id: string) => void
+    onUpdate: (userEdited: User, id: string) => void;
 }
 
 
