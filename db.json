@@ -2,7 +2,7 @@
   "users": [
     {
       "createdAt": "2026-10-08T17:02:38.603Z",
-      "name": "Barbara Price",
+      "name": "Barbara Price1212",
       "email": "Elissa50@hotmail.com",
       "role": "Admin",
       "status": "Active",
@@ -278,6 +278,15 @@
       "status": "Active",
       "avatar": "https://avatars.githubusercontent.com/u/3986269",
       "id": "31"
+    },
+    {
+      "createdAt": "2026-10-08T21:17:16.953Z",
+      "name": "Hưng NV",
+      "email": "hung@yahoo.com",
+      "role": "User",
+      "status": "Active",
+      "avatar": "https://avatars.githubusercontent.com/u/3986269",
+      "id": "32"
     }
   ]
 }

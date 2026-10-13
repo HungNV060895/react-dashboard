@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createUsers } from "@/services/userApi";
-
+import { userKeys } from "@features/queryKeys/userKeys";
 
 
 export const useCreateUser = ()  => {
@@ -9,15 +9,15 @@ export const useCreateUser = ()  => {
 		mutationFn: createUsers,
 		onMutate: async(newUser) => {
 			await queryClient.cancelQueries({
-				queryKey: ['users']
+				queryKey: userKeys.lists()
 			});
 
 			const previousUsers = queryClient.getQueriesData({
-				queryKey: ['users']
+				queryKey: userKeys.lists()
 			})
 
 			queryClient.setQueriesData({
-				queryKey: ['users']
+				queryKey: userKeys.lists()
 			},
 			(oldCaching:any) => {
 				console.log(oldCaching);

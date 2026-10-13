@@ -7,6 +7,8 @@ import { useDebounce } from "@features/hooks/useDebounce";
 import type { User } from "@features/types/user";
 import UserTable from "@features/component/UserTable";
 import UserForm from "@features/component/UserForm";
+import UserFilter from "@features/component/UserFilter";
+
 
 const UserPage = () => {
 	//State Area
@@ -33,19 +35,18 @@ const UserPage = () => {
 				userEdited={userEdited}
 				setUserEdited={setUserEdited}
 			/>
-			{/* Search area */}
-			<div className="space-y-1.5">
-				<label htmlFor="search" className="block text-sm font-medium text-slate-700 dark:text-slate-200">Search</label>
-				<input id="search" type="text" placeholder="Enter key word.." name="search" 
-						onChange={(e) => setSearch(e.target.value)} className="h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-50 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:focus:ring-teal-900/30" />
-			</div>
+			<UserFilter
+				setSearch={(value) => {
+					setSearch(value);
+					setPage(1);
+				}}
+			/>
 			<UserTable 
 				data={UserResponse?.data ?? []}
 				isLoading={isLoading}
 				isFetching={isFetching}
 				error={error}
 				onDelete={(id: string) => deleteMutation.mutate(id)}
-				// onUpdate={(user: User, id: string) => updateMutation.mutate({ data: user, id })}
 				onUpdate={(user: User) => setUserEdited(user)}
 			/>
 			<button disabled={page === 1} onClick={() => setPage((prev) => prev - 1)}>Prev Page</button>

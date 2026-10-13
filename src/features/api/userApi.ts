@@ -24,7 +24,7 @@ const getUsers = async (
 
 	try {
 		const response = await axiosClient.get<User[]>('/users', {
-			params: { _page: page, _per_page: limit, ...params }
+			params: { page: page, limit: limit, ...params }
 		});
 		
 		const responseTotal = await axiosClient.get<User[]>('/users', { params });
