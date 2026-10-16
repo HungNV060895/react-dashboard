@@ -3,9 +3,8 @@ import App from '@/App'
 import Dashboard from '@/pages/Dashboard'
 import Orders from '@/pages/Orders'
 import Products from '@/pages/Products'
-import Users from '@/pages/Users'
 import Settings from '@/pages/Settings'
-import UserPage from '@features/pages/UserPage'
+import UserPage from '@/pages/Users'
 
 export const routes: RouteObject[] = [
   {
@@ -26,7 +25,7 @@ export const routes: RouteObject[] = [
       },
       {
         path: '/users',
-        element: <Users />,
+        element: <UserPage />,
       },
       {
         path: '/settings',
