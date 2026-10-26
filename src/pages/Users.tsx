@@ -1,7 +1,34 @@
-import { UserTable, UserSearch, UserFilter } from "@/features/users";
-import UserPagination from "@/features/users/components/UserPagination";
+import { UserTable, UserSearch, UserFilter, UserForm, useDebounce, useUsers, useDeleteUser } from "@/features/users";
 import { UserPlus } from "lucide-react";
+import { useState } from "react";
+import type { User } from "@/features/users/types/user";
+
 const UserPage = () => {
+
+	const [isOpen, setIsOpen] = useState(false);
+
+	const handleOpenModal = () => {
+		setIsOpen(true);
+	}
+
+	const [page, setPage] = useState(1);
+	const [search, setSearch] = useState('');
+	const [role, setRole] = useState('All');
+	const [status, setStatus] = useState('All');
+
+	const [userEdited, setUserEdited] = useState<User | null>(null);
+	const debounceSearch = useDebounce(search, 500);
+	const params = {
+		page,
+		search: debounceSearch,
+		role,
+		status
+	}
+
+	const { data: UserResponse, isLoading, error } = useUsers(params);
+
+	const deleteMutation = useDeleteUser();
+
 	return (
 		<>
 			<section className="space-y-5 py-5 sm:py-7">
@@ -11,7 +38,7 @@ const UserPage = () => {
 						<h1 className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white sm:text-3xl">User management</h1>
 						<p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">Manage team access, roles and account status.</p>
 					</div>
-					<button type="button" className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-teal-700 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal-700/20">
+					<button onClick={handleOpenModal} type="button" className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-teal-700 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-teal-700/20">
 						<UserPlus size={17} /> Add user
 					</button>
 				</div>
@@ -20,11 +47,16 @@ const UserPage = () => {
 					<UserFilter/>
 				</div>
 				<div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
-					<UserTable />
+					<UserTable 
+						users={UserResponse?.data ?? []}
+						isLoading={isLoading}
+						error={error}
+						onDelete={(id: string) => deleteMutation.mutate(id)}
+					/>
 				</div>
 				{/* <UserPagination/> */}
+				<UserForm isOpen={isOpen} setIsOpen={setIsOpen}/>
 			</section>
-			
 		</>
 	)
 }
