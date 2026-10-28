@@ -1,15 +1,15 @@
-import type { User } from "@/types/user";
-import {UserRound, Pencil, Trash2} from "lucide-react";
+import type { User } from "@features/users/types/user";
+import { Pencil, UserRound, Trash2 } from "lucide-react";
 
 interface UserProps {
 	users: User[],
 	isLoading: boolean,
 	error: Error | null;
-    onDelete: (id: string) => void
+    onEdit: (user: User) => void;
+    onRequestDelete: (user: User) => void,
 }
 
-const UserTable = ({users, isLoading, error, onDelete}: UserProps) => {
-	console.log(isLoading);
+const UserTable = ({users, isLoading, error, onEdit, onRequestDelete}: UserProps) => {
 	if (error) {
         return <div role="alert" className="m-4 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-800">{error.message}</div>;
     }
@@ -30,10 +30,10 @@ const UserTable = ({users, isLoading, error, onDelete}: UserProps) => {
 
 	const userActions = (user: User) => (
         <div className="flex items-center gap-1.5">
-            <button type="button" onClick={() => onDelete(user.id)} aria-label={`Edit ${user.name}`} title="Edit user" className="inline-flex size-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-teal-50 hover:text-teal-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600">
+            <button type="button" onClick={() => onEdit(user)} aria-label={`Edit ${user.name}`} title="Edit user" className="inline-flex size-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-teal-50 hover:text-teal-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-600">
                 <Pencil size={16} />
             </button>
-            <button type="button" onClick={() => handleOpenDeleteModal(user)} aria-label={`Delete ${user.name}`} title="Delete user" className="inline-flex size-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-rose-50 hover:text-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500">
+            <button type="button" onClick={() => onRequestDelete(user)} aria-label={`Delete ${user.name}`} title="Delete user" className="inline-flex size-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-rose-50 hover:text-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500">
                 <Trash2 size={16} />
             </button>
         </div>
@@ -64,7 +64,7 @@ const UserTable = ({users, isLoading, error, onDelete}: UserProps) => {
                                 <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">{user.name}</p>
                                 <p className="break-all text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
                             </div>
-                            {/* {userActions(user)} */}
+                            {userActions(user)}
                         </div>
                         <div className="mt-4 flex flex-wrap items-center gap-2 pl-[52px]">
                             <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300">{user.role}</span>
@@ -96,7 +96,7 @@ const UserTable = ({users, isLoading, error, onDelete}: UserProps) => {
                                 <td className="max-w-64 truncate px-5 py-4 text-slate-600 dark:text-slate-300">{user.email}</td>
                                 <td className="px-5 py-4 text-slate-600 dark:text-slate-300">{user.role}</td>
                                 <td className="px-5 py-4">{statusBadge(user.status)}</td>
-                                <td className="px-5 py-4"><div className="flex justify-end"></div></td>
+                                <td className="px-5 py-4"><div className="flex justify-end">{userActions(user)}</div></td>
                             </tr>
                         ))}
                     </tbody>

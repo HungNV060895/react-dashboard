@@ -1,17 +1,16 @@
-type UserFilterProps = {
-	role: string;
-	status: string;
-	setRole: (role: string) => void;
-	setStatus: (status: string) => void;
-}
+import { useUserStore } from "@features/users/store/useUserStore";
 
 const UserFilter = () => {
+	const role = useUserStore((state) => state.role);
+	const status = useUserStore((state) => state.status);
+	const setRole = useUserStore((state) => state.setRole);
+	const setStatus = useUserStore((state) => state.setStatus);
 	const selectClass = "h-10 w-full rounded-lg border border-slate-200 bg-white px-3 text-sm text-slate-800 outline-none transition focus:border-teal-600 focus:ring-4 focus:ring-teal-600/10 dark:border-slate-700 dark:bg-slate-800 dark:text-white";
 	return (
 		<>
 			<div className="w-full min-w-0">
 				<label htmlFor="role" className="mb-1.5 block text-xs font-semibold text-slate-600 dark:text-slate-300">Role</label>
-				<select id="role" className={selectClass}>
+				<select onChange={(selectedVal) => setRole(selectedVal.target.value)} value={role} id="role" className={selectClass}>
 					<option value="All">All</option>
 					<option value="Admin">Admin</option>
 					<option value="User">User</option>
@@ -20,7 +19,7 @@ const UserFilter = () => {
 			</div>
 			<div className="w-full min-w-0">
 				<label htmlFor="status" className="mb-1.5 block text-xs font-semibold text-slate-600 dark:text-slate-300">Status</label>
-				<select id="status" className={selectClass}>
+				<select onChange={(selectedVal) => setStatus(selectedVal.target.value)} value={status} id="status" className={selectClass}>
 					<option value="All">All</option>
 					<option value="Active">Active</option>
 					<option value="Inactive">Inactive</option>

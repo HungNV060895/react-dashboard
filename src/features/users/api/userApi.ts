@@ -23,21 +23,16 @@ const getUsers = async (
 	};
 
 	try {
-		const response = await axiosClient.get<User[]>('/users', {
-			params: { page: page, limit: limit, ...params }
-		});
-		
-		const responseTotal = await axiosClient.get<User[]>('/users', { params });
-		const filteredData = status === 'All'
-			? response.data
-			: response.data.filter((user) => user.status === status);
-		const filteredTotal = status === 'All'
-			? responseTotal.data
-			: responseTotal.data.filter((user) => user.status === status);
+		const response = await axiosClient.get<User[]>('/users', { params });
+		const filteredUsers = response.data.filter((user) =>
+			(role === 'All' || user.role === role) &&
+			(status === 'All' || user.status === status)
+		);
+		const startIndex = (page - 1) * limit;
 
 		return {
-			data: filteredData,
-			total: filteredTotal.length
+			data: filteredUsers.slice(startIndex, startIndex + limit),
+			total: filteredUsers.length
 		};
 	} catch (error: unknown) {
 		if (axios.isAxiosError(error) && error.response?.status === 404) {
@@ -53,20 +48,8 @@ const createUsers = async (dataUser: Omit<User, 'id'>): Promise<User> => {
 	return response.data;
 }
 
-const updateUser = async(updateUser: User, userID: string): Promise<User> => {
-	// await new Promise(r => setTimeout(r, 3000));
-	console.log(
-        "PUT URL:",
-        `/users/${userID}`
-    );
-
-    console.log(
-        "DATA:",
-        updateUser
-    );
-	const response = await axiosClient.put(`/users/${userID}`, updateUser);
-	
-	console.log(response.data);
+const updateUser = async ({ id, data }: { id: string; data: Omit<User, "id"> }): Promise<User> => {
+	const response = await axiosClient.put<User>(`/users/${id}`, data);
 	return response.data;
 }
 

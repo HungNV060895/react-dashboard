@@ -4,6 +4,7 @@ import { userKeys } from "@features/users/queryKeys/userKeys";
 
 interface UserParams {
     page:number;
+    pageSize: number;
     search:string;
     role:string;
     status:string;
@@ -11,8 +12,15 @@ interface UserParams {
 
 export const useUsers = (params:UserParams) => {
     return useQuery({
-        queryKey: [userKeys.list, params],
-		queryFn: () => getUsers(params.page, 10, params.search, params.role, params.status),
+        queryKey: userKeys.list(params),
+		queryFn: () => 
+            getUsers(
+                params.page, 
+                params.pageSize, 
+                params.search, 
+                params.role, 
+                params.status
+            ),
 		staleTime: 50000, // 50s
         placeholderData: keepPreviousData
     })
