@@ -2,7 +2,7 @@
 
 A responsive dashboard application built with React and TypeScript.
 
-This project is a practical React project focused on building a dashboard with REST API integration, CRUD operations, server-side pagination, search, filtering, form validation, and data visualization.
+This project is a practical React project focused on building a dashboard with REST API integration, CRUD operations, search, filtering, pagination, form validation, and data visualization.
 
 ## 🚀 Live Demo
 
@@ -30,8 +30,13 @@ This project is a practical React project focused on building a dashboard with R
 * React Router
 * Tailwind CSS
 * Axios
+* TanStack Query
+* Zustand
+* React Hook Form
+* Zod
 * Recharts
 * Lucide Icons
+* React Hot Toast
 * MockAPI
 
 ## ✨ Features
@@ -53,10 +58,13 @@ This project is a practical React project focused on building a dashboard with R
 * Create user
 * Update user
 * Delete user
-* Server-side pagination
-* Server-side search
-* Server-side filtering by role and status
-* Form validation
+* Keyword search through the users API
+* Combined role and status filtering (for example, Admin and Active)
+* Client-side pagination with 6 users per page
+* Debounced search (500 ms)
+* Form validation with React Hook Form and Zod
+* UI state managed with Zustand
+* Server state and cache invalidation managed with TanStack Query
 * Loading state
 * Error handling
 * Empty state
@@ -78,6 +86,7 @@ This project is a practical React project focused on building a dashboard with R
 ## 🔌 API
 
 This project uses MockAPI as the backend REST API.
+Set `VITE_API_URL` to the base URL of your MockAPI project. The frontend reads it through the shared Axios client.
 
 ### Users
 
@@ -87,6 +96,8 @@ POST   /users
 PUT    /users/:id
 DELETE /users/:id
 ```
+
+The Users feature requests matching users from the API, applies role and status filters together, calculates the filtered total, and then slices the result into pages of 6. A filter value of `All` is not sent as an API filter.
 
 ### Products
 
@@ -106,23 +117,24 @@ src/
 │
 ├── components/
 │   ├── dashboard/
-│   ├── users/
-│   └── products/
-│
-├── constants/
-├── layouts/
+│   ├── layouts/
+│   ├── products/
+│   └── users/
+├── features/
+│   └── users/
+│       ├── api/
+│       ├── components/
+│       ├── hooks/
+│       ├── queryKeys/
+│       ├── schemas/
+│       ├── store/
+│       └── types/
 ├── pages/
-│   ├── Dashboard/
-│   ├── Users/
-│   └── Products/
-│
-├── services/
-│   ├── userApi.ts
-│   └── productApi.ts
-│
-├── types/
+├── router/
 └── App.tsx
 ```
+
+The Users page composes feature components. TanStack Query owns users data and request state; the Zustand store owns UI state such as search, filters, pagination, and modal selection.
 
 ## 💻 Getting Started
 
@@ -138,7 +150,15 @@ git clone https://github.com/HungNV060895/react-dashboard.git
 npm install
 ```
 
-### 3. Start the development server
+### 3. Configure the API URL
+
+Copy `.env.example` to `.env` and set the base URL for your MockAPI project:
+
+```env
+VITE_API_URL=https://your-project.mockapi.io/api/v1/
+```
+
+### 4. Start the development server
 
 ```bash
 npm run dev
@@ -150,7 +170,7 @@ The application will run at:
 http://localhost:3000
 ```
 
-### 4. Build for production
+### 5. Build for production
 
 ```bash
 npm run build
@@ -161,14 +181,15 @@ npm run build
 Through this project, I practiced:
 
 * Building reusable React components
-* Managing state with `useState`
+* Managing local component state with React
 * Handling side effects with `useEffect`
 * Working with TypeScript
-* Building controlled forms
+* Building forms with React Hook Form and Zod
 * Integrating REST APIs with Axios
 * Implementing CRUD operations
-* Implementing server-side pagination
-* Implementing server-side search and filtering
+* Managing server state and query caching with TanStack Query
+* Managing shared feature UI state with Zustand
+* Implementing debounced search, filtering, and pagination
 * Handling loading, error, and empty states
 * Building dashboard statistics
 * Creating charts with Recharts
@@ -177,14 +198,10 @@ Through this project, I practiced:
 
 ## 🔮 Future Improvements
 
-Planned improvements for the next version:
+Potential future improvements:
 
-* TanStack Query for server-state management
-* React Hook Form
-* Zod validation
-* Zustand for global state
 * Authentication
-* Custom Hooks
+* Automated tests
 * Improved error handling
 * Performance optimization
 * Better responsive UI
